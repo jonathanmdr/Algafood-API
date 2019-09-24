@@ -25,8 +25,8 @@ public class Customer {
 		return this.phone;
 	}
 	
-	public void activate() {
-		this.active = Boolean.TRUE;
+	public void activate(Boolean value) {
+		this.active = value;
 	}
 
 }
