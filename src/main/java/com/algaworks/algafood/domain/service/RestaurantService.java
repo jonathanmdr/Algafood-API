@@ -23,18 +23,17 @@ public class RestaurantService {
 	
 	public Restaurant save(Restaurant restaurant) {
 		Long kitchenId = restaurant.getKitchen().getId();
-		Kitchen kitchen = kitchenRepository.findById(kitchenId);
+		Kitchen kitchen = kitchenRepository.findById(kitchenId)
+			.orElseThrow(() -> new EntityNotFoundException(String.format("A cozinha de ID: %d não existe!", kitchenId)));
 		
-		if (kitchen == null) {
-			throw new EntityNotFoundException(String.format("A cozinha de ID: %d não existe!", kitchenId));
-		}
+		restaurant.setKitchen(kitchen);
 		
 		return restaurantRepository.save(restaurant);
 	}
 	
 	public void delete(Long id) {
 		try {
-			restaurantRepository.delete(id);
+			restaurantRepository.deleteById(id);
 		} catch(EmptyResultDataAccessException ex) {
 			throw new EntityNotFoundException(String.format("Restaurante de ID: %d não existe!", id));
 		} catch(DataIntegrityViolationException ex) {

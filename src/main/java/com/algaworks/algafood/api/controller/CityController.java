@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +34,13 @@ public class CityController {
 	
 	@GetMapping
 	public List<City> findAll() {
-		return cityRepository.list();
+		return cityRepository.findAll();
 	}
 	
 	@GetMapping("/{cityId}")
 	public ResponseEntity<City> findById(@PathVariable Long cityId) {
-		City citySaved = cityRepository.findById(cityId);
-		return citySaved != null ? ResponseEntity.ok(citySaved) : ResponseEntity.notFound().build();
+		Optional<City> citySaved = cityRepository.findById(cityId);
+		return citySaved.isPresent() ? ResponseEntity.ok(citySaved.get()) : ResponseEntity.notFound().build();
 	}
 	
 	@PostMapping
@@ -53,19 +54,23 @@ public class CityController {
 	}
 	
 	@PutMapping("/{cityId}")
-	public ResponseEntity<City> update(@PathVariable Long cityId, @RequestBody City city) {
-		City citySaved = cityRepository.findById(cityId);
+	public ResponseEntity<?> update(@PathVariable Long cityId, @RequestBody City city) {
+		Optional<City> cityCurrent = cityRepository.findById(cityId);
 		
-		if (citySaved != null) {
-			BeanUtils.copyProperties(city, citySaved, "id");
-			citySaved = cityService.save(citySaved);
-			return ResponseEntity.ok(citySaved);
+		if (cityCurrent.isPresent()) {
+			try {
+				BeanUtils.copyProperties(city, cityCurrent.get(), "id");
+				City citySaved = cityService.save(cityCurrent.get());
+				return ResponseEntity.ok(citySaved);
+			} catch(EntityNotFoundException ex) {
+				return ResponseEntity.badRequest().body(ex.getMessage());
+			}
 		}
 		
 		return ResponseEntity.notFound().build();
 	}
 	
-	@DeleteMapping("/cityId")
+	@DeleteMapping("/{cityId}")
 	public ResponseEntity<City> delete(@PathVariable Long cityId) {
 		try {
 			cityService.delete(cityId);

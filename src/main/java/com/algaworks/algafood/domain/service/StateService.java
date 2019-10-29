@@ -22,7 +22,7 @@ public class StateService {
 	
 	public void delete(Long id) {
 		try {
-			stateRepository.delete(id);
+			stateRepository.deleteById(id);
 		} catch(EmptyResultDataAccessException ex) {
 			throw new EntityNotFoundException(String.format("Estado de ID: %d não existe!", id));
 		} catch(DataIntegrityViolationException ex) {

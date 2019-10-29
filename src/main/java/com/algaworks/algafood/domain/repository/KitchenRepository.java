@@ -1,17 +1,20 @@
 package com.algaworks.algafood.domain.repository;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.algaworks.algafood.domain.model.Kitchen;
 
-public interface KitchenRepository {
+@Repository
+public interface KitchenRepository extends JpaRepository<Kitchen, Long> {	
 	
-	List<Kitchen> list();
+	List<Kitchen> findAllByNameContaining(String name);
 	
-	Kitchen findById(Long id);
+	Optional<Kitchen> findByName(String name);
 	
-	Kitchen save(Kitchen kitchen);
-	
-	void delete(Long id);
+	Boolean existsByName(String name);
 
 }

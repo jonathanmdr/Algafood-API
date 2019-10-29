@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,18 +37,18 @@ public class KitchenController {
 	
 	@GetMapping
 	public List<Kitchen> findAll() {
-		return kitchenRepository.list();
+		return kitchenRepository.findAll();
 	}
 	
 	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
 	public KitchensXmlWrapper findAllInFormatXml() {
-		return new KitchensXmlWrapper(kitchenRepository.list());
+		return new KitchensXmlWrapper(kitchenRepository.findAll());
 	}
 	
 	@GetMapping("/{kitchenId}")
 	public ResponseEntity<Kitchen> findById(@PathVariable Long kitchenId) {
-		Kitchen kitchen = kitchenRepository.findById(kitchenId);
-		return kitchen != null ? ResponseEntity.ok(kitchen) : ResponseEntity.notFound().build();
+		Optional<Kitchen> kitchen = kitchenRepository.findById(kitchenId);
+		return kitchen.isPresent() ? ResponseEntity.ok(kitchen.get()) : ResponseEntity.notFound().build();
 	}
 	
 	@PostMapping
@@ -58,11 +59,11 @@ public class KitchenController {
 	
 	@PutMapping("/{kitchenId}")
 	public ResponseEntity<Kitchen> update(@PathVariable Long kitchenId, @RequestBody Kitchen kitchen) {
-		Kitchen kitchenSaved = kitchenRepository.findById(kitchenId);
+		Optional<Kitchen> kitchenCurrent = kitchenRepository.findById(kitchenId);
 		
-		if (kitchenSaved != null) {
-			BeanUtils.copyProperties(kitchen, kitchenSaved, "id");
-			kitchenSaved =  kitchenService.save(kitchenSaved);
+		if (kitchenCurrent.isPresent()) {
+			BeanUtils.copyProperties(kitchen, kitchenCurrent.get(), "id");
+			Kitchen kitchenSaved = kitchenService.save(kitchenCurrent.get());
 			return ResponseEntity.ok(kitchenSaved);
 		}
 		
