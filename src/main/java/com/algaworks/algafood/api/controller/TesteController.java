@@ -1,5 +1,8 @@
 package com.algaworks.algafood.api.controller;
 
+import static com.algaworks.algafood.infrastructure.repository.spec.RestaurantSpecs.withFreightRate;
+import static com.algaworks.algafood.infrastructure.repository.spec.RestaurantSpecs.withNameLike;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -56,12 +59,22 @@ public class TesteController {
 	
 	@GetMapping("/restaurants/by-nameAndFreightRate")
 	public List<Restaurant> find(String name, BigDecimal freightRateInitial, BigDecimal freightRateEnd) {
-		return restaurantRepository.findByNameAndFreightRate(name, freightRateInitial, freightRateEnd);
+		return restaurantRepository.findByNameAndFreightRateJPQL(name, freightRateInitial, freightRateEnd);
+	}
+	
+	@GetMapping("/restaurants/by-nameAndFreightRateCriteria")
+	public List<Restaurant> findCriteria(String name, BigDecimal freightRateInitial, BigDecimal freightRateEnd) {
+		return restaurantRepository.findByNameAndFreightRateCriteria(name, freightRateInitial, freightRateEnd);
 	}
 	
 	@GetMapping("/restaurants/count-byKitchenId")
 	public Long countByKitchenId(Long kitchenId) {
 		return restaurantRepository.countByKitchenId(kitchenId);
+	}
+	
+	@GetMapping("/restaurants/by-freightRateFree")
+	public List<Restaurant> findCriteriaSDJ(String name) {		
+		return restaurantRepository.findAll(withFreightRate().and(withNameLike(name)));
 	}
 
 }

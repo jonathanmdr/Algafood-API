@@ -7,6 +7,8 @@ import com.algaworks.algafood.domain.model.Restaurant;
 
 public interface RestaurantRepositoryQueries {
 
-	List<Restaurant> findByNameAndFreightRate(String name, BigDecimal freightRateInitial, BigDecimal freightRateEnd);
+	List<Restaurant> findByNameAndFreightRateJPQL(String name, BigDecimal freightRateInitial, BigDecimal freightRateEnd);
+	
+	List<Restaurant> findByNameAndFreightRateCriteria(String name, BigDecimal freightRateInitial, BigDecimal freightRateEnd);
 
 }
