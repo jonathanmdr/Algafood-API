@@ -27,6 +27,11 @@ public class TesteController {
 	@Autowired
 	private RestaurantRepository restaurantRepository;
 	
+	@GetMapping("/restaurants/findFirst")
+	public Optional<Kitchen> findFistKitchen() {
+		return kitchenRepository.findFirst();
+	}
+	
 	@GetMapping("/kitchens/by-name")
 	public List<Kitchen> listByName(String name) {
 		return kitchenRepository.findAllByNameContaining(name);
@@ -35,6 +40,11 @@ public class TesteController {
 	@GetMapping("/kitchens/exists-byName")
 	public Boolean existsByName(String name) {
 		return kitchenRepository.existsByName(name);
+	}
+	
+	@GetMapping("/restaurants/findFirst")
+	public Optional<Restaurant> findFistRestaurant() {
+		return restaurantRepository.findFirst();
 	}
 	
 	@GetMapping("/restaurants/by-freightRate")
@@ -74,7 +84,7 @@ public class TesteController {
 	
 	@GetMapping("/restaurants/by-freightRateFree")
 	public List<Restaurant> findCriteriaSDJ(String name) {		
-		return restaurantRepository.findAll(withFreightRate().and(withNameLike(name)));
+		return restaurantRepository.findByNameAndFreightRateFree(name);
 	}
 
 }
