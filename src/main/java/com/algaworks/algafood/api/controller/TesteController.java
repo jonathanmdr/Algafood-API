@@ -27,7 +27,7 @@ public class TesteController {
 	@Autowired
 	private RestaurantRepository restaurantRepository;
 	
-	@GetMapping("/restaurants/findFirst")
+	@GetMapping("/kitchens/findFirst")
 	public Optional<Kitchen> findFistKitchen() {
 		return kitchenRepository.findFirst();
 	}
