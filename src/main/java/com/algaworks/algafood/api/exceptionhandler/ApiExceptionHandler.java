@@ -6,10 +6,15 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +23,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.algaworks.algafood.core.validation.ValidationException;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.EntityInUseException;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
@@ -31,6 +37,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	public static final String GENERIC_ERROR_MESSAGE = "Ocorreu um erro interno inesperado no sistema. "
 			+ "Tente novamente mais tarde, se o problema persistir, entre em contato "
 			+ "com o administrador do sistema.";
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResponseEntity<Object> handleStateNotFoundException(EntityNotFoundException ex, WebRequest request) {
@@ -78,23 +87,42 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, error, new HttpHeaders(), status, request); 
 	}
 	
+	@ExceptionHandler(ValidationException.class)
+	public ResponseEntity<Object> handleValidationException(ValidationException ex, WebRequest request) {
+		return handleValidationInternal(ex, ex.getBindingResult(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		return handleValidationInternal(ex, ex.getBindingResult(), new HttpHeaders(), status, request);
+	}
+
+	private ResponseEntity<Object> handleValidationInternal(Exception ex, BindingResult bindingResult, HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
 		
-		List<ApiError.Field> fields = ex.getBindingResult().getFieldErrors().stream()
-				.map(field -> ApiError.Field.builder()
-						.name(field.getField())
-						.userMessage(field.getDefaultMessage())
-						.build())
+		List<ApiError.Object> objects = bindingResult.getAllErrors().stream()
+				.map(objectError -> {
+					String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
+					
+					String name = objectError.getObjectName();
+					
+					if (objectError instanceof FieldError) {
+						name = ((FieldError) objectError).getField();
+					}
+					
+					return ApiError.Object.builder()
+						.name(name)
+						.userMessage(message)
+						.build();
+				})
 				.collect(Collectors.toList());
 		
 		ApiError error = createApiErrorBuilder(status, ApiErrorType.INVALID_DATA, detail)
 				.userMessage(detail)
-				.fields(fields)
+				.objects(objects)
 				.build();
-	  
-		return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
+		
+		return handleExceptionInternal(ex, error, headers, status, request);
 	}
 
 	@Override
