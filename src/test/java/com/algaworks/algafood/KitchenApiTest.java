@@ -1,5 +1,6 @@
 package com.algaworks.algafood;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 
 import org.hamcrest.Matchers;
@@ -45,7 +46,7 @@ public class KitchenApiTest {
 	}
 	
 	@Test
-	public void returningStatus200WhenFindKitchens() {				
+	public void returningHttpStatusCode200WhenFindKitchens() {				
 		RestAssured.given()
 			.accept(ContentType.JSON)
 		.when()
@@ -67,7 +68,7 @@ public class KitchenApiTest {
 	}
 	
 	@Test
-	public void returningStatus201WhenSaveKitchen() {		
+	public void returningHttpStatusCode201WhenSaveKitchen() {		
 		RestAssured.given()
 			.body("{ \"name\": \"Chinesa\" }")
 			.contentType(ContentType.JSON)
@@ -76,6 +77,27 @@ public class KitchenApiTest {
 			.post()
 		.then()
 			.statusCode(HttpStatus.CREATED.value());
+	}
+	
+	public void returningKitchenSuccessfullyWhenFindKitchenExistent() {
+		RestAssured.given()
+			.pathParam("kitchenId", 1)
+			.accept(ContentType.JSON)
+		.when()
+			.get("/{kitchenId}")
+		.then()
+			.statusCode(HttpStatus.OK.value())
+			.body("name", equalTo("Americana"));
+	}
+	
+	public void returningHttpStatusCode404WhenFindKitchenInexistent() {
+		RestAssured.given()
+			.pathParam("kitchenId", 9999)
+			.accept(ContentType.JSON)
+		.when()
+			.get("/{kitchenId}")
+		.then()
+			.statusCode(HttpStatus.NOT_FOUND.value());
 	}
 	
 	private void prepareData() {
