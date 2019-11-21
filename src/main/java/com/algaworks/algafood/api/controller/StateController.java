@@ -2,6 +2,8 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,12 +39,12 @@ public class StateController {
 	
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public State save(@RequestBody State state) {
+	public State save(@RequestBody @Valid State state) {
 		return stateService.save(state);
 	}
 	
 	@PutMapping("/{stateId}")
-	public State update(@PathVariable Long stateId, @RequestBody State state) {		
+	public State update(@PathVariable Long stateId, @RequestBody @Valid State state) {		
 		State stateCurrent = stateService.findById(stateId);
 		
 		BeanUtils.copyProperties(state, stateCurrent, "id");

@@ -10,7 +10,8 @@ public enum ApiErrorType {
 	BUSINESS_EXCEPTION("/erro-de-negocio", "Violação de regra de negócio"),
 	REQUEST_BODY_ERROR("/erro-no-corpo-da-requisicao", "Erro no corpo da requisição"),
 	REQUEST_INVALID_PARAMETER("/parametro-invalido", "Parâmetro inválido"),
-	INTERNAL_SERVER_ERROR("/erro-de-sistema", "Erro de sistema");
+	INTERNAL_SERVER_ERROR("/erro-de-sistema", "Erro de sistema"),
+	INVALID_DATA("/dados-invalidos", "Dados inválidos");
 	
 	private String title;
 	private String uri;

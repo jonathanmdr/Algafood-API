@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
@@ -49,7 +50,7 @@ public class RestaurantController {
 	}
 	
 	@PostMapping	
-	public Restaurant save(@RequestBody Restaurant restaurant) {
+	public Restaurant save(@RequestBody @Valid Restaurant restaurant) {
 		try {
 			return restaurantService.save(restaurant);
 		} catch(EntityNotFoundException ex) {
@@ -58,7 +59,7 @@ public class RestaurantController {
 	}
 	
 	@PutMapping("/{restaurantId}")
-	public Restaurant update(@PathVariable Long restaurantId, @RequestBody Restaurant restaurant) {
+	public Restaurant update(@PathVariable Long restaurantId, @RequestBody @Valid Restaurant restaurant) {
 		Restaurant restaurantCurrent = restaurantService.findById(restaurantId);
 		
 		BeanUtils.copyProperties(restaurant, restaurantCurrent, "id", "paymentForms", "address", "createdDate", "products");
