@@ -101,6 +101,8 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+			<!-- Skip integration testing when packaging the project -->
 			<plugin>				
 				<artifactId>maven-failsafe-plugin</artifactId>
 			</plugin>

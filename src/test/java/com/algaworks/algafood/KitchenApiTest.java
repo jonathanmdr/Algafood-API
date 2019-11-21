@@ -2,7 +2,6 @@ package com.algaworks.algafood;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 
-import org.flywaydb.core.Flyway;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,20 +10,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.algaworks.algafood.domain.model.Kitchen;
+import com.algaworks.algafood.domain.repository.KitchenRepository;
+import com.algaworks.algafood.util.DatabaseCleaner;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("/application-test.properties")
 public class KitchenApiTest {
 	
 	@LocalServerPort
 	private int port;
 	
 	@Autowired
-	private Flyway flyway;
+	private DatabaseCleaner databaseCleaner;
+	
+	@Autowired
+	private KitchenRepository kitchenRepository;
 	
 	@Before
 	public void setUp() {
@@ -32,7 +40,8 @@ public class KitchenApiTest {
 		RestAssured.basePath = "/kitchens";
 		RestAssured.port = this.port;
 		
-		flyway.migrate();
+		databaseCleaner.clearTables();
+		prepareData();
 	}
 	
 	@Test
@@ -46,15 +55,15 @@ public class KitchenApiTest {
 	}
 	
 	@Test
-	public void returning4KitchensWhenFindKitchens() {		
+	public void returningTwoKitchensWhenFindKitchens() {		
 		RestAssured.given()
 			.accept(ContentType.JSON)
 		.when()
 			.get()
 		.then()
 			.statusCode(HttpStatus.OK.value())
-			.body("name", Matchers.hasSize(4))
-			.body("name", hasItems("Indiana", "Tailandesa"));
+			.body("name", Matchers.hasSize(2))
+			.body("name", hasItems("Tailandesa", "Americana"));
 	}
 	
 	@Test
@@ -67,6 +76,17 @@ public class KitchenApiTest {
 			.post()
 		.then()
 			.statusCode(HttpStatus.CREATED.value());
+	}
+	
+	private void prepareData() {
+		Kitchen k1 = new Kitchen();
+		k1.setName("Tailandesa");
+		
+		Kitchen k2 = new Kitchen();
+		k2.setName("Americana");
+		
+		kitchenRepository.save(k1);
+		kitchenRepository.save(k2);
 	}
 
 }
