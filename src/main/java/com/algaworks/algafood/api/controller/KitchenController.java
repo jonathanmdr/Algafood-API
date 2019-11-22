@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.mapper.KitchenMapper;
+import com.algaworks.algafood.api.model.KitchenDTO;
+import com.algaworks.algafood.api.model.input.KitchenInput;
 import com.algaworks.algafood.api.representation.KitchensXmlWrapper;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.service.KitchenService;
@@ -29,34 +31,38 @@ public class KitchenController {
 	@Autowired
 	private KitchenService kitchenService;
 	
+	@Autowired
+	private KitchenMapper kitchenMapper;
+	
 	@GetMapping
-	public List<Kitchen> findAll() {
-		return kitchenService.findAll();
+	public List<KitchenDTO> findAll() {
+		return kitchenMapper.toCollectionDto(kitchenService.findAll());
 	}
 	
 	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
 	public KitchensXmlWrapper findAllInFormatXml() {
-		return new KitchensXmlWrapper(kitchenService.findAll());
+		return new KitchensXmlWrapper(kitchenMapper.toCollectionDto(kitchenService.findAll()));
 	}
 	
 	@GetMapping("/{kitchenId}")
-	public Kitchen findById(@PathVariable Long kitchenId) {
-		return kitchenService.findById(kitchenId);
+	public KitchenDTO findById(@PathVariable Long kitchenId) {
+		return kitchenMapper.toDto(kitchenService.findById(kitchenId));
 	}
 	
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public Kitchen save(@RequestBody @Valid Kitchen kitchen) {
-		return kitchenService.save(kitchen);
+	public KitchenDTO save(@RequestBody @Valid KitchenInput kitchenInput) {
+		Kitchen kitchen = kitchenMapper.toDomainObject(kitchenInput);
+		return kitchenMapper.toDto(kitchenService.save(kitchen));
 	}
 	
 	@PutMapping("/{kitchenId}")
-	public Kitchen update(@PathVariable Long kitchenId, @RequestBody @Valid Kitchen kitchen) {
+	public KitchenDTO update(@PathVariable Long kitchenId, @RequestBody @Valid KitchenInput kitchenInput) {
 		Kitchen kitchenCurrent = kitchenService.findById(kitchenId);
 		
-		BeanUtils.copyProperties(kitchen, kitchenCurrent, "id");
+		kitchenMapper.copyToDomainObject(kitchenInput, kitchenCurrent);
 		
-		return kitchenService.save(kitchenCurrent);		
+		return kitchenMapper.toDto(kitchenService.save(kitchenCurrent));
 	}
 	
 	@DeleteMapping("/{kitchenId}")
