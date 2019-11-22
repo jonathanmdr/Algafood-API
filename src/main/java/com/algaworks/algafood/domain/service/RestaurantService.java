@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.EntityInUseException;
 import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
@@ -24,15 +25,18 @@ public class RestaurantService {
 	@Autowired
 	private KitchenService kitchenService;
 	
+	@Transactional(readOnly = true)
 	public List<Restaurant> findAll() {
 		return restaurantRepository.findAll();
 	}
 	
+	@Transactional(readOnly = true)
 	public Restaurant findById(Long id) {
 		return restaurantRepository.findById(id)
 				.orElseThrow(() -> new RestaurantNotFoundException(id));
 	}
 	
+	@Transactional
 	public Restaurant save(Restaurant restaurant) {
 		Long kitchenId = restaurant.getKitchen().getId();
 		Kitchen kitchen = kitchenService.findById(kitchenId);
@@ -42,6 +46,7 @@ public class RestaurantService {
 		return restaurantRepository.save(restaurant);
 	}
 	
+	@Transactional
 	public void delete(Long id) {
 		try {
 			restaurantRepository.deleteById(id);
