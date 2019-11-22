@@ -50,6 +50,7 @@ public class CityService {
 	public void delete(Long id) {
 		try {
 			cityRepository.deleteById(id);
+			cityRepository.flush();
 		} catch(EmptyResultDataAccessException ex) {
 			throw new CityNotFoundException(id);
 		} catch(DataIntegrityViolationException ex) {

@@ -1,6 +1,6 @@
 package com.algaworks.algafood.domain.model;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class User {
 	
 	@CreationTimestamp
 	@Column(name = "data_criacao", nullable = false, columnDefinition = "datetime")
-	private LocalDateTime createdDate;
+	private OffsetDateTime createdDate;
 	
 	@ManyToMany
 	@JoinTable(name = "usuario_grupo", 

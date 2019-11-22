@@ -2,7 +2,7 @@ package com.algaworks.algafood.api.representation;
 
 import java.util.List;
 
-import com.algaworks.algafood.domain.model.Kitchen;
+import com.algaworks.algafood.api.model.KitchenDTO;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -17,6 +17,6 @@ public class KitchensXmlWrapper {
 	@JacksonXmlProperty(localName = "kitchen")
 	@JacksonXmlElementWrapper(useWrapping = false)
 	@NonNull
-	private List<Kitchen> kitchens;
+	private List<KitchenDTO> kitchens;
 
 }
