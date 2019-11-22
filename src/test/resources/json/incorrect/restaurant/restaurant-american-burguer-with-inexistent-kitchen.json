@@ -1,0 +1,7 @@
+{
+	"name": "American Burguer",
+	"freightRate": 10,
+	"kitchen": {
+		"id": 9999
+	}
+}

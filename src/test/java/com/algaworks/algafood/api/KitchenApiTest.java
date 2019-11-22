@@ -1,7 +1,6 @@
-package com.algaworks.algafood;
+package com.algaworks.algafood.api;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItems;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -17,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.repository.KitchenRepository;
 import com.algaworks.algafood.util.DatabaseCleaner;
+import com.algaworks.algafood.util.ResourceUtils;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -25,6 +25,12 @@ import io.restassured.http.ContentType;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 public class KitchenApiTest {
+	
+	private static final Integer INEXISTENT_KITCHEN = 9999;
+	private static Integer AMOUNT_KITCHENS;	
+	
+	private static Kitchen americanKitchen;
+	private static String jsonChinesekitchen;
 	
 	@LocalServerPort
 	private int port;
@@ -41,6 +47,8 @@ public class KitchenApiTest {
 		RestAssured.basePath = "/kitchens";
 		RestAssured.port = this.port;
 		
+		jsonChinesekitchen = ResourceUtils.getContentFromResource("/json/correct/kitchen/chinese-kitchen.json");
+		
 		databaseCleaner.clearTables();
 		prepareData();
 	}
@@ -56,21 +64,19 @@ public class KitchenApiTest {
 	}
 	
 	@Test
-	public void returningTwoKitchensWhenFindKitchens() {		
+	public void returningAmountKitchensWhenFindKitchens() {		
 		RestAssured.given()
 			.accept(ContentType.JSON)
 		.when()
 			.get()
 		.then()
-			.statusCode(HttpStatus.OK.value())
-			.body("name", Matchers.hasSize(2))
-			.body("name", hasItems("Tailandesa", "Americana"));
+			.body("", Matchers.hasSize(AMOUNT_KITCHENS));
 	}
 	
 	@Test
-	public void returningHttpStatusCode201WhenSaveKitchen() {		
+	public void returningHttpStatusCode201WhenSaveKitchen() {
 		RestAssured.given()
-			.body("{ \"name\": \"Chinesa\" }")
+			.body(jsonChinesekitchen)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 		.when()
@@ -81,18 +87,18 @@ public class KitchenApiTest {
 	
 	public void returningKitchenSuccessfullyWhenFindKitchenExistent() {
 		RestAssured.given()
-			.pathParam("kitchenId", 1)
+			.pathParam("kitchenId", americanKitchen.getId())
 			.accept(ContentType.JSON)
 		.when()
 			.get("/{kitchenId}")
 		.then()
 			.statusCode(HttpStatus.OK.value())
-			.body("name", equalTo("Americana"));
+			.body("name", equalTo(americanKitchen.getName()));
 	}
 	
 	public void returningHttpStatusCode404WhenFindKitchenInexistent() {
 		RestAssured.given()
-			.pathParam("kitchenId", 9999)
+			.pathParam("kitchenId", INEXISTENT_KITCHEN)
 			.accept(ContentType.JSON)
 		.when()
 			.get("/{kitchenId}")
@@ -101,14 +107,16 @@ public class KitchenApiTest {
 	}
 	
 	private void prepareData() {
-		Kitchen k1 = new Kitchen();
-		k1.setName("Tailandesa");
+		Kitchen thaiKitchen = new Kitchen();
+		thaiKitchen.setName("Tailandesa");
 		
-		Kitchen k2 = new Kitchen();
-		k2.setName("Americana");
+		americanKitchen = new Kitchen();
+		americanKitchen.setName("Americana");
 		
-		kitchenRepository.save(k1);
-		kitchenRepository.save(k2);
+		kitchenRepository.save(thaiKitchen);
+		kitchenRepository.save(americanKitchen);
+		
+		AMOUNT_KITCHENS = (int) kitchenRepository.count();
 	}
 
 }

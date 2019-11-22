@@ -92,6 +92,12 @@
 			<artifactId>rest-assured</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- Manipuling JSON Objects -->
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		</dependency>		
 	</dependencies>
 
 	<!-- Steps for building project -->
