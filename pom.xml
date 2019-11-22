@@ -20,6 +20,7 @@
 	<!-- Definition JAVA 12 version on project -->
 	<properties>
 		<java.version>12</java.version>
+		<modelmapper.version>2.3.0</modelmapper.version>
 	</properties>
 	
 	<dependencies>
@@ -93,11 +94,12 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- Manipuling JSON Objects -->
+		<!-- Mapping objects for objects -->
 		<dependency>
-		    <groupId>com.google.code.gson</groupId>
-		    <artifactId>gson</artifactId>
-		</dependency>		
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>${modelmapper.version}</version>
+		</dependency>
 	</dependencies>
 
 	<!-- Steps for building project -->

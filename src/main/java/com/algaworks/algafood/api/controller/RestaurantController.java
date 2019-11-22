@@ -27,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.mapper.RestaurantMapper;
+import com.algaworks.algafood.api.model.RestaurantDTO;
+import com.algaworks.algafood.api.model.input.RestaurantInput;
 import com.algaworks.algafood.core.validation.ValidationException;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
@@ -45,34 +48,40 @@ public class RestaurantController {
 	@Autowired
 	private SmartValidator validator;
 	
+	@Autowired
+	private RestaurantMapper restaurantMapper;
+	
 	@GetMapping
-	public List<Restaurant> findAll() {
-		return restaurantService.findAll();
+	public List<RestaurantDTO> findAll() {
+		return restaurantMapper.toCollectionDto(restaurantService.findAll());
 	}
 	
 	@GetMapping("/{restaurantId}")
-	public Restaurant findById(@PathVariable Long restaurantId) {
-		return restaurantService.findById(restaurantId);
+	public RestaurantDTO findById(@PathVariable Long restaurantId) {
+		return restaurantMapper.toDto(restaurantService.findById(restaurantId));		
 	}
 	
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public Restaurant save(@RequestBody @Valid Restaurant restaurant) {
+	public RestaurantDTO save(@RequestBody @Valid RestaurantInput restaurantInput) {
 		try {
-			return restaurantService.save(restaurant);
+			Restaurant restaurant = restaurantMapper.toDomainObject(restaurantInput);
+			return restaurantMapper.toDto(restaurantService.save(restaurant));
 		} catch(EntityNotFoundException ex) {
 			throw new BusinessException(ex.getMessage());
 		}
 	}
 	
 	@PutMapping("/{restaurantId}")
-	public Restaurant update(@PathVariable Long restaurantId, @RequestBody @Valid Restaurant restaurant) {
-		Restaurant restaurantCurrent = restaurantService.findById(restaurantId);
-		
-		BeanUtils.copyProperties(restaurant, restaurantCurrent, "id", "paymentForms", "address", "createdDate", "products");
-		
+	public RestaurantDTO update(@PathVariable Long restaurantId, @RequestBody @Valid RestaurantInput restaurantInput) {
 		try {
-			return restaurantService.save(restaurantCurrent);
+			Restaurant restaurant = restaurantMapper.toDomainObject(restaurantInput);
+			
+			Restaurant restaurantCurrent = restaurantService.findById(restaurantId);
+		
+			BeanUtils.copyProperties(restaurant, restaurantCurrent, "id", "paymentForms", "address", "createdDate", "products");		
+		
+			return restaurantMapper.toDto(restaurantService.save(restaurantCurrent));
 		} catch(EntityNotFoundException ex) {
 			throw new BusinessException(ex.getMessage());
 		}
@@ -85,19 +94,21 @@ public class RestaurantController {
 	}
 	
 	@PatchMapping("/{restaurantId}")
-	public Restaurant updatePartial(@PathVariable Long restaurantId, @RequestBody Map<String, Object> values, HttpServletRequest request) {
+	public RestaurantDTO updatePartial(@PathVariable Long restaurantId, @RequestBody Map<String, Object> values, HttpServletRequest request) {
 		Restaurant restaurantSaved = restaurantService.findById(restaurantId);
 		
 		merge(values, restaurantSaved, request);
 		
-		validate(restaurantSaved, "restaurant");
+		RestaurantInput restaurantInput = restaurantMapper.toInputObject(restaurantSaved);
 		
-		return update(restaurantId, restaurantSaved);
+		validate(restaurantInput, "restaurant");
+		
+		return update(restaurantId, restaurantInput);
 	}
 	
-	private void validate(Restaurant restaurant, String objectName) {
-		BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurant, objectName);		
-		validator.validate(restaurant, bindingResult);
+	private void validate(RestaurantInput restaurantInput, String objectName) {
+		BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurantInput, objectName);		
+		validator.validate(restaurantInput, bindingResult);
 		
 		if (bindingResult.hasErrors()) {
 			throw new ValidationException(bindingResult);
