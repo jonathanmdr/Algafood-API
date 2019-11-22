@@ -55,7 +55,8 @@ public class RestaurantController {
 		return restaurantService.findById(restaurantId);
 	}
 	
-	@PostMapping	
+	@PostMapping
+	@ResponseStatus(value = HttpStatus.CREATED)
 	public Restaurant save(@RequestBody @Valid Restaurant restaurant) {
 		try {
 			return restaurantService.save(restaurant);

@@ -40,6 +40,7 @@ public class CityController {
 	}
 	
 	@PostMapping
+	@ResponseStatus(value = HttpStatus.CREATED)
 	public City save(@RequestBody @Valid City city) {
 		try {
 			return city = cityService.save(city);

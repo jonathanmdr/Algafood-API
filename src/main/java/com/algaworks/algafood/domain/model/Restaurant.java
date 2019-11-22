@@ -28,13 +28,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.algaworks.algafood.core.validation.Groups;
-import com.algaworks.algafood.core.validation.ValueZeroIncludingDescription;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@ValueZeroIncludingDescription(fieldValue = "freightRate", fieldDescription = "name", requiredDescription = "Frete Grátis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -51,6 +49,7 @@ public class Restaurant {
 	@Column(name = "nome", nullable = false)
 	private String name;
 	
+	@NotNull
 	@PositiveOrZero
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal freightRate;
