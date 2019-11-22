@@ -14,8 +14,6 @@ import lombok.Setter;
 @Setter
 public class RestaurantInput {
 	
-	private Long id;
-	
 	@NotBlank
 	private String name;
 	

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -74,12 +73,10 @@ public class RestaurantController {
 	
 	@PutMapping("/{restaurantId}")
 	public RestaurantDTO update(@PathVariable Long restaurantId, @RequestBody @Valid RestaurantInput restaurantInput) {
-		try {
-			Restaurant restaurant = restaurantMapper.toDomainObject(restaurantInput);
-			
+		try {			
 			Restaurant restaurantCurrent = restaurantService.findById(restaurantId);
-		
-			BeanUtils.copyProperties(restaurant, restaurantCurrent, "id", "paymentForms", "address", "createdDate", "products");		
+			
+			restaurantMapper.copyToDomainObject(restaurantInput, restaurantCurrent);		
 		
 			return restaurantMapper.toDto(restaurantService.save(restaurantCurrent));
 		} catch(EntityNotFoundException ex) {

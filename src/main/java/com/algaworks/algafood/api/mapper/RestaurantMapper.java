@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.model.RestaurantDTO;
 import com.algaworks.algafood.api.model.input.RestaurantInput;
+import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.model.Restaurant;
 
 @Component
@@ -31,6 +32,16 @@ public class RestaurantMapper {
 	
 	public RestaurantInput toInputObject(Restaurant restaurant) {
 		return modelMapper.map(restaurant, RestaurantInput.class);		
+	}
+	
+	public void copyToDomainObject(RestaurantInput restaurantInput, Restaurant restaurant) {
+		/*
+		 * Para evitar a exception:   org.hibernate.HibernateException: identifier of an instance of 
+		 * com.algaworks.algafood.domain.model.Kitchen was altered from 1 to 2
+		 */		
+		restaurant.setKitchen(new Kitchen());
+		
+		modelMapper.map(restaurantInput, restaurant);		
 	}
 
 }
