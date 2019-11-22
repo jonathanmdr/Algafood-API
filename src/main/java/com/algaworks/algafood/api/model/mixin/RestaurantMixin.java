@@ -1,6 +1,6 @@
 package com.algaworks.algafood.api.model.mixin;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +20,10 @@ public class RestaurantMixin {
 	private Address address;
 	
 	@JsonIgnore
-	private LocalDateTime createdDate;
+	private OffsetDateTime createdDate;
 	
 	@JsonIgnore
-	private LocalDateTime updatedDate;
+	private OffsetDateTime updatedDate;
 
 	@JsonIgnore
 	private List<PaymentForm> paymentForms = new ArrayList<>();
