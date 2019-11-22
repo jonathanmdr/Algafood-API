@@ -28,8 +28,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.algaworks.algafood.core.validation.Groups;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -55,7 +53,6 @@ public class Restaurant {
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal freightRate;
 	
-	@JsonIgnoreProperties(value = "name", allowGetters = true)
 	@Valid
 	@NotNull
 	@ConvertGroup(from = Default.class, to = Groups.KitchenId.class)
@@ -63,28 +60,23 @@ public class Restaurant {
 	@JoinColumn(name = "cozinha_id", nullable = false)
 	private Kitchen kitchen;
 	
-	@JsonIgnore
 	@Embedded
 	private Address address;
 	
-	@JsonIgnore
 	@CreationTimestamp
 	@Column(name = "data_criacao", nullable = false, columnDefinition = "datetime")
 	private LocalDateTime createdDate;
 	
-	@JsonIgnore
 	@UpdateTimestamp
 	@Column(name = "data_atualizacao", nullable = false, columnDefinition = "datetime")
 	private LocalDateTime updatedDate;
 
-	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "restaurante_forma_pagamento", 
 	        joinColumns = @JoinColumn(name = "restaurante_id"), 
 	        inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private List<PaymentForm> paymentForms = new ArrayList<>();
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products = new ArrayList<>();
 
