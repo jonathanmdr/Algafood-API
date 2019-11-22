@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.mapper.CityMapper;
+import com.algaworks.algafood.api.model.CityDTO;
+import com.algaworks.algafood.api.model.input.CityInput;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.StateNotFoundException;
 import com.algaworks.algafood.domain.model.City;
@@ -29,35 +31,38 @@ public class CityController {
 	@Autowired
 	private CityService cityService;
 	
+	@Autowired
+	private CityMapper cityMapper;
+	
 	@GetMapping
-	public List<City> findAll() {
-		return cityService.findAll();
+	public List<CityDTO> findAll() {
+		return cityMapper.toCollectionDto(cityService.findAll());
 	}
 	
 	@GetMapping("/{cityId}")
-	public City findById(@PathVariable Long cityId) {
-		return cityService.findById(cityId);
+	public CityDTO findById(@PathVariable Long cityId) {
+		return cityMapper.toDto(cityService.findById(cityId));
 	}
 	
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public City save(@RequestBody @Valid City city) {
+	public CityDTO save(@RequestBody @Valid CityInput cityInput) {
 		try {
-			return city = cityService.save(city);
+			City city = cityMapper.toDomainObject(cityInput);
+			return cityMapper.toDto(cityService.save(city));
 		} catch(StateNotFoundException ex) {
 			throw new BusinessException(ex.getMessage(), ex);
 		}
 	}
 	
 	@PutMapping("/{cityId}")
-	public City update(@PathVariable Long cityId, @RequestBody @Valid City city) {
+	public CityDTO update(@PathVariable Long cityId, @RequestBody @Valid CityInput cityInput) {
 		try {
 			City cityCurrent = cityService.findById(cityId);
 						
-			BeanUtils.copyProperties(city, cityCurrent, "id");
+			cityMapper.copyToDomainObject(cityInput, cityCurrent);		
 		
-		
-			return cityService.save(cityCurrent);
+			return cityMapper.toDto(cityService.save(cityCurrent));
 		} catch(StateNotFoundException ex) {
 			throw new BusinessException(ex.getMessage(), ex);
 		}

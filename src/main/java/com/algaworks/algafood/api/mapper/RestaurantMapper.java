@@ -36,7 +36,7 @@ public class RestaurantMapper {
 	
 	public void copyToDomainObject(RestaurantInput restaurantInput, Restaurant restaurant) {
 		/*
-		 * Para evitar a exception:   org.hibernate.HibernateException: identifier of an instance of 
+		 * Para evitar a exception: org.hibernate.HibernateException: identifier of an instance of 
 		 * com.algaworks.algafood.domain.model.Kitchen was altered from 1 to 2
 		 */		
 		restaurant.setKitchen(new Kitchen());
