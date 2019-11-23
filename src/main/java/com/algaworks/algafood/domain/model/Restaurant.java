@@ -48,6 +48,9 @@ public class Restaurant {
 	@Embedded
 	private Address address;
 	
+	@Column(name = "ativo")
+	private Boolean active = Boolean.TRUE;
+	
 	@CreationTimestamp
 	@Column(name = "data_criacao", nullable = false, columnDefinition = "datetime")
 	private OffsetDateTime createdDate;
@@ -64,5 +67,13 @@ public class Restaurant {
 	
 	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products = new ArrayList<>();
+	
+	public void activate() {
+		setActive(Boolean.TRUE);
+	}
+	
+	public void inactivate() {
+		setActive(Boolean.FALSE);
+	}
 
 }

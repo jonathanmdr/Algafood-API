@@ -47,6 +47,18 @@ public class RestaurantService {
 	}
 	
 	@Transactional
+	public void activate(Long id) {
+		Restaurant restaurant = findById(id);
+		restaurant.activate();
+	}
+	
+	@Transactional
+	public void inactivate(Long id) {
+		Restaurant restaurant = findById(id);
+		restaurant.inactivate();
+	}
+	
+	@Transactional
 	public void delete(Long id) {
 		try {
 			restaurantRepository.deleteById(id);
