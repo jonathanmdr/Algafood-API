@@ -57,7 +57,7 @@ public class UserController {
 		
 		userMapper.copyToDomainObject(userSummaryInput, userCurrent);
 		
-		return userMapper.toSummaryDto(userCurrent);
+		return userMapper.toSummaryDto(userService.save(userCurrent));
 	}
 	
 	@PutMapping("/{userId}/password")
