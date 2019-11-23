@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.model.RestaurantDTO;
 import com.algaworks.algafood.api.model.input.RestaurantInput;
+import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.model.Restaurant;
 
@@ -40,6 +41,14 @@ public class RestaurantMapper {
 		 * com.algaworks.algafood.domain.model.Kitchen was altered from 1 to 2
 		 */		
 		restaurant.setKitchen(new Kitchen());
+		
+		/*
+		 * Para evitar a exception: org.hibernate.HibernateException: identifier of an instance of 
+		 * com.algaworks.algafood.domain.model.City was altered from 1 to 2
+		 */
+		if (restaurant.getAddress() != null) {
+			restaurant.getAddress().setCity(new City());
+		}
 		
 		modelMapper.map(restaurantInput, restaurant);		
 	}
