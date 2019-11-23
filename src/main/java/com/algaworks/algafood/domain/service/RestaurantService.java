@@ -12,6 +12,7 @@ import com.algaworks.algafood.domain.exception.EntityInUseException;
 import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
 import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.model.Kitchen;
+import com.algaworks.algafood.domain.model.PaymentForm;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.repository.RestaurantRepository;
 
@@ -28,6 +29,9 @@ public class RestaurantService {
 	
 	@Autowired
 	private CityService cityService;
+	
+	@Autowired
+	private PaymentFormService paymentFormService;
 	
 	@Transactional(readOnly = true)
 	public List<Restaurant> findAll() {
@@ -76,6 +80,22 @@ public class RestaurantService {
 		} catch(DataIntegrityViolationException ex) {
 			throw new EntityInUseException(String.format(MESSAGE_RESTAURANT_CONFLICT, id));
 		}
+	}
+	
+	@Transactional
+	public void disassociatePaymentForm(Long restaurantId, Long paymentFormId) {
+		Restaurant restaurant = findById(restaurantId);
+		PaymentForm paymentForm = paymentFormService.findById(paymentFormId);
+		
+		restaurant.disassociatePaymentForm(paymentForm);
+	}
+	
+	@Transactional
+	public void associatePaymentForm(Long restaurantId, Long paymentFormId) {
+		Restaurant restaurant = findById(restaurantId);
+		PaymentForm paymentForm = paymentFormService.findById(paymentFormId);
+		
+		restaurant.associatePaymentForm(paymentForm);
 	}
 
 }

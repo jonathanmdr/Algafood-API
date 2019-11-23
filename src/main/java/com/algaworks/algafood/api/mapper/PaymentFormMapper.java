@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.mapper;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,7 @@ public class PaymentFormMapper {
 		return modelMapper.map(paymentForm, PaymentFormDTO.class);
 	}
 	
-	public List<PaymentFormDTO> toCollectionDto(List<PaymentForm> paymentForms) {
+	public List<PaymentFormDTO> toCollectionDto(Collection<PaymentForm> paymentForms) {
 		return paymentForms.stream().map(paymentForm -> toDto(paymentForm)).collect(Collectors.toList());
 	}
 	
