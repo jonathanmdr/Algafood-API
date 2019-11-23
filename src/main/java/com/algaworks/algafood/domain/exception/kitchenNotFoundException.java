@@ -8,8 +8,8 @@ public class kitchenNotFoundException extends EntityNotFoundException {
 		super(message);
 	}
 	
-	public kitchenNotFoundException(Long stateId) {
-		this(String.format("Cozinha de ID: %d não existe!", stateId));
+	public kitchenNotFoundException(Long kitchenId) {
+		this(String.format("Cozinha de ID: %d não existe!", kitchenId));
 	}
 
 }

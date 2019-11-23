@@ -8,8 +8,8 @@ public class RestaurantNotFoundException extends EntityNotFoundException {
 		super(message);
 	}
 	
-	public RestaurantNotFoundException(Long stateId) {
-		this(String.format("Restaurante de ID: %d não existe!", stateId));
+	public RestaurantNotFoundException(Long restaurantId) {
+		this(String.format("Restaurante de ID: %d não existe!", restaurantId));
 	}
 
 }

@@ -8,8 +8,8 @@ public class CityNotFoundException extends EntityNotFoundException {
 		super(message);
 	}
 	
-	public CityNotFoundException(Long stateId) {
-		this(String.format("Cidade de ID: %d não existe!", stateId));
+	public CityNotFoundException(Long cityId) {
+		this(String.format("Cidade de ID: %d não existe!", cityId));
 	}
 
 }
