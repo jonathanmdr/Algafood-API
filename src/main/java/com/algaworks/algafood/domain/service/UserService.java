@@ -1,6 +1,7 @@
 package com.algaworks.algafood.domain.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,6 +36,14 @@ public class UserService {
 	
 	@Transactional
 	public User save(User user) {
+		userRepository.detach(user);
+		
+		Optional<User> userExistent = userRepository.findByEmail(user.getEmail());
+		
+		if (userExistent.isPresent() && !userExistent.get().equals(user)) {
+			throw new BusinessException(String.format("Já existe um usuário cadastrado com o e-mail %s", user.getEmail()));
+		}
+		
 		return userRepository.save(user);
 	}
 	
