@@ -51,11 +51,11 @@ public class PaymentFormController {
 	
 	@PutMapping("/{paymentFormId}")
 	public PaymentFormDTO update(@PathVariable Long paymentFormId, @RequestBody @Valid PaymentFormInput paymentFormInput) {
-		PaymentForm paymentForm = paymentFormService.findById(paymentFormId);
+		PaymentForm paymentFormCurrent = paymentFormService.findById(paymentFormId);
 			
-		paymentFormMapper.copyToDomainObject(paymentFormInput, paymentForm);
+		paymentFormMapper.copyToDomainObject(paymentFormInput, paymentFormCurrent);
 			
-		return paymentFormMapper.toDto(paymentFormService.save(paymentForm));
+		return paymentFormMapper.toDto(paymentFormService.save(paymentFormCurrent));
 	}
 	
 	@DeleteMapping("/{paymentFormId}")

@@ -82,7 +82,10 @@ INSERT INTO produto(nome, descricao, preco, ativo, restaurante_id) VALUES('Sandu
 INSERT INTO produto(nome, descricao, preco, ativo, restaurante_id) VALUES('Espetinho de Cupim', 'Acompanha farinha, mandioca e vinagrete', 8, 1, 6);
 
 
-
+INSERT INTO grupo(nome) VALUES('Gerente'), 
+							  ('Vendedor'), 
+							  ('Secretária'), 
+							  ('Cadastrador');
 
 
 
