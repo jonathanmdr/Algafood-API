@@ -71,6 +71,18 @@ public class RestaurantService {
 	}
 	
 	@Transactional
+	public void opening(Long id) {
+		Restaurant restaurant = findById(id);
+		restaurant.opening();
+	}
+	
+	@Transactional
+	public void closing(Long id) {
+		Restaurant restaurant = findById(id);
+		restaurant.closing();
+	}
+	
+	@Transactional
 	public void delete(Long id) {
 		try {
 			restaurantRepository.deleteById(id);

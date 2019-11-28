@@ -1,21 +1,19 @@
 package com.algaworks.algafood.api.model;
 
-import java.math.BigDecimal;
-
 import lombok.Setter;
+
+import java.math.BigDecimal;
 
 import lombok.Getter;
 
 @Getter
 @Setter
-public class RestaurantDTO {
+public class ProductDTO {
 	
 	private Long id;
 	private String name;
-	private BigDecimal freightRate;
-	private KitchenDTO kitchen;
+	private String description;
+	private BigDecimal price;
 	private Boolean active;
-	private Boolean opened;
-	private AddressDTO address;
 
 }
