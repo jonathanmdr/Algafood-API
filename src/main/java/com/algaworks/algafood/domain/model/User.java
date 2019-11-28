@@ -32,6 +32,8 @@ public class User {
 	
 	@Column(name = "nome", nullable = false)
 	private String name;
+		
+	private String email;
 	
 	@Column(name = "senha", nullable = false)
 	private String password;
@@ -45,5 +47,13 @@ public class User {
 	        joinColumns = @JoinColumn(name = "usuario_id"), 
 	        inverseJoinColumns = @JoinColumn(name = "grupo_id"))
 	private List<Group> groups = new ArrayList<>();
+	
+	public boolean passwordMatch(String password) {
+		return this.getPassword().equals(password);
+	}
+	
+	public boolean passwordDoesNotMatch(String password) {
+		return !passwordMatch(password);
+	}
 
 }

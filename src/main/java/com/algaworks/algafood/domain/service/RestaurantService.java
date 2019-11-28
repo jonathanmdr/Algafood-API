@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.EntityInUseException;
 import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
+import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.model.Kitchen;
+import com.algaworks.algafood.domain.model.PaymentForm;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.repository.RestaurantRepository;
 
@@ -24,6 +26,12 @@ public class RestaurantService {
 	
 	@Autowired
 	private KitchenService kitchenService;
+	
+	@Autowired
+	private CityService cityService;
+	
+	@Autowired
+	private PaymentFormService paymentFormService;
 	
 	@Transactional(readOnly = true)
 	public List<Restaurant> findAll() {
@@ -39,11 +47,27 @@ public class RestaurantService {
 	@Transactional
 	public Restaurant save(Restaurant restaurant) {
 		Long kitchenId = restaurant.getKitchen().getId();
-		Kitchen kitchen = kitchenService.findById(kitchenId);
+		Long cityId = restaurant.getAddress().getCity().getId();
+		
+		Kitchen kitchen = kitchenService.findById(kitchenId);			
+		City city = cityService.findById(cityId);
 		
 		restaurant.setKitchen(kitchen);
+		restaurant.getAddress().setCity(city);
 		
 		return restaurantRepository.save(restaurant);
+	}
+	
+	@Transactional
+	public void activate(Long id) {
+		Restaurant restaurant = findById(id);
+		restaurant.activate();
+	}
+	
+	@Transactional
+	public void inactivate(Long id) {
+		Restaurant restaurant = findById(id);
+		restaurant.inactivate();
 	}
 	
 	@Transactional
@@ -56,6 +80,22 @@ public class RestaurantService {
 		} catch(DataIntegrityViolationException ex) {
 			throw new EntityInUseException(String.format(MESSAGE_RESTAURANT_CONFLICT, id));
 		}
+	}
+	
+	@Transactional
+	public void disassociatePaymentForm(Long restaurantId, Long paymentFormId) {
+		Restaurant restaurant = findById(restaurantId);
+		PaymentForm paymentForm = paymentFormService.findById(paymentFormId);
+		
+		restaurant.disassociatePaymentForm(paymentForm);
+	}
+	
+	@Transactional
+	public void associatePaymentForm(Long restaurantId, Long paymentFormId) {
+		Restaurant restaurant = findById(restaurantId);
+		PaymentForm paymentForm = paymentFormService.findById(paymentFormId);
+		
+		restaurant.associatePaymentForm(paymentForm);
 	}
 
 }
