@@ -14,6 +14,7 @@ import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.model.PaymentForm;
 import com.algaworks.algafood.domain.model.Restaurant;
+import com.algaworks.algafood.domain.model.User;
 import com.algaworks.algafood.domain.repository.RestaurantRepository;
 
 @Service
@@ -32,6 +33,9 @@ public class RestaurantService {
 	
 	@Autowired
 	private PaymentFormService paymentFormService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Transactional(readOnly = true)
 	public List<Restaurant> findAll() {
@@ -68,6 +72,16 @@ public class RestaurantService {
 	public void inactivate(Long id) {
 		Restaurant restaurant = findById(id);
 		restaurant.inactivate();
+	}
+	
+	@Transactional
+	public void activate(List<Long> restaurantIds) {
+		restaurantIds.forEach(this::activate);
+	}
+	
+	@Transactional
+	public void inactivate(List<Long> restaurantIds) {
+		restaurantIds.forEach(this::inactivate);
 	}
 	
 	@Transactional
@@ -108,6 +122,22 @@ public class RestaurantService {
 		PaymentForm paymentForm = paymentFormService.findById(paymentFormId);
 		
 		restaurant.associatePaymentForm(paymentForm);
+	}
+	
+	@Transactional
+	public void disassociateUser(Long restaurantId, Long userId) {
+		Restaurant restaurant = findById(restaurantId);
+		User user = userService.findById(userId);
+		
+		restaurant.disassociateUser(user);
+	}
+	
+	@Transactional
+	public void associateUser(Long restaurantId, Long userId) {
+		Restaurant restaurant = findById(restaurantId);
+		User user = userService.findById(userId);
+		
+		restaurant.associateUser(user);
 	}
 
 }

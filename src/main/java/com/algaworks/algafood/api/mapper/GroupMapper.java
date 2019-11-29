@@ -1,5 +1,6 @@
 package com.algaworks.algafood.api.mapper;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,7 @@ public class GroupMapper {
 		return modelMapper.map(group, GroupDTO.class);
 	}
 	
-	public List<GroupDTO> toCollectionDto(List<Group> groups) {
+	public List<GroupDTO> toCollectionDto(Collection<Group> groups) {
 		return groups.stream().map(group -> toDto(group)).collect(Collectors.toList());
 	}
 	

@@ -8,6 +8,9 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,6 +35,7 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(name = "subtotal")
 	private BigDecimal subTotal;
 	
 	@Column(name = "taxa_frete")
@@ -43,7 +47,8 @@ public class Order {
 	@Embedded
 	private Address address;
 	
-	private OrderStatus status;
+	@Enumerated(EnumType.STRING)
+	private OrderStatus status = OrderStatus.CREATED;
 	
 	@CreationTimestamp
 	@Column(name = "data_criacao")
@@ -58,7 +63,7 @@ public class Order {
 	@Column(name = "data_entrega")
 	private OffsetDateTime deliveredDate;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "forma_pagamento_id", nullable = false)
 	private PaymentForm paymentForm;
 	

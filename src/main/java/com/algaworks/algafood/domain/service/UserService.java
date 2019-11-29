@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.EntityInUseException;
 import com.algaworks.algafood.domain.exception.UserNotFoundException;
+import com.algaworks.algafood.domain.model.Group;
 import com.algaworks.algafood.domain.model.User;
 import com.algaworks.algafood.domain.repository.UserRepository;
 
@@ -22,6 +23,9 @@ public class UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private GroupService groupService;
 	
 	@Transactional(readOnly = true)
 	public List<User> findAll() {
@@ -67,6 +71,22 @@ public class UserService {
 		} catch(DataIntegrityViolationException ex) {
 			throw new EntityInUseException(String.format(MESSAGE_USER_CONFLICT, id));
 		}
+	}
+	
+	@Transactional
+	public void disassociateGroup(Long userId, Long groupId) {
+		User user = findById(userId);
+		Group group = groupService.findById(groupId);
+		
+		user.disassociateGroup(group);
+	}
+	
+	@Transactional
+	public void associateGroup(Long userId, Long groupId) {
+		User user = findById(userId);
+		Group group = groupService.findById(groupId);
+		
+		user.associateGroup(group);
 	}
 
 }

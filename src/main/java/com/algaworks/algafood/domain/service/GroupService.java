@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.algaworks.algafood.domain.exception.EntityInUseException;
 import com.algaworks.algafood.domain.exception.GroupNotFoundException;
 import com.algaworks.algafood.domain.model.Group;
+import com.algaworks.algafood.domain.model.Permission;
 import com.algaworks.algafood.domain.repository.GroupRepository;
 
 @Service
@@ -20,6 +21,9 @@ public class GroupService {
 	
 	@Autowired
 	private GroupRepository groupRepository;
+	
+	@Autowired
+	private PermissionService permissionService;
 	
 	@Transactional(readOnly = true)
 	public List<Group> findAll() {
@@ -47,6 +51,22 @@ public class GroupService {
 		} catch(DataIntegrityViolationException ex) {
 			throw new EntityInUseException(String.format(MESSAGE_GROUP_CONFLICT, id));
 		}
+	}
+	
+	@Transactional
+	public void disassociatePermission(Long groupId, Long permissionId) {
+		Group group = findById(groupId);
+		Permission permission = permissionService.findById(permissionId);
+		
+		group.disassociatePermission(permission);
+	}
+	
+	@Transactional
+	public void associatePermission(Long groupId, Long permissionId) {
+		Group group = findById(groupId);
+		Permission permission = permissionService.findById(permissionId);
+		
+		group.associatePermission(permission);
 	}
 
 }

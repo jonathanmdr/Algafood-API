@@ -32,6 +32,7 @@ import com.algaworks.algafood.api.model.input.RestaurantInput;
 import com.algaworks.algafood.core.validation.ValidationException;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
+import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.service.RestaurantService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -90,6 +91,16 @@ public class RestaurantController {
 		restaurantService.activate(restaurantId);
 	}
 	
+	@PutMapping("/activations")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void activations(@RequestBody List<Long> restaurantIds) {
+		try {
+			restaurantService.activate(restaurantIds);
+		} catch(RestaurantNotFoundException ex) {
+			throw new BusinessException(ex.getMessage(), ex);
+		}
+	}
+	
 	@PutMapping("/{restaurantId}/opening")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void open(@PathVariable Long restaurantId) {
@@ -112,6 +123,16 @@ public class RestaurantController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void inactivate(@PathVariable Long restaurantId) {
 		restaurantService.inactivate(restaurantId);
+	}
+	
+	@DeleteMapping("/inactivations")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void inactivations(@RequestBody List<Long> restaurantIds) {
+		try {
+			restaurantService.inactivate(restaurantIds);
+		} catch(RestaurantNotFoundException ex) {
+			throw new BusinessException(ex.getMessage(), ex);
+		}
 	}
 	
 	@PatchMapping("/{restaurantId}")
