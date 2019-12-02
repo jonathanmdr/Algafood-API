@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.model.OrderDTO;
 import com.algaworks.algafood.api.model.OrderSummaryDTO;
+import com.algaworks.algafood.api.model.input.OrderInput;
 import com.algaworks.algafood.domain.model.Order;
 
 @Component
@@ -28,6 +29,14 @@ public class OrderMapper {
 	
 	public List<OrderSummaryDTO> toCollectionDto(Collection<Order> orders) {
 		return orders.stream().map(order -> toSummaryDto(order)).collect(Collectors.toList());
+	}
+	
+	public Order toDomainObject(OrderInput orderInput) {
+		return modelMapper.map(orderInput, Order.class);
+	}
+	
+	public void copyToDomainObject(OrderInput orderInput, Order order) {
+		modelMapper.map(orderInput, order);
 	}
 
 }

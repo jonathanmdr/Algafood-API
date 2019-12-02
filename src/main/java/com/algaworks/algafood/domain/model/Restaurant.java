@@ -110,5 +110,13 @@ public class Restaurant {
 	public boolean associateUser(User user) {
 		return this.getUsers().add(user);
 	}
+	
+	public boolean acceptPaymentForm(PaymentForm paymentForm) {
+		return this.getPaymentForms().contains(paymentForm);
+	}
+	
+	public boolean notAcceptPaymentForm(PaymentForm paymentForm) {
+		return !acceptPaymentForm(paymentForm);
+	}
 
 }
