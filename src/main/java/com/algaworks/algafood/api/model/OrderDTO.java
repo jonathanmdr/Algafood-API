@@ -15,6 +15,7 @@ public class OrderDTO {
 	private BigDecimal subTotal;
 	private BigDecimal freightRate;
 	private BigDecimal amount;
+	private String status;
 	private OffsetDateTime creationDate;
 	private OffsetDateTime confirmatedDate;
 	private OffsetDateTime canceledDate;

@@ -22,6 +22,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.algaworks.algafood.domain.exception.BusinessException;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,6 +32,8 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "pedido")
 public class Order {
+	
+	private static final String MESSAGE_UPDATE_STATUS_NOT_ACCEPTABLE = "Status do pedido %d não pode ser alterado de '%s' para '%s'.";
 	
 	@EqualsAndHashCode.Include
 	@Id
@@ -79,6 +83,14 @@ public class Order {
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<OrderItem> items = new ArrayList<>();
 	
+	private void setStatus(OrderStatus newStatus) {
+		if (this.getStatus().cannotChangeTo(newStatus)) {
+			throw new BusinessException(String.format(MESSAGE_UPDATE_STATUS_NOT_ACCEPTABLE, this.getId(), this.getStatus().getDescription(), newStatus.getDescription()));
+		}
+		
+		this.status = newStatus;
+	}
+	
 	public void calculateAmount() {
 		this.getItems().forEach(OrderItem::calculateTotalPrice);
 		
@@ -87,6 +99,21 @@ public class Order {
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
 		
 		this.amount = this.subTotal.add(this.freightRate);
+	}
+	
+	public void confirm() {
+		this.setStatus(OrderStatus.CONFIRMED);
+		this.setConfirmatedDate(OffsetDateTime.now());
+	}
+	
+	public void deliver() {
+		this.setStatus(OrderStatus.DELIVERED);
+		this.setDeliveredDate(OffsetDateTime.now());
+	}
+	
+	public void cancel() {
+		this.setStatus(OrderStatus.CANCELED);
+		this.setCanceledDate(OffsetDateTime.now());
 	}
 
 }
