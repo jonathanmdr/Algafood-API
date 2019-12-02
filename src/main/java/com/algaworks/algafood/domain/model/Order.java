@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,12 +35,15 @@ import lombok.EqualsAndHashCode;
 @Table(name = "pedido")
 public class Order {
 	
-	private static final String MESSAGE_UPDATE_STATUS_NOT_ACCEPTABLE = "Status do pedido %d não pode ser alterado de '%s' para '%s'.";
+	private static final String MESSAGE_UPDATE_STATUS_NOT_ACCEPTABLE = "Status do pedido %s não pode ser alterado de '%s' para '%s'.";
 	
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(name = "codigo")
+	private String code;
 	
 	@Column(name = "subtotal")
 	private BigDecimal subTotal;
@@ -85,7 +90,7 @@ public class Order {
 	
 	private void setStatus(OrderStatus newStatus) {
 		if (this.getStatus().cannotChangeTo(newStatus)) {
-			throw new BusinessException(String.format(MESSAGE_UPDATE_STATUS_NOT_ACCEPTABLE, this.getId(), this.getStatus().getDescription(), newStatus.getDescription()));
+			throw new BusinessException(String.format(MESSAGE_UPDATE_STATUS_NOT_ACCEPTABLE, this.getCode(), this.getStatus().getDescription(), newStatus.getDescription()));
 		}
 		
 		this.status = newStatus;
@@ -114,6 +119,11 @@ public class Order {
 	public void cancel() {
 		this.setStatus(OrderStatus.CANCELED);
 		this.setCanceledDate(OffsetDateTime.now());
+	}
+	
+	@PrePersist
+	private void generateCode() {
+		this.setCode(UUID.randomUUID().toString());
 	}
 
 }

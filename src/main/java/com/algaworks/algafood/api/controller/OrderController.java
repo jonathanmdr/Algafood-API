@@ -39,9 +39,9 @@ public class OrderController {
 		return orderMapper.toCollectionDto(orderService.findAll());
 	}
 	
-	@GetMapping("/{orderId}")
-	public OrderDTO findById(@PathVariable Long orderId) {
-		return orderMapper.toDto(orderService.findById(orderId));
+	@GetMapping("/{code}")
+	public OrderDTO findById(@PathVariable String code) {
+		return orderMapper.toDto(orderService.findByCode(code));
 	}
 	
 	@PostMapping

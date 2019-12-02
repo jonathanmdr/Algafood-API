@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.domain.service.OrderStatusService;
 
 @RestController
-@RequestMapping("/orders/{orderId}")
+@RequestMapping("/orders/{code}")
 public class OrderStatusController {
 	
 	@Autowired
@@ -19,20 +19,20 @@ public class OrderStatusController {
 	
 	@PutMapping("/confirm")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void confirm(@PathVariable Long orderId) {
-		orderStatusService.confirm(orderId);
+	public void confirm(@PathVariable String code) {
+		orderStatusService.confirm(code);
 	}
 	
 	@PutMapping("/deliver")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deliver(@PathVariable Long orderId) {
-		orderStatusService.deliver(orderId);
+	public void deliver(@PathVariable String code) {
+		orderStatusService.deliver(code);
 	}
 	
 	@PutMapping("/cancel")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void cancel(@PathVariable Long orderId) {
-		orderStatusService.cancel(orderId);
+	public void cancel(@PathVariable String code) {
+		orderStatusService.cancel(code);
 	}
 
 }

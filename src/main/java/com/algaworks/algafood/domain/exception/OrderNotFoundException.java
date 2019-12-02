@@ -4,12 +4,8 @@ public class OrderNotFoundException extends EntityNotFoundException {
 
 	private static final long serialVersionUID = 1L;
 	
-	public OrderNotFoundException(String message) {
-		super(message);
-	}
-	
-	public OrderNotFoundException(Long orderId) {
-		this(String.format("Pedido de ID: %d não existe!", orderId));
+	public OrderNotFoundException(String code) {
+		super(String.format("Pedido de ID: %s não existe!", code));
 	}
 
 }
