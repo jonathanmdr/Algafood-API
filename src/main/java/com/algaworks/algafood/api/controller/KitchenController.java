@@ -5,6 +5,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,13 +38,15 @@ public class KitchenController {
 	private KitchenMapper kitchenMapper;
 	
 	@GetMapping
-	public List<KitchenDTO> findAll() {
-		return kitchenMapper.toCollectionDto(kitchenService.findAll());
+	public Page<KitchenDTO> findAll(Pageable pageable) {
+		Page<Kitchen> kitchens = kitchenService.findAll(pageable);
+		List<KitchenDTO> kitchensDTO = kitchenMapper.toCollectionDto(kitchens.getContent());
+		return new PageImpl<>(kitchensDTO, pageable, kitchens.getTotalElements());
 	}
 	
 	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
-	public KitchensXmlWrapper findAllInFormatXml() {
-		return new KitchensXmlWrapper(kitchenMapper.toCollectionDto(kitchenService.findAll()));
+	public KitchensXmlWrapper findAllInFormatXml(Pageable pageable) {
+		return new KitchensXmlWrapper(kitchenMapper.toCollectionDto(kitchenService.findAll(pageable).getContent()));
 	}
 	
 	@GetMapping("/{kitchenId}")
