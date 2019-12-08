@@ -22,6 +22,7 @@ import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.algafood.domain.model.Order;
 import com.algaworks.algafood.domain.model.User;
+import com.algaworks.algafood.domain.repository.filter.OrderFilter;
 import com.algaworks.algafood.domain.service.OrderService;
 
 @RestController
@@ -35,8 +36,8 @@ public class OrderController {
 	private OrderMapper orderMapper;
 	
 	@GetMapping
-	public List<OrderSummaryDTO> findAll() {
-		return orderMapper.toCollectionDto(orderService.findAll());
+	public List<OrderSummaryDTO> findAll(OrderFilter orderFilter) {
+		return orderMapper.toCollectionDto(orderService.findAll(orderFilter));
 	}
 	
 	@GetMapping("/{code}")

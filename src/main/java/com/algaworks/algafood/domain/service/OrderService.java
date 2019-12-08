@@ -15,6 +15,8 @@ import com.algaworks.algafood.domain.model.Product;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.model.User;
 import com.algaworks.algafood.domain.repository.OrderRepository;
+import com.algaworks.algafood.domain.repository.filter.OrderFilter;
+import com.algaworks.algafood.infrastructure.repository.spec.OrderSpecs;
 
 @Service
 public class OrderService {
@@ -40,8 +42,8 @@ public class OrderService {
 	private ProductService productService;
 	
 	@Transactional(readOnly = true)
-	public List<Order> findAll() {
-		return orderRepository.findAll();
+	public List<Order> findAll(OrderFilter orderFilter) {
+		return orderRepository.findAll(OrderSpecs.usingFilter(orderFilter));
 	}
 	
 	@Transactional(readOnly = true)

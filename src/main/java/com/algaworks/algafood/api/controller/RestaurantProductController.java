@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,9 +38,14 @@ public class RestaurantProductController {
 	private ProductMapper productMapper;
 	
 	@GetMapping
-	public List<ProductDTO> findByRestaurant(@PathVariable Long restaurantId) {
+	public List<ProductDTO> findByRestaurant(@PathVariable Long restaurantId, @RequestParam(required = false) boolean includingInactives) {
 		Restaurant restaurant = restaurantService.findById(restaurantId);
-		return productMapper.toCollectionDto(productService.findbyRestaurant(restaurant)); 
+		
+		if (includingInactives) {
+			return productMapper.toCollectionDto(productService.findAllByRestaurant(restaurant));
+		}
+		
+		return productMapper.toCollectionDto(productService.findActiveByRestaurant(restaurant));		
 	}
 	
 	@GetMapping("/{productId}")

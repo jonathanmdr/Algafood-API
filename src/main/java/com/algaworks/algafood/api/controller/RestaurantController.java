@@ -29,12 +29,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.algaworks.algafood.api.mapper.RestaurantMapper;
 import com.algaworks.algafood.api.model.RestaurantDTO;
 import com.algaworks.algafood.api.model.input.RestaurantInput;
+import com.algaworks.algafood.api.model.view.RestaurantView;
 import com.algaworks.algafood.core.validation.ValidationException;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.algafood.domain.exception.RestaurantNotFoundException;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.service.RestaurantService;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -51,9 +53,16 @@ public class RestaurantController {
 	@Autowired
 	private RestaurantMapper restaurantMapper;
 	
+	@JsonView(RestaurantView.Summary.class)
 	@GetMapping
-	public List<RestaurantDTO> findAll() {
+	public List<RestaurantDTO> findAllSummary() {
 		return restaurantMapper.toCollectionDto(restaurantService.findAll());
+	}
+	
+	@JsonView(RestaurantView.JustName.class)
+	@GetMapping(params = "projection=just-name")
+	public List<RestaurantDTO> findAllJustName() {
+		return findAllSummary();
 	}
 	
 	@GetMapping("/{restaurantId}")
