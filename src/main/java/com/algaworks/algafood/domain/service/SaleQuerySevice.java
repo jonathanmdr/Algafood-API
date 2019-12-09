@@ -7,6 +7,6 @@ import com.algaworks.algafood.domain.model.dto.DailySale;
 
 public interface SaleQuerySevice {
 	
-	List<DailySale> findDailySales(DailySaleFilter filter);
+	List<DailySale> findDailySales(DailySaleFilter filter, String timeOffset);
 
 }
