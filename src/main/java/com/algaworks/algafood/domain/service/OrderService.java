@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.OrderNotFoundException;
+import com.algaworks.algafood.domain.filter.OrderFilter;
 import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.model.Order;
 import com.algaworks.algafood.domain.model.PaymentForm;
@@ -15,7 +16,6 @@ import com.algaworks.algafood.domain.model.Product;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.model.User;
 import com.algaworks.algafood.domain.repository.OrderRepository;
-import com.algaworks.algafood.domain.repository.filter.OrderFilter;
 import com.algaworks.algafood.infrastructure.repository.spec.OrderSpecs;
 
 @Service

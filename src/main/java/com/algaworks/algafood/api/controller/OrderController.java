@@ -25,9 +25,9 @@ import com.algaworks.algafood.api.model.input.OrderInput;
 import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
+import com.algaworks.algafood.domain.filter.OrderFilter;
 import com.algaworks.algafood.domain.model.Order;
 import com.algaworks.algafood.domain.model.User;
-import com.algaworks.algafood.domain.repository.filter.OrderFilter;
 import com.algaworks.algafood.domain.service.OrderService;
 
 @RestController
