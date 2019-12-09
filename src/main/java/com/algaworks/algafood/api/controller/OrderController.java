@@ -5,6 +5,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,8 +39,10 @@ public class OrderController {
 	private OrderMapper orderMapper;
 	
 	@GetMapping
-	public List<OrderSummaryDTO> findAll(OrderFilter orderFilter) {
-		return orderMapper.toCollectionDto(orderService.findAll(orderFilter));
+	public Page<OrderSummaryDTO> findAll(OrderFilter orderFilter, Pageable pageable) {
+		Page<Order> orders = orderService.findAll(orderFilter, pageable);
+		List<OrderSummaryDTO> ordersDTO = orderMapper.toCollectionDto(orders.getContent()); 
+		return new PageImpl<OrderSummaryDTO>(ordersDTO, pageable, orders.getTotalElements());
 	}
 	
 	@GetMapping("/{code}")

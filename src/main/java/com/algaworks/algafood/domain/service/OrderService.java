@@ -1,8 +1,8 @@
 package com.algaworks.algafood.domain.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,8 +42,8 @@ public class OrderService {
 	private ProductService productService;
 	
 	@Transactional(readOnly = true)
-	public List<Order> findAll(OrderFilter orderFilter) {
-		return orderRepository.findAll(OrderSpecs.usingFilter(orderFilter));
+	public Page<Order> findAll(OrderFilter orderFilter, Pageable pageable) {
+		return orderRepository.findAll(OrderSpecs.usingFilter(orderFilter), pageable);
 	}
 	
 	@Transactional(readOnly = true)
