@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.model.ProductDTO;
+import com.algaworks.algafood.api.model.ProductPhotoDTO;
 import com.algaworks.algafood.api.model.input.ProductInput;
 import com.algaworks.algafood.domain.model.Product;
+import com.algaworks.algafood.domain.model.ProductPhoto;
 
 @Component
 public class ProductMapper {
@@ -19,6 +21,10 @@ public class ProductMapper {
 	
 	public ProductDTO toDto(Product product) {
 		return modelMapper.map(product, ProductDTO.class);
+	}
+	
+	public ProductPhotoDTO toDto(ProductPhoto productPhoto) {
+		return modelMapper.map(productPhoto, ProductPhotoDTO.class);
 	}
 	
 	public List<ProductDTO> toCollectionDto(List<Product> products) {

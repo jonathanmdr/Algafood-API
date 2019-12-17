@@ -15,6 +15,7 @@ TRUNCATE TABLE usuario_grupo;
 TRUNCATE TABLE restaurante_usuario_responsavel;
 TRUNCATE TABLE pedido;
 TRUNCATE TABLE item_pedido;
+TRUNCATE TABLE foto_produto;
 
 SET foreign_key_checks = 1;
 

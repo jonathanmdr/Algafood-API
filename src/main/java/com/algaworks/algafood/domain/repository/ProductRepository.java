@@ -11,7 +11,7 @@ import com.algaworks.algafood.domain.model.Product;
 import com.algaworks.algafood.domain.model.Restaurant;
 
 @Repository
-public interface ProductRepository extends CustomJpaRepository<Product, Long> {
+public interface ProductRepository extends CustomJpaRepository<Product, Long>, ProductRepositoryQueries {
 	
 	List<Product> findByRestaurant(Restaurant restaurant);
 	
