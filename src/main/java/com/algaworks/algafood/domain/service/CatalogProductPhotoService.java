@@ -47,6 +47,7 @@ public class CatalogProductPhotoService {
 		
 		NewPhoto newPhoto = NewPhoto.builder()
 				.fileName(photoSaved.getFileName())
+				.contentType(photoSaved.getContentType())
 				.inputStream(dataFile)
 				.build();
 		
