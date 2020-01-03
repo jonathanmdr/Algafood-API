@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.algaworks.algafood.domain.model.Product;
+import com.algaworks.algafood.domain.model.ProductPhoto;
 import com.algaworks.algafood.domain.model.Restaurant;
 
 @Repository
@@ -20,5 +21,8 @@ public interface ProductRepository extends CustomJpaRepository<Product, Long>, P
 	
 	@Query("from Product where restaurant.id = :restaurantId and id = :productId")
 	Optional<Product> findById(@Param("restaurantId") Long restaurantId, @Param("productId") Long productId);
+	
+	@Query("select f from ProductPhoto f join f.produto p where p.restaurant.id = :restaurantId and f.produto.id = :productId")
+	Optional<ProductPhoto> findPhotoById(Long restaurantId, Long productId);
 
 }

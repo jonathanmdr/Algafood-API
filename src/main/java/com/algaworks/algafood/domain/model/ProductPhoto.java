@@ -22,9 +22,10 @@ public class ProductPhoto {
 	@Column(name = "produto_id")
 	private Long id;
 	
+	// TODO: Rever problema de nomenclatura do field em inglês no hibernate
 	@OneToOne(fetch = FetchType.LAZY)
 	@MapsId
-	private Product product;
+	private Product produto;
 	
 	@Column(name = "nome_arquivo")
 	private String fileName;
@@ -36,5 +37,13 @@ public class ProductPhoto {
 	
 	@Column(name = "tamanho")
 	private Long size;
+	
+	public Long getRestaurantId() {
+		if (produto != null) {
+			return produto.getRestaurant().getId();
+		}
+		
+		return null;
+	}
 
 }
