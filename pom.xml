@@ -131,6 +131,18 @@
 			<artifactId>aws-java-sdk-s3</artifactId>
 			<version>${aws-sdk-s3.version}</version>
 		</dependency>
+		
+		<!-- Mail sender with Java -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		
+		<!-- Processing templates HTML for send mail -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
+		</dependency>
 	</dependencies>
 
 	<!-- Steps for building project -->

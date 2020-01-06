@@ -101,7 +101,10 @@ INSERT INTO grupo_permissao(grupo_id, permissao_id) VALUES(1, 1),
 INSERT INTO usuario(id, nome, email, senha, data_criacao) VALUES(1, 'João da Silva', 'joao.ger@algafood.com', '123', utc_timestamp),
 																(2, 'Maria Joaquina', 'maria.vnd@algafood.com', '123', utc_timestamp),
 																(3, 'José Souza', 'jose.aux@algafood.com', '123', utc_timestamp),
-																(4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp);
+																(4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp),
+																(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp),
+																(6, 'Débora Mendonça', 'email.teste.aw+debora@gmail.com', '123', utc_timestamp),
+																(7, 'Carlos Lima', 'jonathan.mdr61@gmail.com', '123', utc_timestamp);
 																
 INSERT INTO usuario_grupo(usuario_id, grupo_id) VALUES(1, 1), 
 													  (1, 2), 
@@ -111,7 +114,7 @@ INSERT INTO restaurante_usuario_responsavel(restaurante_id, usuario_id) VALUES(5
 																			  (5, 3);
 -- Pedido 1																			  
 INSERT INTO pedido(id, codigo, restaurante_id, usuario_cliente_id, forma_pagamento_id, endereco_cidade_id, endereco_cep, endereco_logradouro, endereco_numero, endereco_complemento, endereco_bairro, status, data_criacao, subtotal, taxa_frete, valor_total)
-VALUES(1, '2cb92fca-52cf-4463-a133-fba2f52006e6', 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil', 'CREATED', utc_timestamp, 298.90, 10, 308.90);
+VALUES(1, '2cb92fca-52cf-4463-a133-fba2f52006e6', 1, 7, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil', 'CREATED', utc_timestamp, 298.90, 10, 308.90);
 
 INSERT INTO item_pedido(id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao) VALUES(1, 1, 1, 1, 78.9, 78.9, null),
 																											  (2, 1, 2, 2, 110, 220, 'Menos picante, por favor');

@@ -23,17 +23,20 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
+import com.algaworks.algafood.domain.event.OrderCanceledEvent;
+import com.algaworks.algafood.domain.event.OrderConfirmedEvent;
 import com.algaworks.algafood.domain.exception.BusinessException;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "pedido")
-public class Order {
+public class Order extends AbstractAggregateRoot<Order> {
 	
 	private static final String MESSAGE_UPDATE_STATUS_NOT_ACCEPTABLE = "Status do pedido %s não pode ser alterado de '%s' para '%s'.";
 	
@@ -109,6 +112,8 @@ public class Order {
 	public void confirm() {
 		this.setStatus(OrderStatus.CONFIRMED);
 		this.setConfirmatedDate(OffsetDateTime.now());
+		
+		registerEvent(new OrderConfirmedEvent(this));
 	}
 	
 	public void deliver() {
@@ -119,6 +124,8 @@ public class Order {
 	public void cancel() {
 		this.setStatus(OrderStatus.CANCELED);
 		this.setCanceledDate(OffsetDateTime.now());
+		
+		registerEvent(new OrderCanceledEvent(this));
 	}
 	
 	@PrePersist
