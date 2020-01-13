@@ -104,7 +104,7 @@ INSERT INTO usuario(id, nome, email, senha, data_criacao) VALUES(1, 'João da Si
 																(4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp),
 																(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp),
 																(6, 'Débora Mendonça', 'email.teste.aw+debora@gmail.com', '123', utc_timestamp),
-																(7, 'Carlos Lima', 'jonathan.mdr61@gmail.com', '123', utc_timestamp);
+																(7, 'Carlos Lima', 'jonathan.mdr@hotmail.com', '123', utc_timestamp);
 																
 INSERT INTO usuario_grupo(usuario_id, grupo_id) VALUES(1, 1), 
 													  (1, 2), 
