@@ -24,6 +24,10 @@ import com.algaworks.algafood.domain.exception.StateNotFoundException;
 import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.service.CityService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@Api(tags = "Cidades")
 @RestController
 @RequestMapping("/cities")
 public class CityController {
@@ -34,16 +38,19 @@ public class CityController {
 	@Autowired
 	private CityMapper cityMapper;
 	
+	@ApiOperation("Lista todas as cidades")
 	@GetMapping
 	public List<CityDTO> findAll() {
 		return cityMapper.toCollectionDto(cityService.findAll());
 	}
 	
+	@ApiOperation("Busca uma única cidade por ID")
 	@GetMapping("/{cityId}")
 	public CityDTO findById(@PathVariable Long cityId) {
 		return cityMapper.toDto(cityService.findById(cityId));
 	}
 	
+	@ApiOperation("Cadastra uma nova cidade")
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public CityDTO save(@RequestBody @Valid CityInput cityInput) {
@@ -55,6 +62,7 @@ public class CityController {
 		}
 	}
 	
+	@ApiOperation("Atualiza uma cidade por ID")
 	@PutMapping("/{cityId}")
 	public CityDTO update(@PathVariable Long cityId, @RequestBody @Valid CityInput cityInput) {
 		try {
@@ -68,6 +76,7 @@ public class CityController {
 		}
 	}
 	
+	@ApiOperation("Exclui uma cidade por ID")
 	@DeleteMapping("/{cityId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long cityId) {
