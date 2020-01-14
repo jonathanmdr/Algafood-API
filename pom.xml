@@ -24,6 +24,7 @@
 		<squiggly.version>1.3.18</squiggly.version>
 		<jasperreports.version>6.10.0</jasperreports.version>
 		<aws-sdk-s3.version>1.11.671</aws-sdk-s3.version>
+		<spring-fox.version>2.9.2</spring-fox.version>
 	</properties>
 	
 	<dependencies>
@@ -109,6 +110,12 @@
 			<groupId>com.github.bohnman</groupId>
 			<artifactId>squiggly-filter-jackson</artifactId>
 			<version>${squiggly.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 		<!-- Reports with Jasper -->
@@ -142,6 +149,20 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-freemarker</artifactId>
+		</dependency>
+		
+		<!-- Generate definition OpenAPI in JSON with SpringFox -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>${spring-fox.version}</version>
+		</dependency>
+		
+		<!-- Integration Swagger UI with SpringFox -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>${spring-fox.version}</version>
 		</dependency>
 	</dependencies>
 
