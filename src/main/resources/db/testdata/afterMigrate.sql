@@ -53,9 +53,9 @@ INSERT INTO restaurante(id, nome, taxa_frete, cozinha_id, data_criacao, data_atu
 																											   (5, 'Lanchonete do Tio Sam', 11, 4, utc_timestamp, utc_timestamp, true, true),
 																											   (6, 'Bar da Maria', 6, 4, utc_timestamp, utc_timestamp, true, true);
 
-INSERT INTO forma_pagamento(id, nome) VALUES(1, 'Cartão de crédito'),
-											(2, 'Cartão de débito'),
-											(3, 'Dinheiro');
+INSERT INTO forma_pagamento(id, nome, data_atualizacao) VALUES(1, 'Cartão de crédito', utc_timestamp),
+											                  (2, 'Cartão de débito', utc_timestamp),
+											                  (3, 'Dinheiro', utc_timestamp);
 
 INSERT INTO permissao(id, nome, descricao) VALUES(1, 'CONSULTAR_COZINHAS', 'Permite consultar cozinhas'),
 												 (2, 'EDITAR_COZINHAS', 'Permite editar cozinhas');

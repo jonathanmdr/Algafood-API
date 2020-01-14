@@ -1,5 +1,6 @@
 package com.algaworks.algafood.domain.service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,11 @@ public class PaymentFormService {
 	
 	@Autowired
 	private PaymentFormRepository paymentFormRepository;
+	
+	@Transactional(readOnly = true)
+	public OffsetDateTime getLastUpdatedDate() {
+		return paymentFormRepository.getLastUpdatedDate();
+	}	
 	
 	@Transactional(readOnly = true)
 	public List<PaymentForm> findAll() {
