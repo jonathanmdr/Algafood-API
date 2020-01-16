@@ -164,6 +164,13 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${spring-fox.version}</version>
 		</dependency>
+		
+		<!-- Using annotations of beans validations for API documentation with SpringFox -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-bean-validators</artifactId>
+			<version>${spring-fox.version}</version>
+		</dependency>
 	</dependencies>
 
 	<!-- Steps for building project -->

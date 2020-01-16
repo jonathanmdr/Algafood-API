@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.controller.openapi.GroupControllerOpenApi;
 import com.algaworks.algafood.api.mapper.GroupMapper;
 import com.algaworks.algafood.api.model.GroupDTO;
 import com.algaworks.algafood.api.model.input.GroupInput;
@@ -24,7 +25,7 @@ import com.algaworks.algafood.domain.service.GroupService;
 
 @RestController
 @RequestMapping("/groups")
-public class GroupController {
+public class GroupController implements GroupControllerOpenApi {
 	
 	@Autowired
 	private GroupService groupService;
