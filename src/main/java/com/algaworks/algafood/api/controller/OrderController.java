@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.controller.openapi.controller.OrderControllerOpenApi;
 import com.algaworks.algafood.api.mapper.OrderMapper;
 import com.algaworks.algafood.api.model.OrderDTO;
 import com.algaworks.algafood.api.model.OrderSummaryDTO;
@@ -30,9 +32,12 @@ import com.algaworks.algafood.domain.model.Order;
 import com.algaworks.algafood.domain.model.User;
 import com.algaworks.algafood.domain.service.OrderService;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+
 @RestController
-@RequestMapping("/orders")
-public class OrderController {
+@RequestMapping(path = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+public class OrderController implements OrderControllerOpenApi {
 	
 	@Autowired
 	private OrderService orderService;
@@ -40,6 +45,9 @@ public class OrderController {
 	@Autowired
 	private OrderMapper orderMapper;
 	
+	@ApiImplicitParams({
+		@ApiImplicitParam(value = "Nome das propriedades para filtrar na resposta, separados por vírgula", name = "fields", paramType = "query", type = "string")
+	})
 	@GetMapping
 	public Page<OrderSummaryDTO> findAll(OrderFilter orderFilter, Pageable pageable) {
 		pageable = translatePageable(pageable);
@@ -48,6 +56,9 @@ public class OrderController {
 		return new PageImpl<OrderSummaryDTO>(ordersDTO, pageable, orders.getTotalElements());
 	}
 	
+	@ApiImplicitParams({
+		@ApiImplicitParam(value = "Nome das propriedades para filtrar na resposta, separados por vírgula", name = "fields", paramType = "query", type = "string")
+	})
 	@GetMapping("/{code}")
 	public OrderDTO findById(@PathVariable String code) {
 		return orderMapper.toDto(orderService.findByCode(code));

@@ -6,12 +6,18 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.algaworks.algafood.api.controller.openapi.model.KitchensModelOpenApi;
+import com.algaworks.algafood.api.controller.openapi.model.PageableModelOpenApi;
 import com.algaworks.algafood.api.exceptionhandler.ApiError;
+import com.algaworks.algafood.api.model.KitchenDTO;
 import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
@@ -19,6 +25,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
@@ -48,9 +55,15 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.globalResponseMessage(RequestMethod.PUT, globalPostAndPutResponseMessage())
 				.globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessage())
 				.additionalModels(typeResolver.resolve(ApiError.class))
+				.ignoredParameterTypes(ServletWebRequest.class)
+				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Page.class, KitchenDTO.class), KitchensModelOpenApi.class))
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Realiza o gerencimanento de cidades"), 
-					  new Tag("Grupos", "Realiza o gerenciamento de grupos de usuário"));
+					  new Tag("Grupos", "Realiza o gerenciamento de grupos de usuário"),
+					  new Tag("Cozinhas", "Realiza o gerencimento de cozinhas"),
+					  new Tag("Formas de pagamento", "Realiza o gerencimento de formas de pagamento"),
+					  new Tag("Pedidos", "Realiza o gerencimento de pedidos"));
 	}
 	
 	private List<ResponseMessage> globalGetResponseMessage() {

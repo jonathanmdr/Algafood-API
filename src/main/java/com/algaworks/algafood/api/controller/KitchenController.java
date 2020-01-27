@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.controller.openapi.controller.KitchenControllerOpenApi;
 import com.algaworks.algafood.api.mapper.KitchenMapper;
 import com.algaworks.algafood.api.model.KitchenDTO;
 import com.algaworks.algafood.api.model.input.KitchenInput;
@@ -28,8 +29,8 @@ import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.service.KitchenService;
 
 @RestController
-@RequestMapping("/kitchens")
-public class KitchenController {
+@RequestMapping(path = "/kitchens", produces = MediaType.APPLICATION_JSON_VALUE)
+public class KitchenController implements KitchenControllerOpenApi {
 	
 	@Autowired
 	private KitchenService kitchenService;

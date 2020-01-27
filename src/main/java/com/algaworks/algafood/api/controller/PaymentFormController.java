@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
+import com.algaworks.algafood.api.controller.openapi.controller.PaymentFormControllerOpenApi;
 import com.algaworks.algafood.api.mapper.PaymentFormMapper;
 import com.algaworks.algafood.api.model.PaymentFormDTO;
 import com.algaworks.algafood.api.model.input.PaymentFormInput;
@@ -29,8 +31,8 @@ import com.algaworks.algafood.domain.model.PaymentForm;
 import com.algaworks.algafood.domain.service.PaymentFormService;
 
 @RestController
-@RequestMapping("/payment-forms")
-public class PaymentFormController {
+@RequestMapping(path = "/payment-forms", produces = MediaType.APPLICATION_JSON_VALUE)
+public class PaymentFormController implements PaymentFormControllerOpenApi {
 	
 	@Autowired
 	private PaymentFormService paymentFormService;
