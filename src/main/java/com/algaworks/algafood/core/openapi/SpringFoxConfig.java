@@ -15,9 +15,11 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.algaworks.algafood.api.controller.openapi.model.KitchensModelOpenApi;
+import com.algaworks.algafood.api.controller.openapi.model.OrderSummaryModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.PageableModelOpenApi;
 import com.algaworks.algafood.api.exceptionhandler.ApiError;
 import com.algaworks.algafood.api.model.KitchenDTO;
+import com.algaworks.algafood.api.model.OrderSummaryDTO;
 import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
@@ -58,6 +60,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.ignoredParameterTypes(ServletWebRequest.class)
 				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Page.class, KitchenDTO.class), KitchensModelOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Page.class, OrderSummaryDTO.class), OrderSummaryModelOpenApi.class))
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Realiza o gerencimanento de cidades"), 
 					  new Tag("Grupos", "Realiza o gerenciamento de grupos de usuário"),

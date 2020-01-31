@@ -24,7 +24,7 @@ public interface OrderControllerOpenApi {
 	@ApiImplicitParams({
 		@ApiImplicitParam(value = "Nome das propriedades para filtrar na resposta, separados por vírgula", name = "fields", paramType = "query", type = "string")
 	})
-	public Page<OrderSummaryDTO> findAll(@ApiParam(name="filtros", value = "Campos para filtragem de pedidos") OrderFilter orderFilter, Pageable pageable);
+	public Page<OrderSummaryDTO> findAll(OrderFilter orderFilter, Pageable pageable);
 	
 	@ApiOperation("Busca um pedido por UUID")
 	@ApiResponses({
@@ -34,7 +34,7 @@ public interface OrderControllerOpenApi {
 	@ApiImplicitParams({
 		@ApiImplicitParam(value = "Nome das propriedades para filtrar na resposta, separados por vírgula", name = "fields", paramType = "query", type = "string")
 	})
-	public OrderDTO findById(@ApiParam(value = "Identificador de um pedido", example = "1") String code);
+	public OrderDTO findById(@ApiParam(value = "Identificador de um pedido", example = "f9981ca4-5a5e-4da3-af04-933861df3e55") String code);
 	
 	@ApiOperation("Salva um pedido")
 	@ApiResponses({
