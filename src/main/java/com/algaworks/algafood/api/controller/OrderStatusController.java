@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.controller.openapi.controller.OrderStatusControllerOpenApi;
 import com.algaworks.algafood.domain.service.OrderStatusService;
 
 @RestController
 @RequestMapping("/orders/{code}")
-public class OrderStatusController {
+public class OrderStatusController implements OrderStatusControllerOpenApi {
 	
 	@Autowired
 	private OrderStatusService orderStatusService;
