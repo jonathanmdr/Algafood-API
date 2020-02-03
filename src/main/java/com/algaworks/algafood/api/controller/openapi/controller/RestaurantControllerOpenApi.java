@@ -5,38 +5,109 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.algaworks.algafood.api.controller.openapi.model.RestaurantModelOpenApi;
+import com.algaworks.algafood.api.exceptionhandler.ApiError;
 import com.algaworks.algafood.api.model.RestaurantDTO;
 import com.algaworks.algafood.api.model.input.RestaurantInput;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @Api(tags = "Restaurantes")
 public interface RestaurantControllerOpenApi {
 
+	@ApiOperation(value = "Lista todos os restaurantes de forma resumida", response = RestaurantModelOpenApi.class)
+	@ApiImplicitParams({
+		@ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "just-name", name = "projection", paramType = "query", type = "string")
+	})
 	public List<RestaurantDTO> findAllSummary();
 	
+	@ApiOperation(value = "Lista todos os restaurantes apresentando somente o nome", hidden = true)
 	public List<RestaurantDTO> findAllJustName();
 	
-	public RestaurantDTO findById(Long restaurantId);
+	@ApiOperation("Busca um restaurante por ID")
+	@ApiResponses({
+		@ApiResponse(code = 400, message = "Identificador de restaurante inválido", response = ApiError.class),
+		@ApiResponse(code = 404, message = "Restaurante não encontrado", response = ApiError.class)
+	})	
+	public RestaurantDTO findById(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId);
 	
-	public RestaurantDTO save(RestaurantInput restaurantInput);
+	@ApiOperation("Cadastra um novo restaurante")
+	@ApiResponses({
+		@ApiResponse(code = 201, message = "Restaurante cadastrado")
+	})
+	public RestaurantDTO save(@ApiParam(name = "corpo", value = "Representação de um novo restaurante", required = true) RestaurantInput restaurantInput);
 	
-	public RestaurantDTO update(Long restaurantId, RestaurantInput restaurantInput);
+	@ApiOperation("Atualiza um restaurante por ID")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "Restaurante atualizado"),
+		@ApiResponse(code = 404, message = "Restaurante não encontrado", response = ApiError.class)
+	})
+	public RestaurantDTO update(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId, 
+			                    @ApiParam(name = "corpo", value = "Representação de um novo restaurante", required = true) RestaurantInput restaurantInput);
 	
-	public void activate(Long restaurantId);
+	@ApiOperation("Ativa um restaurante por ID")
+	@ApiResponses({
+		@ApiResponse(code = 400, message = "Identificador de restaurante inválido", response = ApiError.class),
+		@ApiResponse(code = 404, message = "Restaurante não encontrado", response = ApiError.class)
+	})
+	public void activate(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId);
 	
-	public void activations(List<Long> restaurantIds);
+	@ApiOperation("Ativa restaurantes em lote por ID")
+	@ApiResponses({
+		@ApiResponse(code = 400, message = "Identificador de restaurante inválido", response = ApiError.class),
+		@ApiResponse(code = 404, message = "Restaurante não encontrado", response = ApiError.class)
+	})
+	public void activations(@ApiParam(name = "corpo", value = "Lista de identificadores de restaurantes", required = true) List<Long> restaurantIds);
 	
-	public void open(Long restaurantId);
+	@ApiOperation("Abre um restaurante por ID")
+	@ApiResponses({
+		@ApiResponse(code = 400, message = "Identificador de restaurante inválido", response = ApiError.class),
+		@ApiResponse(code = 404, message = "Restaurante não encontrado", response = ApiError.class)
+	})
+	public void open(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId);
 	
-	public void close(Long restaurantId);
+	@ApiOperation("Fecha um restaurante por ID")
+	@ApiResponses({
+		@ApiResponse(code = 400, message = "Identificador de restaurante inválido", response = ApiError.class),
+		@ApiResponse(code = 404, message = "Restaurante não encontrado", response = ApiError.class)
+	})
+	public void close(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId);
 	
-	public void delete(Long restaurantId);
+	@ApiOperation("Exclui um restaurante por ID")
+	@ApiResponses({
+		@ApiResponse(code = 204, message = "Restaurante excluído"),
+		@ApiResponse(code = 400, message = "Identificador de restaurante inválido", response = ApiError.class),
+		@ApiResponse(code = 404, message = "Restaurante não encontrado", response = ApiError.class),
+		@ApiResponse(code = 409, message = "Restaurante não pode ser excluído pois está associado a outro recurso", response = ApiError.class)
+	})	
+	public void delete(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId);
 	
-	public void inactivate(Long restaurantId);
+	@ApiOperation("Inativa um restaurante por ID")
+	@ApiResponses({
+		@ApiResponse(code = 400, message = "Identificador de restaurante inválido", response = ApiError.class),
+		@ApiResponse(code = 404, message = "Restaurante não encontrado", response = ApiError.class)
+	})
+	public void inactivate(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId);
 	
-	public void inactivations(List<Long> restaurantIds);
-		
-	public RestaurantDTO updatePartial(Long restaurantId, Map<String, Object> values, HttpServletRequest request);
+	@ApiOperation("Inativa restaurantes em lote por ID")
+	@ApiResponses({
+		@ApiResponse(code = 400, message = "Identificador de restaurante inválido", response = ApiError.class),
+		@ApiResponse(code = 404, message = "Restaurante não encontrado", response = ApiError.class)
+	})
+	public void inactivations(@ApiParam(name = "corpo", value = "Lista de identificadores de restaurantes", required = true) List<Long> restaurantIds);
+	
+	@ApiOperation("Atualiza um restaurante por ID parcialmente")
+	@ApiResponses({
+		@ApiResponse(code = 400, message = "Identificador de restaurante inválido", response = ApiError.class),
+		@ApiResponse(code = 404, message = "Restaurante não encontrado", response = ApiError.class)
+	})
+	public RestaurantDTO updatePartial(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId, 
+			                           @ApiParam(name = "corpo", value = "Representação dos campos que deseja alterar", required = true) Map<String, Object> values, HttpServletRequest request);
 	
 }
