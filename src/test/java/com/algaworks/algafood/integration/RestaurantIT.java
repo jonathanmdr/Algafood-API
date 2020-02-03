@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import javax.validation.ConstraintViolationException;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.algaworks.algafood.domain.repository.KitchenRepository;
 import com.algaworks.algafood.domain.service.RestaurantService;
 import com.algaworks.algafood.util.DatabaseCleaner;
 
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
