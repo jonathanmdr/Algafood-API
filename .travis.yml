@@ -1,6 +1,11 @@
 language: java
 jdk:
   - openjdk12
+services:
+  - mysql 
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS algafoodapi;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS algafood_test;'
 install:
   - mvn -N io.takari:maven:wrapper
   - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V

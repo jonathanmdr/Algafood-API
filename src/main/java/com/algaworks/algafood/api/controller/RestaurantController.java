@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.controller.openapi.controller.RestaurantControllerOpenApi;
 import com.algaworks.algafood.api.mapper.RestaurantMapper;
 import com.algaworks.algafood.api.model.RestaurantDTO;
 import com.algaworks.algafood.api.model.input.RestaurantInput;
@@ -42,7 +43,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/restaurants")
-public class RestaurantController {
+public class RestaurantController implements RestaurantControllerOpenApi {
 	
 	@Autowired
 	private RestaurantService restaurantService;
