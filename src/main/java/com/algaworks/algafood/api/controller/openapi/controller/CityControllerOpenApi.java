@@ -23,27 +23,28 @@ public interface CityControllerOpenApi {
 		@ApiResponse(code = 400, message = "Identificador da cidade inválido", response = ApiError.class),
 		@ApiResponse(code = 404, message = "Cidade não encontrada", response = ApiError.class)
 	})	
-	public CityDTO findById(@ApiParam(value = "Identificador de uma cidade", example = "1") Long cityId);
+	public CityDTO findById(@ApiParam(value = "Identificador de uma cidade", example = "1", required = true) Long cityId);
 	
 	@ApiOperation("Cadastra uma nova cidade")
 	@ApiResponses({
 		@ApiResponse(code = 201, message = "Cidade cadastrada")
 	})		
-	public CityDTO save(@ApiParam(name = "corpo", value = "Representação de uma nova cidade") CityInput cityInput);
+	public CityDTO save(@ApiParam(name = "corpo", value = "Representação de uma nova cidade", required = true) CityInput cityInput);
 	
 	@ApiOperation("Atualiza uma cidade por ID")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "Cidade atualizada"),
 		@ApiResponse(code = 404, message = "Cidade não encontrada", response = ApiError.class)
 	})	
-	public CityDTO update(@ApiParam(value = "Identificador de uma cidade", example = "1") Long cityId, 
-			              @ApiParam(name = "corpo", value = "Representação de uma cidade com novos dados") CityInput cityInput);
+	public CityDTO update(@ApiParam(value = "Identificador de uma cidade", example = "1", required = true) Long cityId, 
+			              @ApiParam(name = "corpo", value = "Representação de uma cidade com novos dados", required = true) CityInput cityInput);
 	
 	@ApiOperation("Exclui uma cidade por ID")
 	@ApiResponses({
 		@ApiResponse(code = 204, message = "Cidade excluída"),
-		@ApiResponse(code = 404, message = "Cidade não encontrada", response = ApiError.class)
+		@ApiResponse(code = 404, message = "Cidade não encontrada", response = ApiError.class),
+		@ApiResponse(code = 409, message = "Cidade não pode ser excluída pois está associada a outro recurso", response = ApiError.class)
 	})	
-	public void delete(@ApiParam(value = "Identificador de uma cidade", example = "1") Long cityId);
+	public void delete(@ApiParam(value = "Identificador de uma cidade", example = "1", required = true) Long cityId);
 		
 }

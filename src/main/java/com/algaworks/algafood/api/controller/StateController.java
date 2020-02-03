@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.controller.openapi.controller.StateControllerOpenApi;
 import com.algaworks.algafood.api.mapper.StateMapper;
 import com.algaworks.algafood.api.model.StateDTO;
 import com.algaworks.algafood.api.model.input.StateInput;
@@ -24,7 +25,7 @@ import com.algaworks.algafood.domain.service.StateService;
 
 @RestController
 @RequestMapping("/states")
-public class StateController {
+public class StateController implements StateControllerOpenApi {
 	
 	@Autowired
 	private StateService stateService;
