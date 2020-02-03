@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,14 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.controller.openapi.controller.RestaurantUserManagerControllerOpenApi;
 import com.algaworks.algafood.api.mapper.UserMapper;
 import com.algaworks.algafood.api.model.UserSummaryDTO;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.service.RestaurantService;
 
 @RestController
-@RequestMapping("/restaurants/{restaurantId}/users")
-public class RestaurantUserManagerController {
+@RequestMapping(value = "/restaurants/{restaurantId}/users", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestaurantUserManagerController implements RestaurantUserManagerControllerOpenApi {
 	
 	@Autowired
 	private RestaurantService restaurantService;

@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
@@ -42,7 +43,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
-@RequestMapping("/restaurants")
+@RequestMapping(value = "/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController implements RestaurantControllerOpenApi {
 	
 	@Autowired
