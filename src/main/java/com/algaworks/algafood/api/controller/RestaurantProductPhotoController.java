@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.algaworks.algafood.api.controller.openapi.controller.RestaurantProductPhotoControllerOpenApi;
 import com.algaworks.algafood.api.mapper.ProductMapper;
 import com.algaworks.algafood.api.model.ProductPhotoDTO;
 import com.algaworks.algafood.api.model.input.ProductPhotoInput;
@@ -33,8 +36,8 @@ import com.algaworks.algafood.domain.service.PhotoStorageService.PhotoRecovered;
 import com.algaworks.algafood.domain.service.ProductService;
 
 @RestController
-@RequestMapping("/restaurants/{restaurantId}/products/{productId}/photo")
-public class RestaurantProductPhotoController {
+@RequestMapping(value = "/restaurants/{restaurantId}/products/{productId}/photo", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestaurantProductPhotoController implements RestaurantProductPhotoControllerOpenApi {
 	
 	@Autowired
 	private CatalogProductPhotoService catalogProductService;
@@ -48,13 +51,13 @@ public class RestaurantProductPhotoController {
 	@Autowired
 	private ProductMapper productMapper;
 	
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping
 	public ProductPhotoDTO findById(@PathVariable Long restaurantId, @PathVariable Long productId) {
 		ProductPhoto productPhoto = catalogProductService.findById(restaurantId, productId);
 		return productMapper.toDto(productPhoto);
 	}
 	
-	@GetMapping
+	@GetMapping(produces = MediaType.ALL_VALUE)
 	public ResponseEntity<?> servePhoto(@PathVariable Long restaurantId, @PathVariable Long productId, @RequestHeader(name = "accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
 		try {
 			ProductPhoto productPhoto = catalogProductService.findById(restaurantId, productId);
@@ -80,7 +83,7 @@ public class RestaurantProductPhotoController {
 	}
 
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ProductPhotoDTO updatePhoto(@PathVariable Long restaurantId, @PathVariable Long productId, @Valid ProductPhotoInput productPhotoInput) throws IOException {
+	public ProductPhotoDTO updatePhoto(@PathVariable Long restaurantId, @PathVariable Long productId, @Valid ProductPhotoInput productPhotoInput, @RequestPart(required = true) MultipartFile file) throws IOException {
 		Product product = productService.findById(restaurantId, productId);
 		
 		ProductPhoto photo = new ProductPhoto();
