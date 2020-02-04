@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.ResourceUriHelper;
 import com.algaworks.algafood.api.controller.openapi.controller.CityControllerOpenApi;
 import com.algaworks.algafood.api.mapper.CityMapper;
 import com.algaworks.algafood.api.model.CityDTO;
@@ -51,7 +52,11 @@ public class CityController implements CityControllerOpenApi {
 	public CityDTO save(@RequestBody @Valid CityInput cityInput) {
 		try {
 			City city = cityMapper.toDomainObject(cityInput);
-			return cityMapper.toDto(cityService.save(city));
+			CityDTO cityDto = cityMapper.toDto(cityService.save(city));
+			
+			ResourceUriHelper.addUriResponseHeader(cityDto.getId());
+			
+			return cityDto;
 		} catch(StateNotFoundException ex) {
 			throw new BusinessException(ex.getMessage(), ex);
 		}

@@ -20,7 +20,7 @@ import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.service.RestaurantService;
 
 @RestController
-@RequestMapping(value = "/restaurants/{restaurantId}/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/restaurants/{restaurantId}/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantUserManagerController implements RestaurantUserManagerControllerOpenApi {
 	
 	@Autowired

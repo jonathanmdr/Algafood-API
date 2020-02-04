@@ -27,7 +27,7 @@ import com.algaworks.algafood.domain.model.User;
 import com.algaworks.algafood.domain.service.UserService;
 
 @RestController
-@RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController implements UserControllerOpenApi {
 	
 	@Autowired
