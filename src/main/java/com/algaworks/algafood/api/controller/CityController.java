@@ -2,9 +2,12 @@ package com.algaworks.algafood.api.controller;
 
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -44,7 +47,15 @@ public class CityController implements CityControllerOpenApi {
 		
 	@GetMapping("/{cityId}")
 	public CityDTO findById(@PathVariable Long cityId) {
-		return cityMapper.toDto(cityService.findById(cityId));
+		CityDTO cityDto = cityMapper.toDto(cityService.findById(cityId));
+		
+		cityDto.add(linkTo(CityController.class).slash(cityDto.getId()).withSelfRel());
+		cityDto.add(linkTo(CityController.class).withRel(IanaLinkRelations.COLLECTION));
+		
+		cityDto.getState().add(linkTo(StateController.class).slash(cityDto.getState().getId()).withSelfRel());
+		cityDto.getState().add(linkTo(StateController.class).withRel(IanaLinkRelations.COLLECTION));
+		
+		return cityDto;
 	}
 	
 	@PostMapping
