@@ -1,6 +1,6 @@
 package com.algaworks.algafood.api.representation;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.algaworks.algafood.api.model.KitchenDTO;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -13,10 +13,10 @@ import lombok.NonNull;
 @JacksonXmlRootElement(localName = "kitchens")
 @Data
 public class KitchensXmlWrapper {
-	
+
 	@JacksonXmlProperty(localName = "kitchen")
 	@JacksonXmlElementWrapper(useWrapping = false)
 	@NonNull
-	private List<KitchenDTO> kitchens;
+	private CollectionModel<KitchenDTO> kitchens;
 
 }
