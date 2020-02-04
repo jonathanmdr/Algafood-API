@@ -1,6 +1,6 @@
 package com.algaworks.algafood.api.controller.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.algaworks.algafood.api.exceptionhandler.ApiError;
 import com.algaworks.algafood.api.model.UserSummaryDTO;
@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiResponses;
 public interface UserControllerOpenApi {
 	
 	@ApiOperation("Lista todos os usuários")
-	public List<UserSummaryDTO> findAll();
+	public CollectionModel<UserSummaryDTO> findAll();
 	
 	@ApiOperation("Busca um usuário por ID")
 	@ApiResponses({

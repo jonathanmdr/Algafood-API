@@ -1,8 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,25 +21,28 @@ import com.algaworks.algafood.domain.service.RestaurantService;
 @RestController
 @RequestMapping(path = "/restaurants/{restaurantId}/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantUserManagerController implements RestaurantUserManagerControllerOpenApi {
-	
+
 	@Autowired
 	private RestaurantService restaurantService;
-	
+
 	@Autowired
 	private UserMapper userMapper;
-	
+
+	@Override
 	@GetMapping
-	public List<UserSummaryDTO> findById(@PathVariable Long restaurantId) {
+	public CollectionModel<UserSummaryDTO> findById(@PathVariable Long restaurantId) {
 		Restaurant restaurant = restaurantService.findById(restaurantId);
-		return userMapper.toCollectionSummaryDto(restaurant.getUsers());
+		return userMapper.toCollectionModel(restaurant.getUsers());
 	}
-	
+
+	@Override
 	@PutMapping("/{userId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void associateUser(@PathVariable Long restaurantId, @PathVariable Long userId) {
 		restaurantService.associateUser(restaurantId, userId);
 	}
-	
+
+	@Override
 	@DeleteMapping("/{userId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void disassociateUser(@PathVariable Long restaurantId, @PathVariable Long userId) {

@@ -1,10 +1,9 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,45 +28,51 @@ import com.algaworks.algafood.domain.service.UserService;
 @RestController
 @RequestMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController implements UserControllerOpenApi {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private UserMapper userMapper;
-	
+
+	@Override
 	@GetMapping
-	public List<UserSummaryDTO> findAll() {
-		return userMapper.toCollectionSummaryDto(userService.findAll());
+	public CollectionModel<UserSummaryDTO> findAll() {
+		return userMapper.toCollectionModel(userService.findAll());
 	}
-	
+
+	@Override
 	@GetMapping("/{userId}")
 	public UserSummaryDTO findById(@PathVariable Long userId) {
-		return userMapper.toSummaryDto(userService.findById(userId));
+		return userMapper.toModel(userService.findById(userId));
 	}
-	
+
+	@Override
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public UserSummaryDTO save(@RequestBody @Valid UserInput userInput) {
 		User user = userMapper.toDomainObject(userInput);
-		return userMapper.toSummaryDto(userService.save(user));
+		return userMapper.toModel(userService.save(user));
 	}
-	
+
+	@Override
 	@PutMapping("/{userId}")
 	public UserSummaryDTO update(@PathVariable Long userId, @RequestBody @Valid UserSummaryInput userSummaryInput) {
 		User userCurrent = userService.findById(userId);
-		
+
 		userMapper.copyToDomainObject(userSummaryInput, userCurrent);
-		
-		return userMapper.toSummaryDto(userService.save(userCurrent));
+
+		return userMapper.toModel(userService.save(userCurrent));
 	}
-	
+
+	@Override
 	@PutMapping("/{userId}/password")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void updatePassword(@PathVariable Long userId, @RequestBody @Valid UserPasswordInput userPasswordInput) {
 		userService.updatePassword(userId, userPasswordInput.getCurrentPassword(), userPasswordInput.getNewPassword());
 	}
-	
+
+	@Override
 	@DeleteMapping("/{userId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long userId) {

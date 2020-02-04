@@ -1,13 +1,9 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,63 +29,60 @@ import com.algaworks.algafood.domain.service.CityService;
 @RestController
 @RequestMapping(path = "/cities", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CityController implements CityControllerOpenApi {
-	
+
 	@Autowired
 	private CityService cityService;
-	
+
 	@Autowired
 	private CityMapper cityMapper;
-		
+
+	@Override
 	@GetMapping
-	public List<CityDTO> findAll() {
-		return cityMapper.toCollectionDto(cityService.findAll());
+	public CollectionModel<CityDTO> findAll() {
+		return cityMapper.toCollectionModel(cityService.findAll());
 	}
-		
+
+	@Override
 	@GetMapping("/{cityId}")
 	public CityDTO findById(@PathVariable Long cityId) {
-		CityDTO cityDto = cityMapper.toDto(cityService.findById(cityId));
-		
-		cityDto.add(linkTo(CityController.class).slash(cityDto.getId()).withSelfRel());
-		cityDto.add(linkTo(CityController.class).withRel(IanaLinkRelations.COLLECTION));
-		
-		cityDto.getState().add(linkTo(StateController.class).slash(cityDto.getState().getId()).withSelfRel());
-		cityDto.getState().add(linkTo(StateController.class).withRel(IanaLinkRelations.COLLECTION));
-		
-		return cityDto;
+		return cityMapper.toModel(cityService.findById(cityId));
 	}
-	
+
+	@Override
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public CityDTO save(@RequestBody @Valid CityInput cityInput) {
 		try {
 			City city = cityMapper.toDomainObject(cityInput);
-			CityDTO cityDto = cityMapper.toDto(cityService.save(city));
-			
+			CityDTO cityDto = cityMapper.toModel(cityService.save(city));
+
 			ResourceUriHelper.addUriResponseHeader(cityDto.getId());
-			
+
 			return cityDto;
-		} catch(StateNotFoundException ex) {
+		} catch (StateNotFoundException ex) {
 			throw new BusinessException(ex.getMessage(), ex);
 		}
 	}
-	
+
+	@Override
 	@PutMapping("/{cityId}")
 	public CityDTO update(@PathVariable Long cityId, @RequestBody @Valid CityInput cityInput) {
 		try {
 			City cityCurrent = cityService.findById(cityId);
-						
-			cityMapper.copyToDomainObject(cityInput, cityCurrent);		
-		
-			return cityMapper.toDto(cityService.save(cityCurrent));
-		} catch(StateNotFoundException ex) {
+
+			cityMapper.copyToDomainObject(cityInput, cityCurrent);
+
+			return cityMapper.toModel(cityService.save(cityCurrent));
+		} catch (StateNotFoundException ex) {
 			throw new BusinessException(ex.getMessage(), ex);
 		}
 	}
-	
+
+	@Override
 	@DeleteMapping("/{cityId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long cityId) {
 		cityService.delete(cityId);
-	}		
+	}
 
 }
