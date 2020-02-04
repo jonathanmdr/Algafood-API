@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.api.controller.openapi.controller.UserControllerOpenApi;
 import com.algaworks.algafood.api.mapper.UserMapper;
 import com.algaworks.algafood.api.model.UserSummaryDTO;
 import com.algaworks.algafood.api.model.input.UserInput;
@@ -27,7 +28,7 @@ import com.algaworks.algafood.domain.service.UserService;
 
 @RestController
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserController {
+public class UserController implements UserControllerOpenApi {
 	
 	@Autowired
 	private UserService userService;
