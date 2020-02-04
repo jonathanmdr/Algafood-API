@@ -24,7 +24,8 @@ public interface RestaurantProductPhotoControllerOpenApi {
 		@ApiResponse(code = 400, message = "Identificador do restaurante ou produto inválido", response = ApiError.class),
 		@ApiResponse(code = 404, message = "Foto de produto não encontrada", response = ApiError.class)
 	})
-	public ProductPhotoDTO findById(Long restaurantId, Long productId);
+	public ProductPhotoDTO findById(@ApiParam(value = "Identificador do restaurante", example = "1", required = true) Long restaurantId, 
+                                    @ApiParam(value = "Identificador do produto", example = "1", required = true) Long productId);
 	
 	@ApiOperation(value = "Busca a foto do produto de um restaurante", hidden = true)
 	public ResponseEntity<?> servePhoto(Long restaurantId, Long productId, String acceptHeader) throws HttpMediaTypeNotAcceptableException;

@@ -16,7 +16,7 @@ public interface RestaurantPaymentFormControllerOpenApi {
 	
 	@ApiOperation("Lista todas as formas de pagamento por restaurante")
 	@ApiResponses({
-		@ApiResponse(code = 404, message = "Restaurante ou forma de pagamento não encontrado", response = ApiError.class)
+		@ApiResponse(code = 404, message = "Restaurante não encontrado", response = ApiError.class)
 	})
 	public List<PaymentFormDTO> findAll(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId);
 	
