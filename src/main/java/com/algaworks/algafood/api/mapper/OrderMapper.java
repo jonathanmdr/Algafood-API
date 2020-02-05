@@ -31,6 +31,18 @@ public class OrderMapper extends RepresentationModelAssemblerSupport<Order, Orde
 		
 		orderDto.add(algaLinks.linkToOrders());
 		
+		if (order.canBeConfirmed()) {
+            orderDto.add(algaLinks.linkToConfirmOrder(orderDto.getCode(), "confirm"));
+		}
+		
+		if (order.canBeCanceled()) {
+            orderDto.add(algaLinks.linkToCancelOrder(orderDto.getCode(), "cancel"));
+		}
+		
+		if (order.canBeDelivered()) {
+            orderDto.add(algaLinks.linkToDeliverOrder(orderDto.getCode(), "deliver"));
+		}
+		
 		orderDto.getRestaurant()
 		    .add(algaLinks.linkToRestaurant(orderDto.getRestaurant().getId()));
 		

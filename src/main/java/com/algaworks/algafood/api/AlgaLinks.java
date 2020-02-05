@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.algaworks.algafood.api.controller.CityController;
 import com.algaworks.algafood.api.controller.KitchenController;
 import com.algaworks.algafood.api.controller.OrderController;
+import com.algaworks.algafood.api.controller.OrderStatusController;
 import com.algaworks.algafood.api.controller.PaymentFormController;
 import com.algaworks.algafood.api.controller.RestaurantController;
 import com.algaworks.algafood.api.controller.RestaurantProductController;
@@ -39,6 +40,21 @@ public class AlgaLinks {
 
 		return new Link(UriTemplate.of(linkTo(OrderController.class)
 				.toUri().toString(), PAGINATION_VARIABLES.concat(filterVariables)), "orders");
+	}
+	
+	public Link linkToConfirmOrder(String orderCode, String linkRelation) {
+		return linkTo(methodOn(OrderStatusController.class)
+				.confirm(orderCode)).withRel(linkRelation);
+	}
+	
+	public Link linkToDeliverOrder(String orderCode, String linkRelation) {
+		return linkTo(methodOn(OrderStatusController.class)
+				.deliver(orderCode)).withRel(linkRelation);
+	}
+	
+	public Link linkToCancelOrder(String orderCode, String linkRelation) {
+		return linkTo(methodOn(OrderStatusController.class)
+				.cancel(orderCode)).withRel(linkRelation);
 	}
 
 	public Link linkToRestaurant(Long restaurantId, String linkRelation) {

@@ -99,6 +99,18 @@ public class Order extends AbstractAggregateRoot<Order> {
 		this.status = newStatus;
 	}
 	
+	public boolean canBeConfirmed() {
+		return getStatus().canChangeTo(OrderStatus.CONFIRMED);
+	}
+	
+	public boolean canBeDelivered() {
+		return getStatus().canChangeTo(OrderStatus.DELIVERED);
+	}
+	
+	public boolean canBeCanceled() {
+		return getStatus().canChangeTo(OrderStatus.CANCELED);
+	}
+	
 	public void calculateAmount() {
 		this.getItems().forEach(OrderItem::calculateTotalPrice);
 		
