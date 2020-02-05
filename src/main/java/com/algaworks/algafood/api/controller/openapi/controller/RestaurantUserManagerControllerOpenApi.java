@@ -18,7 +18,7 @@ public interface RestaurantUserManagerControllerOpenApi {
 	@ApiResponses({
 		@ApiResponse(code = 404, message = "Restaurante não encontrado", response = ApiError.class)
 	})
-	public CollectionModel<UserSummaryDTO> findById(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId);
+	public CollectionModel<UserSummaryDTO> findAllByRestaurantId(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId);
 	
 	@ApiOperation("Associação de restaurante com usuário responsável")
 	@ApiResponses({

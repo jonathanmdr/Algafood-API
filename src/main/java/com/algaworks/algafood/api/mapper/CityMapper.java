@@ -1,16 +1,12 @@
 package com.algaworks.algafood.api.mapper;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.controller.CityController;
-import com.algaworks.algafood.api.controller.StateController;
 import com.algaworks.algafood.api.model.CityDTO;
 import com.algaworks.algafood.api.model.input.CityInput;
 import com.algaworks.algafood.domain.model.City;
@@ -21,6 +17,9 @@ public class CityMapper extends RepresentationModelAssemblerSupport<City, CityDT
 
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private AlgaLinks algaLinks;
 
 	public CityMapper() {
 		super(CityController.class, CityDTO.class);
@@ -31,16 +30,10 @@ public class CityMapper extends RepresentationModelAssemblerSupport<City, CityDT
 		CityDTO cityDto = createModelWithId(city.getId(), city);
 		modelMapper.map(city, cityDto);
 		
-		cityDto.add(linkTo(methodOn(CityController.class).findAll()).withRel("cities"));
-		cityDto.getState()
-				.add(linkTo(methodOn(StateController.class).findById(cityDto.getState().getId())).withSelfRel());
+		cityDto.add(algaLinks.linkToCities("cities"));
+		cityDto.getState().add(algaLinks.linkToState(cityDto.getState().getId()));
 
 		return cityDto;
-	}
-	
-	@Override
-	public CollectionModel<CityDTO> toCollectionModel(Iterable<? extends City> entities) {		
-		return super.toCollectionModel(entities).add(linkTo(CityController.class).withSelfRel());
 	}
 
 	public City toDomainObject(CityInput cityInput) {

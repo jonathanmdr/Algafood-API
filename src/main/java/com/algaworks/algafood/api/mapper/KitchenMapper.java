@@ -1,13 +1,11 @@
 package com.algaworks.algafood.api.mapper;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.controller.KitchenController;
 import com.algaworks.algafood.api.model.KitchenDTO;
 import com.algaworks.algafood.api.model.input.KitchenInput;
@@ -18,6 +16,9 @@ public class KitchenMapper extends RepresentationModelAssemblerSupport<Kitchen, 
 
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private AlgaLinks algaLinks;
 
 	public KitchenMapper() {
 		super(KitchenController.class, KitchenDTO.class);
@@ -28,14 +29,9 @@ public class KitchenMapper extends RepresentationModelAssemblerSupport<Kitchen, 
 		KitchenDTO kitchenDto = createModelWithId(kitchen.getId(), kitchen);
 		modelMapper.map(kitchen, kitchenDto);
 
-		kitchenDto.add(linkTo(KitchenController.class).withRel("kitchens"));
+		kitchenDto.add(algaLinks.linkToKitchens("kitchens"));
 
 		return kitchenDto;
-	}
-
-	@Override
-	public CollectionModel<KitchenDTO> toCollectionModel(Iterable<? extends Kitchen> entities) {
-		return super.toCollectionModel(entities).add(linkTo(KitchenController.class).withSelfRel());
 	}
 
 	public Kitchen toDomainObject(KitchenInput kitchenInput) {

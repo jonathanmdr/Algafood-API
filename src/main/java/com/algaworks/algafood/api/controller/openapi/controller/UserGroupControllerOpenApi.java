@@ -15,7 +15,7 @@ import io.swagger.annotations.ApiResponses;
 public interface UserGroupControllerOpenApi {
 	
 	@ApiOperation("Lista todos os grupos por usuário")
-	public List<GroupDTO> findById(@ApiParam(value = "Identificador do usuário", example = "1", required = true) Long userId);
+	public List<GroupDTO> findAllByUserId(@ApiParam(value = "Identificador do usuário", example = "1", required = true) Long userId);
 	
 	@ApiOperation("Associação de usuário com grupo")
 	@ApiResponses({

@@ -30,7 +30,7 @@ public class UserGroupController implements UserGroupControllerOpenApi {
 	private GroupMapper groupMapper;
 	
 	@GetMapping
-	public List<GroupDTO> findById(@PathVariable Long userId) {
+	public List<GroupDTO> findAllByUserId(@PathVariable Long userId) {
 		User user = userService.findById(userId);
 		return groupMapper.toCollectionDto(user.getGroups());
 	}

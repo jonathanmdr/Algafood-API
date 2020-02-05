@@ -1,16 +1,13 @@
 package com.algaworks.algafood.api.mapper;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.controller.UserController;
-import com.algaworks.algafood.api.controller.UserGroupController;
 import com.algaworks.algafood.api.model.UserSummaryDTO;
 import com.algaworks.algafood.api.model.input.UserInput;
 import com.algaworks.algafood.api.model.input.UserSummaryInput;
@@ -21,6 +18,9 @@ public class UserMapper extends RepresentationModelAssemblerSupport<User, UserSu
 
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private AlgaLinks algaLinks;
 
 	public UserMapper() {
 		super(UserController.class, UserSummaryDTO.class);
@@ -31,16 +31,15 @@ public class UserMapper extends RepresentationModelAssemblerSupport<User, UserSu
 		UserSummaryDTO userSummaryDto = createModelWithId(user.getId(), user);
 		modelMapper.map(user, userSummaryDto);
 
-		userSummaryDto.add(linkTo(methodOn(UserController.class).findAll()).withRel("users"));
-		userSummaryDto.add(
-				linkTo(methodOn(UserGroupController.class).findById(userSummaryDto.getId())).withRel("user-groups"));
+		userSummaryDto.add(algaLinks.linkToUsers("users"));
+		userSummaryDto.add(algaLinks.linkToUserGroup(userSummaryDto.getId(), "user-groups"));
 
 		return userSummaryDto;
 	}
 
 	@Override
 	public CollectionModel<UserSummaryDTO> toCollectionModel(Iterable<? extends User> entities) {
-		return super.toCollectionModel(entities).add(linkTo(UserController.class).withSelfRel());
+		return super.toCollectionModel(entities).add(algaLinks.linkToUsers());
 	}
 
 	public User toDomainObject(UserInput userInput) {
