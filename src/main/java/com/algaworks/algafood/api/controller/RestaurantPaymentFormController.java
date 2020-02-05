@@ -30,7 +30,7 @@ public class RestaurantPaymentFormController implements RestaurantPaymentFormCon
 	private PaymentFormMapper paymentFormMapper;
 	
 	@GetMapping
-	public List<PaymentFormDTO> findAll(@PathVariable Long restaurantId) {
+	public List<PaymentFormDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
 		Restaurant restaurant = restaurantService.findById(restaurantId);
 		return paymentFormMapper.toCollectionDto(restaurant.getPaymentForms());
 	}
