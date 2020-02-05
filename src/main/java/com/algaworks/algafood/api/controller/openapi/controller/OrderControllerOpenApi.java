@@ -1,7 +1,7 @@
 package com.algaworks.algafood.api.controller.openapi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 import com.algaworks.algafood.api.exceptionhandler.ApiError;
 import com.algaworks.algafood.api.model.OrderDTO;
@@ -24,7 +24,7 @@ public interface OrderControllerOpenApi {
 	@ApiImplicitParams({
 		@ApiImplicitParam(value = "Nome das propriedades para filtrar na resposta, separados por vírgula", name = "fields", paramType = "query", type = "string")
 	})
-	public Page<OrderSummaryDTO> findAll(OrderFilter orderFilter, Pageable pageable);
+	public PagedModel<OrderSummaryDTO> findAll(OrderFilter orderFilter, Pageable pageable);
 	
 	@ApiOperation("Busca um pedido por UUID")
 	@ApiResponses({

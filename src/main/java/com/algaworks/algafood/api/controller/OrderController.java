@@ -1,14 +1,15 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.controller.openapi.controller.OrderControllerOpenApi;
 import com.algaworks.algafood.api.mapper.OrderMapper;
+import com.algaworks.algafood.api.mapper.OrderSummaryMapper;
 import com.algaworks.algafood.api.model.OrderDTO;
 import com.algaworks.algafood.api.model.OrderSummaryDTO;
 import com.algaworks.algafood.api.model.input.OrderInput;
@@ -32,67 +34,65 @@ import com.algaworks.algafood.domain.model.Order;
 import com.algaworks.algafood.domain.model.User;
 import com.algaworks.algafood.domain.service.OrderService;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-
 @RestController
 @RequestMapping(path = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController implements OrderControllerOpenApi {
-	
+
 	@Autowired
 	private OrderService orderService;
+
+	@Autowired
+	private OrderSummaryMapper orderSummaryMapper;
 	
 	@Autowired
 	private OrderMapper orderMapper;
 	
-	@ApiImplicitParams({
-		@ApiImplicitParam(value = "Nome das propriedades para filtrar na resposta, separados por vírgula", name = "fields", paramType = "query", type = "string")
-	})
+	@Autowired
+	private PagedResourcesAssembler<Order> pagedResourceAssembler;
+
+	@Override
 	@GetMapping
-	public Page<OrderSummaryDTO> findAll(OrderFilter orderFilter, Pageable pageable) {
+	public PagedModel<OrderSummaryDTO> findAll(OrderFilter orderFilter, @PageableDefault(size = 10) Pageable pageable) {
 		pageable = translatePageable(pageable);
 		Page<Order> orders = orderService.findAll(orderFilter, pageable);
-		List<OrderSummaryDTO> ordersDTO = orderMapper.toCollectionDto(orders.getContent()); 
-		return new PageImpl<OrderSummaryDTO>(ordersDTO, pageable, orders.getTotalElements());
+		
+		return pagedResourceAssembler.toModel(orders, orderSummaryMapper);
 	}
-	
-	@ApiImplicitParams({
-		@ApiImplicitParam(value = "Nome das propriedades para filtrar na resposta, separados por vírgula", name = "fields", paramType = "query", type = "string")
-	})
+
+	@Override
 	@GetMapping("/{code}")
 	public OrderDTO findById(@PathVariable String code) {
-		return orderMapper.toDto(orderService.findByCode(code));
+		return orderMapper.toModel(orderService.findByCode(code));
 	}
-	
+
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public OrderDTO save(@RequestBody @Valid OrderInput orderInput) {
 		try {
 			Order order = orderMapper.toDomainObject(orderInput);
-			
+
 			// TODO: Alterar para pegar o usuário logado
 			order.setCustomer(new User());
 			order.getCustomer().setId(1L);
-			
-			return orderMapper.toDto(orderService.save(order));
-		} catch(EntityNotFoundException ex) {
+
+			return orderMapper.toModel(orderService.save(order));
+		} catch (EntityNotFoundException ex) {
 			throw new BusinessException(ex.getMessage(), ex);
 		}
 	}
-	
+
 	private Pageable translatePageable(Pageable pageable) {
-		var mapping = Map.of(
-					"code", "code",
-					"subTotal", "subTotal",
-					"freightRate", "freightRate",
-					"amount", "amount",
-					"creationDate", "creationDate",
-					"restaurant.id", "restaurant.id",
-					"restaurant.name", "restaurant.name",
-					"customer.id", "customer.id",
-					"customer.name", "customer.name"
-				);
-		
+		var mapping = Map.of("code", "code", 
+				"subTotal", "subTotal", 
+				"freightRate", "freightRate", 
+				"amount", "amount",
+				"creationDate", "creationDate", 
+				"restaurant.id", "restaurant.id", 
+				"restaurant.name", "restaurant.name",
+				"customer.id", "customer.id", 
+				"customer.name", "customer.name");
+
 		return PageableTranslator.translate(pageable, mapping);
 	}
 
