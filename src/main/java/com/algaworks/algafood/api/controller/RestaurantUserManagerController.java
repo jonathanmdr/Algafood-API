@@ -36,7 +36,8 @@ public class RestaurantUserManagerController implements RestaurantUserManagerCon
 	@GetMapping
 	public CollectionModel<UserSummaryDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
 		Restaurant restaurant = restaurantService.findById(restaurantId);
-		return userMapper.toCollectionModel(restaurant.getUsers()).removeLinks()
+		return userMapper.toCollectionModel(restaurant.getUsers())
+				.removeLinks()
 				.add(algaLinks.linkToRestaurantUserManager(restaurant.getId()));
 	}
 
