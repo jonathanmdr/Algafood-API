@@ -1,7 +1,5 @@
 package com.algaworks.algafood.api.model;
 
-import java.math.BigDecimal;
-
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -11,21 +9,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Relation(collectionRelation = "restaurants")
-@ApiModel(value = "Restaurante Resumido", description = "Representação de restaurante de forma resumida")
+@ApiModel(value = "Restaurante somente nome", description = "Representação de restaurante apresentando somente nome e ID")
 @Getter
 @Setter
-public class RestaurantSummaryDTO extends RepresentationModel<RestaurantSummaryDTO> {
+public class RestaurantJustNameDTO extends RepresentationModel<RestaurantJustNameDTO> {
 
 	@ApiModelProperty(example = "1", position = 10)
 	private Long id;
 
 	@ApiModelProperty(example = "Thai Delivery", position = 20)
 	private String name;
-
-	@ApiModelProperty(example = "8.00", position = 30)
-	private BigDecimal freightRate;
-
-	@ApiModelProperty(position = 40)
-	private KitchenDTO kitchen;
 
 }

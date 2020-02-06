@@ -31,7 +31,7 @@ public class OrderSummaryDTO extends RepresentationModel<OrderSummaryDTO> {
 	private OffsetDateTime creationDate;
 	
 	@ApiModelProperty(position = 60)
-	private RestaurantSummaryDTO restaurant;
+	private RestaurantJustNameDTO restaurant;
 	
 	@ApiModelProperty(position = 70)
 	private UserSummaryDTO customer;

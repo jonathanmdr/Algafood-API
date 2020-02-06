@@ -52,7 +52,7 @@ public class OrderDTO extends RepresentationModel<OrderDTO> {
 	private PaymentFormDTO paymentForm;
 
 	@ApiModelProperty(position = 120)
-	private RestaurantSummaryDTO restaurant;
+	private RestaurantJustNameDTO restaurant;
 
 	@ApiModelProperty(position = 130)
 	private UserSummaryDTO customer;
