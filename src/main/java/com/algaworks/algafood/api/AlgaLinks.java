@@ -31,8 +31,11 @@ public class AlgaLinks {
 			new TemplateVariable("page", VariableType.REQUEST_PARAM),
 			new TemplateVariable("size", VariableType.REQUEST_PARAM),
 			new TemplateVariable("sort", VariableType.REQUEST_PARAM));
+	
+	public static final TemplateVariables PROJECTION_VARIABLES = new TemplateVariables(
+			new TemplateVariable("projection", VariableType.REQUEST_PARAM));
 
-	public Link linkToOrders() {
+	public Link linkToOrders(String linkRelation) {
 		TemplateVariables filterVariables = new TemplateVariables(
 				new TemplateVariable("customerId", VariableType.REQUEST_PARAM),
 				new TemplateVariable("restaurantId", VariableType.REQUEST_PARAM),
@@ -40,7 +43,7 @@ public class AlgaLinks {
 				new TemplateVariable("endCreationDate", VariableType.REQUEST_PARAM));
 
 		return new Link(UriTemplate.of(linkTo(OrderController.class)
-				.toUri().toString(), PAGINATION_VARIABLES.concat(filterVariables)), "orders");
+				.toUri().toString(), PAGINATION_VARIABLES.concat(filterVariables)), linkRelation);
 	}
 	
 	public Link linkToConfirmOrder(String orderCode, String linkRelation) {
@@ -68,7 +71,8 @@ public class AlgaLinks {
 	}
 	
 	public Link linkToRestaurants(String linkRelation) {
-		return linkTo(RestaurantController.class).withRel(linkRelation);
+		return new Link(UriTemplate.of(linkTo(RestaurantController.class)
+				.toUri().toString(), PROJECTION_VARIABLES), linkRelation);
 	}
 	
 	public Link linkToRestaurants() {

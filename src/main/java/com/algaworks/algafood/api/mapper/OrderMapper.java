@@ -29,7 +29,7 @@ public class OrderMapper extends RepresentationModelAssemblerSupport<Order, Orde
 		OrderDTO orderDto = createModelWithId(order.getCode(), order);
 		modelMapper.map(order, orderDto);
 		
-		orderDto.add(algaLinks.linkToOrders());
+		orderDto.add(algaLinks.linkToOrders("orders"));
 		
 		if (order.canBeConfirmed()) {
             orderDto.add(algaLinks.linkToConfirmOrder(orderDto.getCode(), "confirm"));
