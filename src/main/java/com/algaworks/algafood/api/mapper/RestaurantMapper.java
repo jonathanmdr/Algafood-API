@@ -31,6 +31,22 @@ public class RestaurantMapper extends RepresentationModelAssemblerSupport<Restau
 		RestaurantDTO restaurantDto = createModelWithId(restaurant.getId(), restaurant);
 		modelMapper.map(restaurant, restaurantDto);
 
+		if (restaurant.allowedActivate()) {
+			restaurantDto.add(algaLinks.linkToRestaurantActivation(restaurantDto.getId(), "activate"));
+		}
+
+		if (restaurant.allowedInactivate()) {
+			restaurantDto.add(algaLinks.linkToRestaurantInactivation(restaurantDto.getId(), "inactivate"));
+		}
+
+		if (restaurant.allowedOpening()) {
+			restaurantDto.add(algaLinks.linkToRestaurantOpening(restaurantDto.getId(), "opening"));
+		}
+
+		if (restaurant.allowedClosing()) {
+			restaurantDto.add(algaLinks.linkToRestaurantClosing(restaurantDto.getId(), "closing"));
+		}
+
 		restaurantDto.add(algaLinks.linkToRestaurants("restaurants"));
 
 		restaurantDto.getKitchen().add(algaLinks.linkToKitchen(restaurantDto.getKitchen().getId()));
@@ -54,8 +70,9 @@ public class RestaurantMapper extends RepresentationModelAssemblerSupport<Restau
 
 	public void copyToDomainObject(RestaurantInput restaurantInput, Restaurant restaurant) {
 		/*
-		 * Para evitar a exception: org.hibernate.HibernateException: identifier of an 
-		 * instance of com.algaworks.algafood.domain.model.Kitchen was altered from 1 to 2
+		 * Para evitar a exception: org.hibernate.HibernateException: identifier of an
+		 * instance of com.algaworks.algafood.domain.model.Kitchen was altered from 1 to
+		 * 2
 		 */
 		restaurant.setKitchen(new Kitchen());
 
