@@ -1,7 +1,6 @@
 package com.algaworks.algafood.api.controller.openapi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -19,7 +18,7 @@ import io.swagger.annotations.ApiResponses;
 public interface PaymentFormControllerOpenApi {
 	
 	@ApiOperation("Lista todas as formas de pagamento")
-	public ResponseEntity<List<PaymentFormDTO>> findAll(ServletWebRequest request);
+	public ResponseEntity<CollectionModel<PaymentFormDTO>> findAll(ServletWebRequest request);
 	
 	@ApiOperation("Busca uma forma de pagamento por ID")
 	@ApiResponses({

@@ -84,6 +84,11 @@ public class AlgaLinks {
 				.findAllByRestaurantId(restaurantId)).withRel(linkRelation);
 	}
 	
+	public Link linkToRestaurantPaymentForms(Long restaurantId) {
+		return linkTo(methodOn(RestaurantPaymentFormController.class)
+				.findAllByRestaurantId(restaurantId)).withRel(IanaLinkRelations.SELF.value());
+	}
+	
 	public Link linkToRestaurantOpening(Long restaurantId, String linkRelation) {
 		return linkTo(methodOn(RestaurantController.class)
 				.open(restaurantId)).withRel(linkRelation);
@@ -146,6 +151,14 @@ public class AlgaLinks {
 
 	public Link linkToPaymentForm(Long paymentFormId) {
 		return linkToPaymentForm(paymentFormId, IanaLinkRelations.SELF.value());
+	}
+	
+	public Link linkToPaymentForms(String linkRelation) {
+		return linkTo(PaymentFormController.class).withRel(linkRelation);
+	}
+	
+	public Link linkToPaymentForms() {
+		return linkTo(PaymentFormController.class).withRel(IanaLinkRelations.SELF.value());
 	}
 
 	public Link linkToCity(Long cityId, String linkRelation) {
