@@ -2,14 +2,13 @@ package com.algaworks.algafood.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.AlgaLinks;
@@ -28,7 +27,7 @@ public class RestaurantPaymentFormController implements RestaurantPaymentFormCon
 
 	@Autowired
 	private PaymentFormMapper paymentFormMapper;
-	
+
 	@Autowired
 	private AlgaLinks algaLinks;
 
@@ -36,23 +35,35 @@ public class RestaurantPaymentFormController implements RestaurantPaymentFormCon
 	@GetMapping
 	public CollectionModel<PaymentFormDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
 		Restaurant restaurant = restaurantService.findById(restaurantId);
-		return paymentFormMapper.toCollectionModel(restaurant.getPaymentForms())
-				.removeLinks()
-				.add(algaLinks.linkToRestaurantPaymentForms(restaurantId));
+
+		CollectionModel<PaymentFormDTO> paymentFormsDto = paymentFormMapper
+				.toCollectionModel(restaurant.getPaymentForms()).removeLinks()
+				.add(algaLinks.linkToRestaurantPaymentForms(restaurantId))
+				.add(algaLinks.linkToRestaurantPaymentFormsAssociate(restaurantId, "associate"));
+
+		paymentFormsDto.getContent().forEach(paymentForm -> {
+			paymentForm.add(algaLinks.linkToRestaurantPaymentFormsDisassociate(restaurantId, paymentForm.getId(), "disassociate"));
+		});
+
+		return paymentFormsDto;
 	}
 
 	@Override
 	@PutMapping("/{paymentFormId}")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void associatePaymentForm(@PathVariable Long restaurantId, @PathVariable Long paymentFormId) {
+	public ResponseEntity<Void> associatePaymentForm(@PathVariable Long restaurantId,
+			@PathVariable Long paymentFormId) {
 		restaurantService.associatePaymentForm(restaurantId, paymentFormId);
+
+		return ResponseEntity.noContent().build();
 	}
 
 	@Override
 	@DeleteMapping("/{paymentFormId}")
-	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void disassociatePaymentForm(@PathVariable Long restaurantId, @PathVariable Long paymentFormId) {
+	public ResponseEntity<Void> disassociatePaymentForm(@PathVariable Long restaurantId,
+			@PathVariable Long paymentFormId) {
 		restaurantService.disassociatePaymentForm(restaurantId, paymentFormId);
+
+		return ResponseEntity.noContent().build();
 	}
 
 }

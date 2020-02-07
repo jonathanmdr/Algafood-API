@@ -89,6 +89,16 @@ public class AlgaLinks {
 				.findAllByRestaurantId(restaurantId)).withRel(IanaLinkRelations.SELF.value());
 	}
 	
+	public Link linkToRestaurantPaymentFormsAssociate(Long restaurantId, String linkRelation) {
+		return linkTo(methodOn(RestaurantPaymentFormController.class)
+				.associatePaymentForm(restaurantId, null)).withRel(linkRelation);
+	}
+	
+	public Link linkToRestaurantPaymentFormsDisassociate(Long restaurantId, Long paymentFormId, String linkRelation) {
+		return linkTo(methodOn(RestaurantPaymentFormController.class)
+				.disassociatePaymentForm(restaurantId, paymentFormId)).withRel(linkRelation);
+	}
+	
 	public Link linkToRestaurantOpening(Long restaurantId, String linkRelation) {
 		return linkTo(methodOn(RestaurantController.class)
 				.open(restaurantId)).withRel(linkRelation);

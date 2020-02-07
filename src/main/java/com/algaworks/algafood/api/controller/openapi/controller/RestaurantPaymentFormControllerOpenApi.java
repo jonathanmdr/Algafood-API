@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controller.openapi.controller;
 
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import com.algaworks.algafood.api.exceptionhandler.ApiError;
 import com.algaworks.algafood.api.model.PaymentFormDTO;
@@ -25,7 +26,7 @@ public interface RestaurantPaymentFormControllerOpenApi {
 		@ApiResponse(code = 204, message = "Associação realizada com sucesso"),
 		@ApiResponse(code = 404, message = "Restaurante ou forma de pagamento não encontrado", response = ApiError.class)
 	})
-	public void associatePaymentForm(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId, 
+	public ResponseEntity<Void> associatePaymentForm(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId, 
 			                         @ApiParam(value = "Identificador de uma forma de pagamento", example = "1", required = true) Long paymentFormId);
 	
 	@ApiOperation("Desassociação de restaurante com forma de pagamento")
@@ -33,7 +34,7 @@ public interface RestaurantPaymentFormControllerOpenApi {
 		@ApiResponse(code = 204, message = "Desassociação realizada com sucesso"),
 		@ApiResponse(code = 404, message = "Restaurante ou forma de pagamento não encontrado", response = ApiError.class)
 	})
-	public void disassociatePaymentForm(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId, 
+	public ResponseEntity<Void> disassociatePaymentForm(@ApiParam(value = "Identificador de um restaurante", example = "1", required = true) Long restaurantId, 
 			                            @ApiParam(value = "Identificador de uma forma de pagamento", example = "1", required = true) Long paymentFormId);
 
 }
