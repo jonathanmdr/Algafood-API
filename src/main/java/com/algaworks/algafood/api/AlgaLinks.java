@@ -153,6 +153,16 @@ public class AlgaLinks {
 	public Link linkToRestaurantUserManager(Long restaurantId) {
 		return linkToRestaurantUserManager(restaurantId, IanaLinkRelations.SELF.value());
 	}
+	
+	public Link linkToRestaurantUserManagerAssociate(Long restaurantId, String linkRelation) {
+		return linkTo(methodOn(RestaurantUserManagerController.class)
+				.associateUser(restaurantId, null)).withRel(linkRelation);
+	}
+	
+	public Link linkToRestaurantUserManagerDisassociate(Long restaurantId, Long userId, String linkRelation) {
+		return linkTo(methodOn(RestaurantUserManagerController.class)
+				.disassociateUser(restaurantId, userId)).withRel(linkRelation);
+	}
 
 	public Link linkToPaymentForm(Long paymentFormId, String linkRelation) {
 		return linkTo(methodOn(PaymentFormController.class)

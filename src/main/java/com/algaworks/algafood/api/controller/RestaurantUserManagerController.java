@@ -2,14 +2,13 @@ package com.algaworks.algafood.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.AlgaLinks;
@@ -28,7 +27,7 @@ public class RestaurantUserManagerController implements RestaurantUserManagerCon
 
 	@Autowired
 	private UserMapper userMapper;
-	
+
 	@Autowired
 	private AlgaLinks algaLinks;
 
@@ -36,23 +35,33 @@ public class RestaurantUserManagerController implements RestaurantUserManagerCon
 	@GetMapping
 	public CollectionModel<UserSummaryDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
 		Restaurant restaurant = restaurantService.findById(restaurantId);
-		return userMapper.toCollectionModel(restaurant.getUsers())
+
+		CollectionModel<UserSummaryDTO> userSummaryDto = userMapper.toCollectionModel(restaurant.getUsers())
 				.removeLinks()
-				.add(algaLinks.linkToRestaurantUserManager(restaurant.getId()));
+				.add(algaLinks.linkToRestaurantUserManager(restaurant.getId()))
+				.add(algaLinks.linkToRestaurantUserManagerAssociate(restaurantId, "associate"));
+
+		userSummaryDto.getContent().forEach(user -> {
+			user.add(algaLinks.linkToRestaurantUserManagerDisassociate(restaurantId, user.getId(), "disassociate"));
+		});
+
+		return userSummaryDto;
 	}
 
 	@Override
 	@PutMapping("/{userId}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void associateUser(@PathVariable Long restaurantId, @PathVariable Long userId) {
+	public ResponseEntity<Void> associateUser(@PathVariable Long restaurantId, @PathVariable Long userId) {
 		restaurantService.associateUser(restaurantId, userId);
+
+		return ResponseEntity.noContent().build();
 	}
 
 	@Override
 	@DeleteMapping("/{userId}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void disassociateUser(@PathVariable Long restaurantId, @PathVariable Long userId) {
+	public ResponseEntity<Void> disassociateUser(@PathVariable Long restaurantId, @PathVariable Long userId) {
 		restaurantService.disassociateUser(restaurantId, userId);
+
+		return ResponseEntity.noContent().build();
 	}
 
 }
