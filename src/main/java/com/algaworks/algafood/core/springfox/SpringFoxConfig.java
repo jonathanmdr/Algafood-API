@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,11 +22,13 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.algaworks.algafood.api.controller.openapi.model.CitiesModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.KitchensModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.LinksModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.OrderSummaryModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.PageableModelOpenApi;
 import com.algaworks.algafood.api.exceptionhandler.ApiError;
+import com.algaworks.algafood.api.model.CityDTO;
 import com.algaworks.algafood.api.model.KitchenDTO;
 import com.algaworks.algafood.api.model.OrderSummaryDTO;
 import com.fasterxml.classmate.TypeResolver;
@@ -70,6 +73,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.directModelSubstitute(Links.class, LinksModelOpenApi.class)
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Page.class, KitchenDTO.class), KitchensModelOpenApi.class))
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Page.class, OrderSummaryDTO.class), OrderSummaryModelOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, CityDTO.class), CitiesModelOpenApi.class))
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Realiza o gerencimanento de cidades"), 
 					  new Tag("Grupos", "Realiza o gerenciamento de grupos de usuário"),
