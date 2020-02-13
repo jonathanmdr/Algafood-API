@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,11 @@ public class RestaurantSummaryMapper extends RepresentationModelAssemblerSupport
 		restaurantSummaryDto.getKitchen().add(algaLinks.linkToKitchen(restaurantSummaryDto.getKitchen().getId()));
 
 		return restaurantSummaryDto;
+	}
+
+	@Override
+	public CollectionModel<RestaurantSummaryDTO> toCollectionModel(Iterable<? extends Restaurant> entities) {
+		return super.toCollectionModel(entities).add(algaLinks.linkToRestaurants());
 	}
 
 }

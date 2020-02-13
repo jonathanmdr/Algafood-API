@@ -1,6 +1,6 @@
 package com.algaworks.algafood.api.controller.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.algaworks.algafood.api.exceptionhandler.ApiError;
 import com.algaworks.algafood.api.model.GroupDTO;
@@ -15,7 +15,7 @@ import io.swagger.annotations.ApiResponses;
 public interface UserGroupControllerOpenApi {
 	
 	@ApiOperation("Lista todos os grupos por usuário")
-	public List<GroupDTO> findAllByUserId(@ApiParam(value = "Identificador do usuário", example = "1", required = true) Long userId);
+	public CollectionModel<GroupDTO> findAllByUserId(@ApiParam(value = "Identificador do usuário", example = "1", required = true) Long userId);
 	
 	@ApiOperation("Associação de usuário com grupo")
 	@ApiResponses({

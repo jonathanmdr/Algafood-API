@@ -12,6 +12,8 @@ import org.springframework.hateoas.TemplateVariable.VariableType;
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.controller.CityController;
+import com.algaworks.algafood.api.controller.GroupController;
+import com.algaworks.algafood.api.controller.GroupPermissionController;
 import com.algaworks.algafood.api.controller.KitchenController;
 import com.algaworks.algafood.api.controller.OrderController;
 import com.algaworks.algafood.api.controller.OrderStatusController;
@@ -144,6 +146,20 @@ public class AlgaLinks {
 
 	public Link linkToUserGroup(Long userId) {
 		return linkToUser(userId, IanaLinkRelations.SELF.value());
+	}
+	
+	public Link linkToGroups(String linkRelation) {
+		return linkTo(methodOn(GroupController.class)
+				.findAll()).withRel(linkRelation);
+	}
+	
+	public Link linkToGroups() {
+		return linkToGroups(IanaLinkRelations.SELF.value());
+	}
+	
+	public Link linkToGroupPermissions(Long groupId, String linkRelation) {
+		return linkTo(methodOn(GroupPermissionController.class)
+				.findById(groupId)).withRel(linkRelation);
 	}
 
 	public Link linkToRestaurantUserManager(Long restaurantId, String linkRelation) {

@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ public class CityMapper extends RepresentationModelAssemblerSupport<City, CityDT
 
 	@Autowired
 	private ModelMapper modelMapper;
-	
+
 	@Autowired
 	private AlgaLinks algaLinks;
 
@@ -29,11 +30,16 @@ public class CityMapper extends RepresentationModelAssemblerSupport<City, CityDT
 	public CityDTO toModel(City city) {
 		CityDTO cityDto = createModelWithId(city.getId(), city);
 		modelMapper.map(city, cityDto);
-		
+
 		cityDto.add(algaLinks.linkToCities("cities"));
 		cityDto.getState().add(algaLinks.linkToState(cityDto.getState().getId()));
 
 		return cityDto;
+	}
+
+	@Override
+	public CollectionModel<CityDTO> toCollectionModel(Iterable<? extends City> entities) {
+		return super.toCollectionModel(entities).add(algaLinks.linkToCities());
 	}
 
 	public City toDomainObject(CityInput cityInput) {

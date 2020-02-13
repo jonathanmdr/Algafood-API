@@ -57,7 +57,9 @@ public class RestaurantProductController implements RestaurantProductControllerO
 			productsDto = productService.findActiveByRestaurant(restaurant);
 		}
 
-		return productMapper.toCollectionModel(productsDto).add(algaLinks.linkToProdutcs(restaurantId));
+		return productMapper.toCollectionModel(productsDto)
+				.removeLinks()
+				.add(algaLinks.linkToProdutcs(restaurantId));
 	}
 
 	@Override

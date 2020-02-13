@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,11 @@ public class PaymentFormMapper extends RepresentationModelAssemblerSupport<Payme
 		paymentFormDto.add(algaLinks.linkToPaymentForms("payment-forms"));
 
 		return paymentFormDto;
+	}
+
+	@Override
+	public CollectionModel<PaymentFormDTO> toCollectionModel(Iterable<? extends PaymentForm> entities) {
+		return super.toCollectionModel(entities).add(algaLinks.linkToPaymentForms());
 	}
 
 	public PaymentForm toDomainObject(PaymentFormInput paymentFormInput) {

@@ -2,6 +2,7 @@ package com.algaworks.algafood.api.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ public class StateMapper extends RepresentationModelAssemblerSupport<State, Stat
 
 	@Autowired
 	private ModelMapper modelMapper;
-	
+
 	@Autowired
 	private AlgaLinks algaLinks;
 
@@ -32,6 +33,11 @@ public class StateMapper extends RepresentationModelAssemblerSupport<State, Stat
 		stateDto.add(algaLinks.linkToStates("states"));
 
 		return stateDto;
+	}
+
+	@Override
+	public CollectionModel<StateDTO> toCollectionModel(Iterable<? extends State> entities) {
+		return super.toCollectionModel(entities).add(algaLinks.linkToStates());
 	}
 
 	public State toDomainObject(StateInput stateInput) {

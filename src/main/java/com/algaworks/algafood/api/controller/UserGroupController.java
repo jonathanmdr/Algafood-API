@@ -1,8 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,9 +29,9 @@ public class UserGroupController implements UserGroupControllerOpenApi {
 	private GroupMapper groupMapper;
 	
 	@GetMapping
-	public List<GroupDTO> findAllByUserId(@PathVariable Long userId) {
+	public CollectionModel<GroupDTO> findAllByUserId(@PathVariable Long userId) {
 		User user = userService.findById(userId);
-		return groupMapper.toCollectionDto(user.getGroups());
+		return groupMapper.toCollectionModel(user.getGroups());
 	}
 	
 	@PutMapping("/{groupId}")

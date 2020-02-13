@@ -37,7 +37,8 @@ public class RestaurantPaymentFormController implements RestaurantPaymentFormCon
 		Restaurant restaurant = restaurantService.findById(restaurantId);
 
 		CollectionModel<PaymentFormDTO> paymentFormsDto = paymentFormMapper
-				.toCollectionModel(restaurant.getPaymentForms()).removeLinks()
+				.toCollectionModel(restaurant.getPaymentForms())
+				.removeLinks()
 				.add(algaLinks.linkToRestaurantPaymentForms(restaurantId))
 				.add(algaLinks.linkToRestaurantPaymentFormsAssociate(restaurantId, "associate"));
 

@@ -33,7 +33,7 @@ public class ProductMapper extends RepresentationModelAssemblerSupport<Product, 
 		productDto.add(algaLinks.linkToProductPhoto(product.getRestaurant().getId(), product.getId(), "photo"));
 
 		return productDto;
-	}	
+	}
 
 	public Product toDomainObject(ProductInput productInput) {
 		return modelMapper.map(productInput, Product.class);

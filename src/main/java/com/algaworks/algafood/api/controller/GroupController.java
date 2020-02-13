@@ -1,10 +1,9 @@
 package com.algaworks.algafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,20 +34,20 @@ public class GroupController implements GroupControllerOpenApi {
 	private GroupMapper groupMapper;
 	
 	@GetMapping
-	public List<GroupDTO> findAll() {
-		return groupMapper.toCollectionDto(groupService.findAll());
+	public CollectionModel<GroupDTO> findAll() {
+		return groupMapper.toCollectionModel(groupService.findAll());
 	}
 	
 	@GetMapping("/{groupId}")
 	public GroupDTO findById(@PathVariable Long groupId) {
-		return groupMapper.toDto(groupService.findById(groupId));
+		return groupMapper.toModel(groupService.findById(groupId));
 	}
 	
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public GroupDTO save(@RequestBody @Valid GroupInput groupInput) {
 		Group group = groupMapper.toDomainObject(groupInput);
-		return groupMapper.toDto(groupService.save(group));
+		return groupMapper.toModel(groupService.save(group));
 	}
 	
 	@PutMapping("/{groupId}")
@@ -57,7 +56,7 @@ public class GroupController implements GroupControllerOpenApi {
 		
 		groupMapper.copyToDomainObject(groupInput, groupCurrent);
 		
-		return groupMapper.toDto(groupService.save(groupCurrent));
+		return groupMapper.toModel(groupService.save(groupCurrent));
 	}
 	
 	@DeleteMapping("/{groupId}")
