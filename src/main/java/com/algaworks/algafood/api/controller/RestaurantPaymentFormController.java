@@ -51,8 +51,7 @@ public class RestaurantPaymentFormController implements RestaurantPaymentFormCon
 
 	@Override
 	@PutMapping("/{paymentFormId}")
-	public ResponseEntity<Void> associatePaymentForm(@PathVariable Long restaurantId,
-			@PathVariable Long paymentFormId) {
+	public ResponseEntity<Void> associatePaymentForm(@PathVariable Long restaurantId, @PathVariable Long paymentFormId) {
 		restaurantService.associatePaymentForm(restaurantId, paymentFormId);
 
 		return ResponseEntity.noContent().build();
@@ -60,8 +59,7 @@ public class RestaurantPaymentFormController implements RestaurantPaymentFormCon
 
 	@Override
 	@DeleteMapping("/{paymentFormId}")
-	public ResponseEntity<Void> disassociatePaymentForm(@PathVariable Long restaurantId,
-			@PathVariable Long paymentFormId) {
+	public ResponseEntity<Void> disassociatePaymentForm(@PathVariable Long restaurantId, @PathVariable Long paymentFormId) {
 		restaurantService.disassociatePaymentForm(restaurantId, paymentFormId);
 
 		return ResponseEntity.noContent().build();

@@ -18,6 +18,7 @@ import com.algaworks.algafood.api.controller.KitchenController;
 import com.algaworks.algafood.api.controller.OrderController;
 import com.algaworks.algafood.api.controller.OrderStatusController;
 import com.algaworks.algafood.api.controller.PaymentFormController;
+import com.algaworks.algafood.api.controller.PermissionController;
 import com.algaworks.algafood.api.controller.RestaurantController;
 import com.algaworks.algafood.api.controller.RestaurantPaymentFormController;
 import com.algaworks.algafood.api.controller.RestaurantProductController;
@@ -160,6 +161,30 @@ public class AlgaLinks {
 	public Link linkToGroupPermissions(Long groupId, String linkRelation) {
 		return linkTo(methodOn(GroupPermissionController.class)
 				.findById(groupId)).withRel(linkRelation);
+	}
+	
+	public Link linkToGroupPermissions(Long groupId) {
+		return linkTo(methodOn(GroupPermissionController.class)
+				.findById(groupId)).withRel(IanaLinkRelations.SELF.value());
+	}
+	
+	public Link linkToGroupPermissionAssociate(Long groupId, Long permissionId, String linkRelation) {
+		return linkTo(methodOn(GroupPermissionController.class)
+				.associatePermission(groupId, permissionId)).withRel(linkRelation);
+	}
+	
+	public Link linkToGroupPermissionDisassociate(Long groupId, Long permissionId, String linkRelation) {
+		return linkTo(methodOn(GroupPermissionController.class)
+				.disassociatePermission(groupId, permissionId)).withRel(linkRelation);
+	}
+	
+	public Link linkToPermissions(String linkRelation) {
+		return linkTo(methodOn(PermissionController.class)
+				.findAll()).withRel(linkRelation);
+	}
+	
+	public Link linkToPermissions() {
+		return linkToPermissions(IanaLinkRelations.SELF.value());
 	}
 
 	public Link linkToRestaurantUserManager(Long restaurantId, String linkRelation) {
