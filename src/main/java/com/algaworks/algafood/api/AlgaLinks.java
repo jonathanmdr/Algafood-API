@@ -25,6 +25,7 @@ import com.algaworks.algafood.api.controller.RestaurantProductController;
 import com.algaworks.algafood.api.controller.RestaurantProductPhotoController;
 import com.algaworks.algafood.api.controller.RestaurantUserManagerController;
 import com.algaworks.algafood.api.controller.StateController;
+import com.algaworks.algafood.api.controller.StatisticsController;
 import com.algaworks.algafood.api.controller.UserController;
 import com.algaworks.algafood.api.controller.UserGroupController;
 
@@ -309,6 +310,23 @@ public class AlgaLinks {
 
 	public Link linkToKitchens() {
 		return linkToKitchens(IanaLinkRelations.SELF.value());
+	}
+	
+	public Link linkToStatistics(String linkRelation) {
+		return linkTo(StatisticsController.class).withRel(linkRelation);
+	}
+	
+	public Link linkToStatisticsDailySale(String linkRelation) {
+		TemplateVariables filterVariables = new TemplateVariables(
+				new TemplateVariable("restaurantId", VariableType.REQUEST_PARAM),
+				new TemplateVariable("startCreationDate", VariableType.REQUEST_PARAM),
+				new TemplateVariable("endCreationDate", VariableType.REQUEST_PARAM),
+				new TemplateVariable("timeOffset", VariableType.REQUEST_PARAM));
+		
+		String statisticsUrl = linkTo(methodOn(StatisticsController.class)
+				.findDailySales(null, null)).toUri().toString();
+		
+		return new Link(UriTemplate.of(statisticsUrl, filterVariables), linkRelation);
 	}
 
 }

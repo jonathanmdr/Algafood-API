@@ -29,6 +29,7 @@ public class RootEntryPointController {
 		rootEntyPointDto.add(algaLinks.linkToPaymentForms("payment-forms"));
 		rootEntyPointDto.add(algaLinks.linkToCities("cities"));
 		rootEntyPointDto.add(algaLinks.linkToStates("states"));
+		rootEntyPointDto.add(algaLinks.linkToStatistics("statistics"));
 		
 		return rootEntyPointDto;
 	}
