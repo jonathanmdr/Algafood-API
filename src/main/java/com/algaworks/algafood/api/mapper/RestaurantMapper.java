@@ -51,7 +51,11 @@ public class RestaurantMapper extends RepresentationModelAssemblerSupport<Restau
 
 		restaurantDto.getKitchen().add(algaLinks.linkToKitchen(restaurantDto.getKitchen().getId()));
 
-		restaurantDto.getAddress().getCity().add(algaLinks.linkToCity(restaurantDto.getAddress().getCity().getId()));
+		if (restaurantDto.getAddress() != null && restaurantDto.getAddress().getCity() != null) {
+		    restaurantDto.getAddress().getCity().add(algaLinks.linkToCity(restaurantDto.getAddress().getCity().getId()));
+		}
+		
+		restaurantDto.add(algaLinks.linkToProdutcs(restaurantDto.getId(), "products"));
 
 		restaurantDto.add(algaLinks.linkToRestaurantPaymentForms(restaurantDto.getId(), "payment-forms"));
 
