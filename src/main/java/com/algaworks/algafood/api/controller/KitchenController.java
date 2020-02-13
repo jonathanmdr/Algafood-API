@@ -50,8 +50,7 @@ public class KitchenController implements KitchenControllerOpenApi {
 
 		return kitchensPagedModel;
 	}
-
-	@Deprecated
+	
 	@Override
 	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
 	public KitchensXmlWrapper findAllInFormatXml(Pageable pageable) {
