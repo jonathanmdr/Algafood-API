@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.algaworks.algafood.api.controller.openapi.controller.RestaurantProductPhotoControllerOpenApi;
-import com.algaworks.algafood.api.mapper.ProductMapper;
+import com.algaworks.algafood.api.mapper.ProductPhotoMapper;
 import com.algaworks.algafood.api.model.ProductPhotoDTO;
 import com.algaworks.algafood.api.model.input.ProductPhotoInput;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
@@ -49,14 +49,16 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
 	private PhotoStorageService photoStorageService;
 	
 	@Autowired
-	private ProductMapper productMapper;
+	private ProductPhotoMapper productPhotoMapper;
 	
+	@Override
 	@GetMapping
 	public ProductPhotoDTO findById(@PathVariable Long restaurantId, @PathVariable Long productId) {
 		ProductPhoto productPhoto = catalogProductService.findById(restaurantId, productId);
-		return productMapper.toDto(productPhoto);
+		return productPhotoMapper.toModel(productPhoto);
 	}
 	
+	@Override
 	@GetMapping(produces = MediaType.ALL_VALUE)
 	public ResponseEntity<?> servePhoto(@PathVariable Long restaurantId, @PathVariable Long productId, @RequestHeader(name = "accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
 		try {
@@ -82,6 +84,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
 		}
 	}
 
+	@Override
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ProductPhotoDTO updatePhoto(@PathVariable Long restaurantId, @PathVariable Long productId, @Valid ProductPhotoInput productPhotoInput, @RequestPart(required = true) MultipartFile file) throws IOException {
 		Product product = productService.findById(restaurantId, productId);
@@ -93,9 +96,10 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
 		photo.setSize(productPhotoInput.getFile().getSize());
 		photo.setFileName(productPhotoInput.getFile().getOriginalFilename());
 		
-		return productMapper.toDto(catalogProductService.save(photo, productPhotoInput.getFile().getInputStream()));
+		return productPhotoMapper.toModel(catalogProductService.save(photo, productPhotoInput.getFile().getInputStream()));
 	}
 	
+	@Override
 	@DeleteMapping
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long restaurantId, @PathVariable Long productId) {

@@ -8,10 +8,8 @@ import org.springframework.stereotype.Component;
 import com.algaworks.algafood.api.AlgaLinks;
 import com.algaworks.algafood.api.controller.RestaurantProductController;
 import com.algaworks.algafood.api.model.ProductDTO;
-import com.algaworks.algafood.api.model.ProductPhotoDTO;
 import com.algaworks.algafood.api.model.input.ProductInput;
 import com.algaworks.algafood.domain.model.Product;
-import com.algaworks.algafood.domain.model.ProductPhoto;
 
 @Component
 public class ProductMapper extends RepresentationModelAssemblerSupport<Product, ProductDTO> {
@@ -32,13 +30,10 @@ public class ProductMapper extends RepresentationModelAssemblerSupport<Product, 
 		modelMapper.map(product, productDto);
 
 		productDto.add(algaLinks.linkToProdutcs(product.getRestaurant().getId(), "products"));
+		productDto.add(algaLinks.linkToProductPhoto(product.getRestaurant().getId(), product.getId(), "photo"));
 
 		return productDto;
-	}
-
-	public ProductPhotoDTO toDto(ProductPhoto productPhoto) {
-		return modelMapper.map(productPhoto, ProductPhotoDTO.class);
-	}
+	}	
 
 	public Product toDomainObject(ProductInput productInput) {
 		return modelMapper.map(productInput, Product.class);
