@@ -223,6 +223,15 @@ public class AlgaLinks {
 	public Link linkToProduct(Long restaurantId, Long productId) {
 		return linkToProduct(restaurantId, productId, IanaLinkRelations.SELF.value());
 	}
+	
+	public Link linkToProdutcs(Long restaurantId, String linkRelation) {
+		return linkTo(methodOn(RestaurantProductController.class)
+				.findByRestaurant(restaurantId, null)).withRel(linkRelation);
+	}
+	
+	public Link linkToProdutcs(Long restaurantId) {
+		return linkToProdutcs(restaurantId, IanaLinkRelations.SELF.value());
+	}
 
 	public Link linkToKitchen(Long kitchenId, String linkRelation) {
 		return linkTo(methodOn(KitchenController.class)

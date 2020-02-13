@@ -1,12 +1,12 @@
 package com.algaworks.algafood.api.mapper;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.algaworks.algafood.api.AlgaLinks;
+import com.algaworks.algafood.api.controller.RestaurantProductController;
 import com.algaworks.algafood.api.model.ProductDTO;
 import com.algaworks.algafood.api.model.ProductPhotoDTO;
 import com.algaworks.algafood.api.model.input.ProductInput;
@@ -14,27 +14,36 @@ import com.algaworks.algafood.domain.model.Product;
 import com.algaworks.algafood.domain.model.ProductPhoto;
 
 @Component
-public class ProductMapper {
-	
+public class ProductMapper extends RepresentationModelAssemblerSupport<Product, ProductDTO> {
+
 	@Autowired
 	private ModelMapper modelMapper;
-	
-	public ProductDTO toDto(Product product) {
-		return modelMapper.map(product, ProductDTO.class);
+
+	@Autowired
+	private AlgaLinks algaLinks;
+
+	public ProductMapper() {
+		super(RestaurantProductController.class, ProductDTO.class);
 	}
-	
+
+	@Override
+	public ProductDTO toModel(Product product) {
+		ProductDTO productDto = createModelWithId(product.getId(), product, product.getRestaurant().getId());
+		modelMapper.map(product, productDto);
+
+		productDto.add(algaLinks.linkToProdutcs(product.getRestaurant().getId(), "products"));
+
+		return productDto;
+	}
+
 	public ProductPhotoDTO toDto(ProductPhoto productPhoto) {
 		return modelMapper.map(productPhoto, ProductPhotoDTO.class);
 	}
-	
-	public List<ProductDTO> toCollectionDto(List<Product> products) {
-		return products.stream().map(product -> toDto(product)).collect(Collectors.toList());
-	}
-	
+
 	public Product toDomainObject(ProductInput productInput) {
 		return modelMapper.map(productInput, Product.class);
 	}
-	
+
 	public void copyToDomainObject(ProductInput productInput, Product product) {
 		modelMapper.map(productInput, product);
 	}
