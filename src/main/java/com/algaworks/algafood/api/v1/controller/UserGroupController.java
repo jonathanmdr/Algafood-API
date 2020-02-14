@@ -19,7 +19,7 @@ import com.algaworks.algafood.domain.model.User;
 import com.algaworks.algafood.domain.service.UserService;
 
 @RestController
-@RequestMapping(path = "/users/{userId}/groups", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/users/{userId}/groups", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserGroupController implements UserGroupControllerOpenApi {
 
 	@Autowired

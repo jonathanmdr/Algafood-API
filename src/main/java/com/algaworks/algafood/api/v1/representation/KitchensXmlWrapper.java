@@ -1,4 +1,4 @@
-package com.algaworks.algafood.api.representation;
+package com.algaworks.algafood.api.v1.representation;
 
 import org.springframework.hateoas.CollectionModel;
 

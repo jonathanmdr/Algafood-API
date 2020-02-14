@@ -12,7 +12,7 @@ import com.algaworks.algafood.api.v1.controller.openapi.controller.OrderStatusCo
 import com.algaworks.algafood.domain.service.OrderStatusService;
 
 @RestController
-@RequestMapping(path = "/orders/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/orders/{code}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderStatusController implements OrderStatusControllerOpenApi {
 	
 	@Autowired

@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Relation(collectionRelation = "users")
-@ApiModel(value = "Usuário Resumo", description = "Representação de usuário resumida")
+@ApiModel(value = "UsuarioResumoDTO", description = "Representação de usuário resumida")
 @Getter
 @Setter
 public class UserSummaryDTO extends RepresentationModel<UserSummaryDTO> {

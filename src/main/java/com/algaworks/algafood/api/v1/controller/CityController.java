@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,14 +21,13 @@ import com.algaworks.algafood.api.v1.controller.openapi.controller.CityControlle
 import com.algaworks.algafood.api.v1.mapper.CityMapper;
 import com.algaworks.algafood.api.v1.model.CityDTO;
 import com.algaworks.algafood.api.v1.model.input.CityInput;
-import com.algaworks.algafood.core.web.AlgaMediaTypesCustom;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.StateNotFoundException;
 import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.service.CityService;
 
 @RestController
-@RequestMapping(path = "/cities", produces = AlgaMediaTypesCustom.V1_APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/cities", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CityController implements CityControllerOpenApi {
 
 	@Autowired

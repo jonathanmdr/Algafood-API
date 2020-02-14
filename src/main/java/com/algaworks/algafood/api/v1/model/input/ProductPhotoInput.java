@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-@ApiModel(value = "Foto produto", description = "Representa o arquivo de foto do produto")
+@ApiModel(value = "FotoProdutoInput", description = "Representa o arquivo de foto do produto")
 @Getter
 @Setter
 public class ProductPhotoInput {

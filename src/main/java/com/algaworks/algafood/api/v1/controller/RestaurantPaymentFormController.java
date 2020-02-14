@@ -19,7 +19,7 @@ import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.service.RestaurantService;
 
 @RestController
-@RequestMapping(path = "/restaurants/{restaurantId}/payment-forms", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/restaurants/{restaurantId}/payment-forms", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantPaymentFormController implements RestaurantPaymentFormControllerOpenApi {
 
 	@Autowired

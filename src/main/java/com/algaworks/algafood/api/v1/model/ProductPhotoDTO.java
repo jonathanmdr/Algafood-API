@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Relation(collectionRelation = "photos")
-@ApiModel(value = "Foto Produto", description = "Representa os dados do arquivo de foto")
+@ApiModel(value = "FotoProdutoDTO", description = "Representa os dados do arquivo de foto")
 @Getter
 @Setter
 public class ProductPhotoDTO extends RepresentationModel<ProductPhotoDTO> {

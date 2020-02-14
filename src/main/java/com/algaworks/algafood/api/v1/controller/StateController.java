@@ -24,7 +24,7 @@ import com.algaworks.algafood.domain.model.State;
 import com.algaworks.algafood.domain.service.StateService;
 
 @RestController
-@RequestMapping(path = "/states", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/states", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StateController implements StateControllerOpenApi {
 
 	@Autowired

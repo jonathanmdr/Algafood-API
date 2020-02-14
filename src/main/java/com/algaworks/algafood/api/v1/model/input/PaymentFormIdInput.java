@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-@ApiModel(value = "Forma de Pagamento", description = "Representação de forma de pagamento")
+@ApiModel(value = "FormaDePagamentoIdInput", description = "Representação de forma de pagamento")
 @Getter
 @Setter
 public class PaymentFormIdInput {

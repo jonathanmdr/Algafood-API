@@ -36,7 +36,7 @@ import com.algaworks.algafood.domain.model.User;
 import com.algaworks.algafood.domain.service.OrderService;
 
 @RestController
-@RequestMapping(path = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController implements OrderControllerOpenApi {
 
 	@Autowired

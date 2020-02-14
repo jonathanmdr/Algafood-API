@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Relation(collectionRelation = "permissions")
-@ApiModel(value = "Permissão", description = "Representação de permissão")
+@ApiModel(value = "PermissaoDTO", description = "Representação de permissão")
 @Getter
 @Setter
 public class PermissionDTO extends RepresentationModel<PermissionDTO> {

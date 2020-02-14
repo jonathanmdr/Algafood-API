@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-@ApiModel(value = "Estado", description = "Representação de UF")
+@ApiModel(value = "EstadoIdInput", description = "Representação de UF")
 @Getter
 @Setter
 public class StateIdInput {

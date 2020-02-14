@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Relation(collectionRelation = "restaurants")
-@ApiModel(value = "Resturante", description = "Representação de restaurante")
+@ApiModel(value = "ResturanteDTO", description = "Representação de restaurante")
 @Getter
 @Setter
 public class RestaurantDTO extends RepresentationModel<RestaurantDTO> {

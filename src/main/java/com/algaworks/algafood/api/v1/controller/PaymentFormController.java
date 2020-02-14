@@ -31,7 +31,7 @@ import com.algaworks.algafood.domain.model.PaymentForm;
 import com.algaworks.algafood.domain.service.PaymentFormService;
 
 @RestController
-@RequestMapping(path = "/payment-forms", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/payment-forms", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PaymentFormController implements PaymentFormControllerOpenApi {
 	
 	@Autowired

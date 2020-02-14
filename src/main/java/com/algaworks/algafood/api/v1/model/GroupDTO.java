@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Relation(collectionRelation = "groups")
-@ApiModel(value = "Grupo", description = "Representação de grupo de usuário")
+@ApiModel(value = "GrupoDTO", description = "Representação de grupo de usuário")
 @Getter
 @Setter
 public class GroupDTO extends RepresentationModel<GroupDTO> {

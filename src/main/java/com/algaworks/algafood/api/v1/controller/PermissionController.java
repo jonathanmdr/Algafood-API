@@ -14,7 +14,7 @@ import com.algaworks.algafood.api.v1.model.PermissionDTO;
 import com.algaworks.algafood.domain.service.PermissionService;
 
 @RestController
-@RequestMapping(path = "/permissions", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/permissions", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PermissionController implements PermissionControllerOpenApi {
 
 	@Autowired

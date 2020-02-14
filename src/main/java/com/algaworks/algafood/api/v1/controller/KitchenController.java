@@ -22,14 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.controller.openapi.controller.KitchenControllerOpenApi;
 import com.algaworks.algafood.api.v1.model.input.KitchenInput;
-import com.algaworks.algafood.api.representation.KitchensXmlWrapper;
+import com.algaworks.algafood.api.v1.representation.KitchensXmlWrapper;
 import com.algaworks.algafood.api.v1.mapper.KitchenMapper;
 import com.algaworks.algafood.api.v1.model.KitchenDTO;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.service.KitchenService;
 
 @RestController
-@RequestMapping(path = "/kitchens", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/kitchens", produces = MediaType.APPLICATION_JSON_VALUE)
 public class KitchenController implements KitchenControllerOpenApi {
 
 	@Autowired

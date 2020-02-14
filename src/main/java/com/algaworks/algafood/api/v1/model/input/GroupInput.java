@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-@ApiModel(value = "Grupo", description = "Representação de grupo de usuário")
+@ApiModel(value = "GrupoInput", description = "Representação de grupo de usuário")
 @Getter
 @Setter
 public class GroupInput {

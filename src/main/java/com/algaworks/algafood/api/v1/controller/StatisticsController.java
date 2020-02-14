@@ -20,7 +20,7 @@ import com.algaworks.algafood.domain.service.SaleQuerySevice;
 import com.algaworks.algafood.domain.service.SaleReportService;
 
 @RestController
-@RequestMapping(path = "/statistics", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/statistics", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StatisticsController implements StatisticsControllerOpenApi {
 
 	@Autowired

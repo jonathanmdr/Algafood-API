@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-@ApiModel(value = "Pedido", description = "Representação de pedido")
+@ApiModel(value = "PedidoInput", description = "Representação de pedido")
 @Getter
 @Setter
 public class OrderInput {

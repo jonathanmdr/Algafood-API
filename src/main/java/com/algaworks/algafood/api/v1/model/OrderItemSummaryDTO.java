@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Relation(collectionRelation = "order-items")
-@ApiModel(value = "Item do Pedido Resumido", description = "Representação resumida de um item do pedido")
+@ApiModel(value = "ItemDoPedidoResumoDTO", description = "Representação resumida de um item do pedido")
 @Getter
 @Setter
 public class OrderItemSummaryDTO extends RepresentationModel<OrderItemSummaryDTO> {

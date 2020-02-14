@@ -6,11 +6,13 @@ import java.time.OffsetDateTime;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 @Relation(collectionRelation = "orders")
+@ApiModel(value = "PedidoResumoDTO", description = "Representação de um pedido resumido")
 @Getter
 @Setter
 public class OrderSummaryDTO extends RepresentationModel<OrderSummaryDTO> {

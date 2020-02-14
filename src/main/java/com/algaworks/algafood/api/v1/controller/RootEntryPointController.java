@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.AlgaLinks;
+import com.algaworks.algafood.api.v1.controller.openapi.controller.RootEntryPointControllerOpenApi;
 
 @RestController
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-public class RootEntryPointController {
+@RequestMapping(path = "/v1", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RootEntryPointController implements RootEntryPointControllerOpenApi {
 	
 	@Autowired
 	private AlgaLinks algaLinks;
@@ -34,7 +35,7 @@ public class RootEntryPointController {
 		return rootEntyPointDto;
 	}
 	
-	private static class RootEntryPointDTO extends RepresentationModel<RootEntryPointDTO> {
+	public static class RootEntryPointDTO extends RepresentationModel<RootEntryPointDTO> {
 		
 	}
 

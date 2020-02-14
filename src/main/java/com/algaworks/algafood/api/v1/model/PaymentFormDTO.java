@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Relation(collectionRelation = "paymentForms")
-@ApiModel(value = "Forma de Pagamento", description = "Representação de forma de pagamento")
+@ApiModel(value = "FormaDePagamentoDTO", description = "Representação de forma de pagamento")
 @Getter
 @Setter
 public class PaymentFormDTO extends RepresentationModel<PaymentFormDTO> {

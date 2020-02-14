@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-@ApiModel(value = "Endereço", description = "Representação de endereço")
+@ApiModel(value = "EnderecoInput", description = "Representação de endereço")
 @Getter
 @Setter
 public class AddressInput {

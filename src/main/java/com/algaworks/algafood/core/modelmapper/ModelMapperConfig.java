@@ -6,9 +6,11 @@ import org.springframework.context.annotation.Configuration;
 
 import com.algaworks.algafood.api.v1.model.input.OrderItemInput;
 import com.algaworks.algafood.api.v2.model.input.CityInputV2;
+import com.algaworks.algafood.api.v2.model.input.KitchenInputV2;
 import com.algaworks.algafood.api.v1.model.AddressDTO;
 import com.algaworks.algafood.domain.model.Address;
 import com.algaworks.algafood.domain.model.City;
+import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.model.OrderItem;
 
 @Configuration
@@ -29,6 +31,9 @@ public class ModelMapperConfig {
 		
 		modelMapper.createTypeMap(CityInputV2.class, City.class)
 		    .addMappings(mapper -> mapper.skip(City::setId));
+		
+		modelMapper.createTypeMap(KitchenInputV2.class, Kitchen.class)
+	        .addMappings(mapper -> mapper.skip(Kitchen::setId));
 		
 		return modelMapper;
 	}

@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,18 +17,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.ResourceUriHelper;
+import com.algaworks.algafood.api.v2.controller.openapi.CityControllerOpenApiV2;
 import com.algaworks.algafood.api.v2.mapper.CityMapperV2;
 import com.algaworks.algafood.api.v2.model.CityDTOV2;
 import com.algaworks.algafood.api.v2.model.input.CityInputV2;
-import com.algaworks.algafood.core.web.AlgaMediaTypesCustom;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.StateNotFoundException;
 import com.algaworks.algafood.domain.model.City;
 import com.algaworks.algafood.domain.service.CityService;
 
 @RestController
-@RequestMapping(path = "/cities", produces = AlgaMediaTypesCustom.V2_APPLICATION_JSON_VALUE)
-public class CityControllerV2 {
+@RequestMapping(path = "/v2/cities", produces = MediaType.APPLICATION_JSON_VALUE)
+public class CityControllerV2 implements CityControllerOpenApiV2 {
 
 	@Autowired
 	private CityService cityService;

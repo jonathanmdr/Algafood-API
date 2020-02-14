@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Relation(collectionRelation = "states")
-@ApiModel(value = "Estado", description = "Representação de UF")
+@ApiModel(value = "EstadoDTO", description = "Representação de UF")
 @Getter
 @Setter
 public class StateDTO extends RepresentationModel<StateDTO> {

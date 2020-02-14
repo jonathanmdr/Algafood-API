@@ -46,6 +46,10 @@ import com.algaworks.algafood.api.v1.model.ProductDTO;
 import com.algaworks.algafood.api.v1.model.RestaurantSummaryDTO;
 import com.algaworks.algafood.api.v1.model.StateDTO;
 import com.algaworks.algafood.api.v1.model.UserSummaryDTO;
+import com.algaworks.algafood.api.v2.controller.openapi.model.CitiesModelOpenApiV2;
+import com.algaworks.algafood.api.v2.controller.openapi.model.KitchensModelOpenApiV2;
+import com.algaworks.algafood.api.v2.model.CityDTOV2;
+import com.algaworks.algafood.api.v2.model.KitchenDTOV2;
 import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
@@ -69,13 +73,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SpringFoxConfig implements WebMvcConfigurer {
 	
 	@Bean
-	public Docket apiDocket() {
+	public Docket apiDocketV1() {
 		var typeResolver = new TypeResolver();
 		
 		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("V1")
 				.select()
 					.apis(RequestHandlerSelectors.basePackage("com.algaworks.algafood.api"))
-					.paths(PathSelectors.any())
+					.paths(PathSelectors.ant("/v1/**"))
 					.build()
 				.useDefaultResponseMessages(false)
 				.globalResponseMessage(RequestMethod.GET, globalGetResponseMessage())
@@ -97,7 +102,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, ProductDTO.class), ProductsModelOpenApi.class))
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, RestaurantSummaryDTO.class), RestaurantsSummaryModelOpenApi.class))
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, UserSummaryDTO.class), UsersSummaryModelOpenApi.class))
-				.apiInfo(apiInfo())
+				.apiInfo(apiInfoV1())
 				.tags(new Tag("Cidades", "Realiza o gerencimanento de cidades"), 
 					  new Tag("Grupos", "Realiza o gerenciamento de grupos de usuário"),
 					  new Tag("Cozinhas", "Realiza o gerencimento de cozinhas"),
@@ -108,7 +113,35 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 					  new Tag("Produtos", "Realiza o gerenciamento de produtos"),
 					  new Tag("Usuários", "Realiza o gerenciamento de usuários"),
 					  new Tag("Estatísticas", "Consulta estatísticas de vendas do Algafood"),
-					  new Tag("Permissões", "Realiza o gerenciamento de permissões"));
+					  new Tag("Permissões", "Realiza o gerenciamento de permissões"),
+					  new Tag("Root", "Realiza o gerenciamento das URL's disponíveis na API"));
+	}
+	
+	@Bean
+	public Docket apiDocketV2() {
+		var typeResolver = new TypeResolver();
+		
+		return new Docket(DocumentationType.SWAGGER_2)
+				.groupName("V2")
+				.select()
+					.apis(RequestHandlerSelectors.basePackage("com.algaworks.algafood.api"))
+					.paths(PathSelectors.ant("/v2/**"))
+					.build()
+				.useDefaultResponseMessages(false)
+				.globalResponseMessage(RequestMethod.GET, globalGetResponseMessage())
+				.globalResponseMessage(RequestMethod.POST, globalPostAndPutResponseMessage())
+				.globalResponseMessage(RequestMethod.PUT, globalPostAndPutResponseMessage())
+				.globalResponseMessage(RequestMethod.DELETE, globalDeleteResponseMessage())
+				.additionalModels(typeResolver.resolve(ApiError.class))
+				.ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class, Resource.class, File.class, InputStream.class)
+				.directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+				.directModelSubstitute(Links.class, LinksModelOpenApi.class)
+				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, CityDTOV2.class), CitiesModelOpenApiV2.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(PagedModel.class, KitchenDTOV2.class), KitchensModelOpenApiV2.class))
+				.apiInfo(apiInfoV2())
+				.tags(new Tag("Cidades", "Realiza o gerencimanento de cidades"),
+					  new Tag("Cozinhas", "Realiza o gerencimento de cozinhas"),
+					  new Tag("Root", "Realiza o gerenciamento das URL's disponíveis na API"));
 	}
 	
 	private List<ResponseMessage> globalGetResponseMessage() {
@@ -164,11 +197,20 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				);
 	}
 	
-	private ApiInfo apiInfo() {
+	private ApiInfo apiInfoV1() {
 		return new ApiInfoBuilder()
 				.title("Algafood API")
 				.description("API aberta para clientes e restaurantes")
 				.version("1.0.0")
+				.contact(new Contact("Jonathan Henrique Medeiros", "https://jonathanmdr.github.io/", "jonathan.mdr@hotmail.com"))
+				.build();
+	}
+	
+	private ApiInfo apiInfoV2() {
+		return new ApiInfoBuilder()
+				.title("Algafood API")
+				.description("API aberta para clientes e restaurantes")
+				.version("2.0.0")
 				.contact(new Contact("Jonathan Henrique Medeiros", "https://jonathanmdr.github.io/", "jonathan.mdr@hotmail.com"))
 				.build();
 	}

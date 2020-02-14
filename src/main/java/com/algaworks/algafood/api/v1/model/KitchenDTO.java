@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Relation(collectionRelation = "kitchens")
-@ApiModel(value = "Cozinha", description = "Representação de cozinha")
+@ApiModel(value = "CozinhaDTO", description = "Representação de cozinha")
 @Getter
 @Setter
 public class KitchenDTO extends RepresentationModel<KitchenDTO> {
