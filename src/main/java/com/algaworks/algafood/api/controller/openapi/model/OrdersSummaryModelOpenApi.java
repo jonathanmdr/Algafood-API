@@ -4,27 +4,27 @@ import java.util.List;
 
 import org.springframework.hateoas.Links;
 
-import com.algaworks.algafood.api.model.KitchenDTO;
+import com.algaworks.algafood.api.model.OrderSummaryDTO;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
 
-@ApiModel("CozinhasModel")
+@ApiModel("PedidosModel")
 @Getter
 @Setter
-public class KitchensModelOpenApi {
+public class OrdersSummaryModelOpenApi {
 
-	private KitchenEmbeddedModelOpenApi _embedded;
+	private OrderSummaryEmbeddedModelOpenApi _embedded;
 	private Links _links;
 	private PageModelOpenApi page;
 
-	@ApiModel("CozinhasEmbeddedModel")
+	@ApiModel("PedidosEmbeddedModel")
 	@Getter
 	@Setter
-	private class KitchenEmbeddedModelOpenApi {
+	private class OrderSummaryEmbeddedModelOpenApi {
 
-		private List<KitchenDTO> kitchens;
+		private List<OrderSummaryDTO> orders;
 
 	}
 

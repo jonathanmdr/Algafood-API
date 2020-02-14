@@ -27,6 +27,7 @@ import com.algaworks.algafood.api.controller.openapi.model.GroupsModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.KitchensModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.LinksModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.OrderSummaryModelOpenApi;
+import com.algaworks.algafood.api.controller.openapi.model.OrdersSummaryModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.PageableModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.PaymentFormsModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.PermissionsModelOpenApi;
@@ -86,6 +87,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, PaymentFormDTO.class), PaymentFormsModelOpenApi.class))
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, GroupDTO.class), GroupsModelOpenApi.class))
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, PermissionDTO.class), PermissionsModelOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, OrderSummaryDTO.class), OrdersSummaryModelOpenApi.class))
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Realiza o gerencimanento de cidades"), 
 					  new Tag("Grupos", "Realiza o gerenciamento de grupos de usuário"),
