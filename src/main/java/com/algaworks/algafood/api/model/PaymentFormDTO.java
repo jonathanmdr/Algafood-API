@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-@Relation(collectionRelation = "payment-forms")
+@Relation(collectionRelation = "paymentForms")
 @ApiModel(value = "Forma de Pagamento", description = "Representação de forma de pagamento")
 @Getter
 @Setter

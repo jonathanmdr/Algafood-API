@@ -30,7 +30,7 @@ public class PaymentFormMapper extends RepresentationModelAssemblerSupport<Payme
 		PaymentFormDTO paymentFormDto = createModelWithId(paymentForm.getId(), paymentForm);
 		modelMapper.map(paymentForm, paymentFormDto);
 
-		paymentFormDto.add(algaLinks.linkToPaymentForms("payment-forms"));
+		paymentFormDto.add(algaLinks.linkToPaymentForms("paymentForms"));
 
 		return paymentFormDto;
 	}

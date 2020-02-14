@@ -27,11 +27,13 @@ import com.algaworks.algafood.api.controller.openapi.model.KitchensModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.LinksModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.OrderSummaryModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.PageableModelOpenApi;
+import com.algaworks.algafood.api.controller.openapi.model.PaymentFormsModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.StatesModelOpenApi;
 import com.algaworks.algafood.api.exceptionhandler.ApiError;
 import com.algaworks.algafood.api.model.CityDTO;
 import com.algaworks.algafood.api.model.KitchenDTO;
 import com.algaworks.algafood.api.model.OrderSummaryDTO;
+import com.algaworks.algafood.api.model.PaymentFormDTO;
 import com.algaworks.algafood.api.model.StateDTO;
 import com.fasterxml.classmate.TypeResolver;
 
@@ -77,6 +79,7 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(PagedModel.class, OrderSummaryDTO.class), OrderSummaryModelOpenApi.class))
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, CityDTO.class), CitiesModelOpenApi.class))
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, StateDTO.class), StatesModelOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, PaymentFormDTO.class), PaymentFormsModelOpenApi.class))
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Realiza o gerencimanento de cidades"), 
 					  new Tag("Grupos", "Realiza o gerenciamento de grupos de usuário"),

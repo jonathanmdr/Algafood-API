@@ -4,6 +4,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.ServletWebRequest;
 
+import com.algaworks.algafood.api.controller.openapi.model.PaymentFormsModelOpenApi;
 import com.algaworks.algafood.api.exceptionhandler.ApiError;
 import com.algaworks.algafood.api.model.PaymentFormDTO;
 import com.algaworks.algafood.api.model.input.PaymentFormInput;
@@ -17,7 +18,7 @@ import io.swagger.annotations.ApiResponses;
 @Api(tags = "Formas de pagamento")
 public interface PaymentFormControllerOpenApi {
 	
-	@ApiOperation("Lista todas as formas de pagamento")
+	@ApiOperation(value = "Lista todas as formas de pagamento", response = PaymentFormsModelOpenApi.class)
 	public ResponseEntity<CollectionModel<PaymentFormDTO>> findAll(ServletWebRequest request);
 	
 	@ApiOperation("Busca uma forma de pagamento por ID")

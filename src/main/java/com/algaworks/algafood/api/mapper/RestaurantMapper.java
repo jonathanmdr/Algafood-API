@@ -57,7 +57,7 @@ public class RestaurantMapper extends RepresentationModelAssemblerSupport<Restau
 		
 		restaurantDto.add(algaLinks.linkToProdutcs(restaurantDto.getId(), "products"));
 
-		restaurantDto.add(algaLinks.linkToRestaurantPaymentForms(restaurantDto.getId(), "payment-forms"));
+		restaurantDto.add(algaLinks.linkToRestaurantPaymentForms(restaurantDto.getId(), "paymentForms"));
 
 		restaurantDto.add(algaLinks.linkToRestaurantUserManager(restaurantDto.getId(), "responsible-users"));
 
