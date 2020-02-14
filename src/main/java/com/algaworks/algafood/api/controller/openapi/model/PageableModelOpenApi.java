@@ -14,11 +14,11 @@ public class PageableModelOpenApi {
 
 	@ApiModelProperty(example = "0", value = "Número da página (inicia com 0)")
 	private int page;
-	
+
 	@ApiModelProperty(example = "10", value = "Quantidade de elementos por página")
 	private int size;
-	
+
 	@ApiModelProperty(example = "name,asc", value = "Nome da propriedade para ordenação e tipo de ordenação (asc ou desc)")
 	private List<String> sort;
-	
+
 }

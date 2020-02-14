@@ -13,16 +13,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RestaurantModelOpenApi {
-	
+
 	@ApiModelProperty(example = "1", position = 10)
 	private Long id;
-	
+
 	@ApiModelProperty(example = "Thai Delivery", position = 20)
 	private String name;
-	
+
 	@ApiModelProperty(example = "8.00", position = 40)
 	private BigDecimal freightRate;
-	
+
 	@ApiModelProperty(position = 50)
 	private KitchenDTO kitchen;
 

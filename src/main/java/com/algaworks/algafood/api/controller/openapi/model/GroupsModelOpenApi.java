@@ -4,26 +4,26 @@ import java.util.List;
 
 import org.springframework.hateoas.Links;
 
-import com.algaworks.algafood.api.model.CityDTO;
+import com.algaworks.algafood.api.model.GroupDTO;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
 
-@ApiModel("CidadesModel")
+@ApiModel("GruposModel")
 @Getter
 @Setter
-public class CitiesModelOpenApi {
+public class GroupsModelOpenApi {
 
-	private CityEmbeddedModelOpenApi _embedded;
+	private GroupEmbeddedModelOpenApi _embedded;
 	private Links _links;
 
-	@ApiModel("CidadesEmbeddedModel")
+	@ApiModel("GruposEmbeddedModel")
 	@Getter
 	@Setter
-	private class CityEmbeddedModelOpenApi {
+	private class GroupEmbeddedModelOpenApi {
 
-		private List<CityDTO> cities;
+		private List<GroupDTO> groups;
 
 	}
 

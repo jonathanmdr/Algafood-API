@@ -14,17 +14,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StatesModelOpenApi {
-	
+
 	private StateEmbeddedModelOpenApi _embedded;
 	private Links _links;
-	
+
 	@ApiModel("EstadosEmbeddedModel")
 	@Getter
 	@Setter
 	private class StateEmbeddedModelOpenApi {
-		
+
 		private List<StateDTO> states;
-		
+
 	}
 
 }
