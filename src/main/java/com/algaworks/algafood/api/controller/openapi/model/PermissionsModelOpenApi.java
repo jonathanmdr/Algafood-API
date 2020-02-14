@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
 
-@ApiModel("PermissãoModel")
+@ApiModel("PermissaoModel")
 @Getter
 @Setter
 public class PermissionsModelOpenApi {
@@ -18,7 +18,7 @@ public class PermissionsModelOpenApi {
 	private PermissionEmbeddedModelOpenApi _embedded;
 	private Links _links;
 
-	@ApiModel("PermissãoEmbeddedModel")
+	@ApiModel("PermissaoEmbeddedModel")
 	@Getter
 	@Setter
 	private class PermissionEmbeddedModelOpenApi {

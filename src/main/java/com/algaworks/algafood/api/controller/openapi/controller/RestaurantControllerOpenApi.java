@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
-import com.algaworks.algafood.api.controller.openapi.model.RestaurantModelOpenApi;
 import com.algaworks.algafood.api.exceptionhandler.ApiError;
 import com.algaworks.algafood.api.model.RestaurantDTO;
 import com.algaworks.algafood.api.model.RestaurantJustNameDTO;
@@ -22,16 +21,18 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = "Restaurantes")
 public interface RestaurantControllerOpenApi {
 
-	@ApiOperation(value = "Lista todos os restaurantes de forma resumida", response = RestaurantModelOpenApi.class)
+	@ApiOperation("Lista todos os restaurantes de forma resumida")
 	@ApiImplicitParams({
 		@ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "just-name", name = "projection", paramType = "query", type = "string")
 	})
 	public CollectionModel<RestaurantSummaryDTO> findAllSummary();
 	
+	@ApiIgnore
 	@ApiOperation(value = "Lista todos os restaurantes apresentando somente o nome", hidden = true)
 	public CollectionModel<RestaurantJustNameDTO> findAllJustName();
 	

@@ -31,7 +31,10 @@ import com.algaworks.algafood.api.controller.openapi.model.OrdersSummaryModelOpe
 import com.algaworks.algafood.api.controller.openapi.model.PageableModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.PaymentFormsModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.PermissionsModelOpenApi;
+import com.algaworks.algafood.api.controller.openapi.model.ProductsModelOpenApi;
+import com.algaworks.algafood.api.controller.openapi.model.RestaurantsSummaryModelOpenApi;
 import com.algaworks.algafood.api.controller.openapi.model.StatesModelOpenApi;
+import com.algaworks.algafood.api.controller.openapi.model.UsersSummaryModelOpenApi;
 import com.algaworks.algafood.api.exceptionhandler.ApiError;
 import com.algaworks.algafood.api.model.CityDTO;
 import com.algaworks.algafood.api.model.GroupDTO;
@@ -39,7 +42,10 @@ import com.algaworks.algafood.api.model.KitchenDTO;
 import com.algaworks.algafood.api.model.OrderSummaryDTO;
 import com.algaworks.algafood.api.model.PaymentFormDTO;
 import com.algaworks.algafood.api.model.PermissionDTO;
+import com.algaworks.algafood.api.model.ProductDTO;
+import com.algaworks.algafood.api.model.RestaurantSummaryDTO;
 import com.algaworks.algafood.api.model.StateDTO;
+import com.algaworks.algafood.api.model.UserSummaryDTO;
 import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
@@ -88,6 +94,9 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, GroupDTO.class), GroupsModelOpenApi.class))
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, PermissionDTO.class), PermissionsModelOpenApi.class))
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, OrderSummaryDTO.class), OrdersSummaryModelOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, ProductDTO.class), ProductsModelOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, RestaurantSummaryDTO.class), RestaurantsSummaryModelOpenApi.class))
+				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, UserSummaryDTO.class), UsersSummaryModelOpenApi.class))
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Realiza o gerencimanento de cidades"), 
 					  new Tag("Grupos", "Realiza o gerenciamento de grupos de usuário"),
