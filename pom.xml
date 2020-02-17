@@ -69,6 +69,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
 		</dependency>
+		
+		<!-- Starter Security -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		
+		<!-- Starter Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 		<!-- Dependency connection database MySQL -->
 		<dependency>
@@ -201,7 +214,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
+		
 	</dependencies>
 
 	<!-- Steps for building project -->
