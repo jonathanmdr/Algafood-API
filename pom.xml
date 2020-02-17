@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<!-- lookup parent from repository -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.2.2.RELEASE</version>
-		<relativePath/>
+		<relativePath />
 	</parent>
-	
+
 	<!-- Definition Algafood API -->
 	<groupId>com.algaworks</groupId>
 	<artifactId>algafood-api</artifactId>
@@ -26,93 +27,94 @@
 		<jasperreports.version>6.10.0</jasperreports.version>
 		<aws-sdk-s3.version>1.11.671</aws-sdk-s3.version>
 		<spring-fox.version>2.9.2</spring-fox.version>
+		<logback-ext-loggly.version>0.1.5</logback-ext-loggly.version>
 	</properties>
-	
+
 	<dependencies>
-	
+
 		<!-- Starter project Web MVC -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		
+
 		<!-- Starter Tests -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- Start project execution instantly for development environment -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
-		
-		<!--  Starter several project configurations -->
+
+		<!-- Starter several project configurations -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
-		
+
 		<!-- Starter JPA configurations -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		
+
 		<!-- Starter Spring HATEOAS -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
-		</dependency>		
-		
+		</dependency>
+
 		<!-- Dependency connection database MySQL -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<!-- Using for reduce boilerplate code -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
-		
+
 		<!-- Using to apply for responses in format XML -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
-		
+
 		<!-- Migration Database -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
 		</dependency>
-		
+
 		<!-- Utility classes -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
-		
+
 		<!-- Test REST APIs -->
 		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- Mapping objects for objects -->
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>${modelmapper.version}</version>
 		</dependency>
-		
+
 		<!-- Filter fields for objects summary -->
 		<dependency>
 			<groupId>com.github.bohnman</groupId>
@@ -125,40 +127,40 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<!-- Reports with Jasper -->
 		<dependency>
-		  <groupId>net.sf.jasperreports</groupId>
-		  <artifactId>jasperreports</artifactId>
-		  <version>${jasperreports.version}</version>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>${jasperreports.version}</version>
 		</dependency>
-		
+
 		<!-- Functions for reports with Jasper -->
 		<dependency>
-		  <groupId>net.sf.jasperreports</groupId>
-		  <artifactId>jasperreports-functions</artifactId>
-		  <version>${jasperreports.version}</version>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports-functions</artifactId>
+			<version>${jasperreports.version}</version>
 		</dependency>
-		
+
 		<!-- AWS S3 Storage files in cloud -->
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-s3</artifactId>
 			<version>${aws-sdk-s3.version}</version>
 		</dependency>
-		
+
 		<!-- Mail sender with Java -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
-		
+
 		<!-- Processing templates HTML for send mail -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-freemarker</artifactId>
 		</dependency>
-		
+
 		<!-- Generate definition OpenAPI in JSON with SpringFox -->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -171,15 +173,23 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<!-- Integration Swagger UI with SpringFox -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${spring-fox.version}</version>
 		</dependency>
-		
-		<!-- Using annotations of beans validations for API documentation with SpringFox -->
+
+		<!-- Appender for Logs using Logback -->
+		<dependency>
+			<groupId>org.logback-extensions</groupId>
+			<artifactId>logback-ext-loggly</artifactId>
+			<version>${logback-ext-loggly.version}</version>
+		</dependency>
+
+		<!-- Using annotations of beans validations for API documentation with 
+			SpringFox -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-bean-validators</artifactId>
@@ -201,9 +211,9 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			
+
 			<!-- Skip integration testing when packaging the project -->
-			<plugin>				
+			<plugin>
 				<artifactId>maven-failsafe-plugin</artifactId>
 			</plugin>
 		</plugins>

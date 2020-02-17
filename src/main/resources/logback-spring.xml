@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+	<!-- Configuration log defaults for Spring boot -->
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+	
+	<!-- Enable personalized configuration in production environment -->
+	<springProfile name="production">
+	
+		<!-- Load access token loggly -->
+		<springProperty name="logglyToken" source="logging.loggly.token" />
+		
+		<!-- Configuration log personalized for loggly -->
+		<appender name="loggly"	class="ch.qos.logback.ext.loggly.LogglyAppender">
+			<endpointUrl>https://logs-01.loggly.com/inputs/${logglyToken}/tag/logback</endpointUrl>
+			<pattern>%d{"ISO8601", UTC} %p %t %c %M - %m%n</pattern>
+		</appender>
+		
+		<!-- Configuration appender interceptor for async requests -->
+		<appender name="logglyAsync" class="ch.qos.logback.classic.AsyncAppender">
+			<appender-ref ref="loggly" />
+		</appender>
+		
+		<!-- Configure level for loggings -->
+		<root level="info">
+			<appender-ref ref="logglyAsync" />
+		</root>
+	</springProfile>
+</configuration>
