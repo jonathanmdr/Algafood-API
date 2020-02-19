@@ -98,13 +98,13 @@ INSERT INTO grupo_permissao(grupo_id, permissao_id) VALUES(1, 1),
 														  (2, 2), 
 														  (3, 1); 							  
 							  
-INSERT INTO usuario(id, nome, email, senha, data_criacao) VALUES(1, 'João da Silva', 'joao.ger@algafood.com', '123', utc_timestamp),
-																(2, 'Maria Joaquina', 'maria.vnd@algafood.com', '123', utc_timestamp),
-																(3, 'José Souza', 'jose.aux@algafood.com', '123', utc_timestamp),
-																(4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp),
-																(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp),
-																(6, 'Débora Mendonça', 'email.teste.aw+debora@gmail.com', '123', utc_timestamp),
-																(7, 'Carlos Lima', 'jonathan.mdr@hotmail.com', '123', utc_timestamp);
+INSERT INTO usuario(id, nome, email, senha, data_criacao) VALUES(1, 'João da Silva', 'joao.ger@algafood.com', '$2y$12$k8hflrntg6GVj3Da5IIrfuGcTcdsuHexguuEryHLS05stS8.yxfcO', utc_timestamp),
+																(2, 'Maria Joaquina', 'maria.vnd@algafood.com', '$2y$12$k8hflrntg6GVj3Da5IIrfuGcTcdsuHexguuEryHLS05stS8.yxfcO', utc_timestamp),
+																(3, 'José Souza', 'jose.aux@algafood.com', '$2y$12$k8hflrntg6GVj3Da5IIrfuGcTcdsuHexguuEryHLS05stS8.yxfcO', utc_timestamp),
+																(4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '$2y$12$k8hflrntg6GVj3Da5IIrfuGcTcdsuHexguuEryHLS05stS8.yxfcO', utc_timestamp),
+																(5, 'Manoel Lima', 'manoel.loja@gmail.com', '$2y$12$k8hflrntg6GVj3Da5IIrfuGcTcdsuHexguuEryHLS05stS8.yxfcO', utc_timestamp),
+																(6, 'Débora Mendonça', 'email.teste.aw+debora@gmail.com', '$2y$12$k8hflrntg6GVj3Da5IIrfuGcTcdsuHexguuEryHLS05stS8.yxfcO', utc_timestamp),
+																(7, 'Jonathan Henrique', 'jonathan.henrique@algafood.com', '$2y$12$k8hflrntg6GVj3Da5IIrfuGcTcdsuHexguuEryHLS05stS8.yxfcO', utc_timestamp);
 																
 INSERT INTO usuario_grupo(usuario_id, grupo_id) VALUES(1, 1), 
 													  (1, 2), 
