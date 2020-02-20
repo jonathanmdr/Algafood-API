@@ -10,7 +10,6 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,10 +21,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.controller.openapi.controller.KitchenControllerOpenApi;
-import com.algaworks.algafood.api.v1.model.input.KitchenInput;
-import com.algaworks.algafood.api.v1.representation.KitchensXmlWrapper;
 import com.algaworks.algafood.api.v1.mapper.KitchenMapper;
 import com.algaworks.algafood.api.v1.model.KitchenDTO;
+import com.algaworks.algafood.api.v1.model.input.KitchenInput;
+import com.algaworks.algafood.api.v1.representation.KitchensXmlWrapper;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.service.KitchenService;
 
@@ -43,7 +43,7 @@ public class KitchenController implements KitchenControllerOpenApi {
 	private PagedResourcesAssembler<Kitchen> pagedResourceAssembler;
 
 	@Override
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Kitchens.AllowedConsult
 	@GetMapping
 	public PagedModel<KitchenDTO> findAll(@PageableDefault(size = 10) Pageable pageable) {
 		Page<Kitchen> kitchens = kitchenService.findAll(pageable);
@@ -54,21 +54,21 @@ public class KitchenController implements KitchenControllerOpenApi {
 	}
 	
 	@Override
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Kitchens.AllowedConsult
 	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
 	public KitchensXmlWrapper findAllInFormatXml(Pageable pageable) {
 		return new KitchensXmlWrapper(kitchenMapper.toCollectionModel(kitchenService.findAll(pageable).getContent()));
 	}
 
 	@Override
-	@PreAuthorize("isAuthenticated()")
+	@CheckSecurity.Kitchens.AllowedConsult
 	@GetMapping("/{kitchenId}")
 	public KitchenDTO findById(@PathVariable Long kitchenId) {
 		return kitchenMapper.toModel(kitchenService.findById(kitchenId));
 	}
 
 	@Override
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS') and scope('write')")
+	@CheckSecurity.Kitchens.AllowedEdit
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public KitchenDTO save(@RequestBody @Valid KitchenInput kitchenInput) {
@@ -77,7 +77,7 @@ public class KitchenController implements KitchenControllerOpenApi {
 	}
 
 	@Override
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS') and scope('write')")
+	@CheckSecurity.Kitchens.AllowedEdit
 	@PutMapping("/{kitchenId}")
 	public KitchenDTO update(@PathVariable Long kitchenId, @RequestBody @Valid KitchenInput kitchenInput) {
 		Kitchen kitchenCurrent = kitchenService.findById(kitchenId);
@@ -88,7 +88,7 @@ public class KitchenController implements KitchenControllerOpenApi {
 	}
 
 	@Override
-	@PreAuthorize("hasAuthority('EDITAR_COZINHAS') and scope('write')")
+	@CheckSecurity.Kitchens.AllowedEdit
 	@DeleteMapping("/{kitchenId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long kitchenId) {
