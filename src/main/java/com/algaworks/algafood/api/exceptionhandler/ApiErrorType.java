@@ -11,7 +11,8 @@ public enum ApiErrorType {
 	REQUEST_BODY_ERROR("/erro-no-corpo-da-requisicao", "Erro no corpo da requisição"),
 	REQUEST_INVALID_PARAMETER("/parametro-invalido", "Parâmetro inválido"),
 	INTERNAL_SERVER_ERROR("/erro-de-sistema", "Erro de sistema"),
-	INVALID_DATA("/dados-invalidos", "Dados inválidos");
+	INVALID_DATA("/dados-invalidos", "Dados inválidos"),
+	ACCESS_DENIED("/acesso-negado", "Acesso negado");
 	
 	private String title;
 	private String uri;
