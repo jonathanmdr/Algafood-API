@@ -88,7 +88,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
 	}
 
 	@Override
-	@Security.Restaurants.AllowedEdit
+	@Security.Restaurants.AllowedUserManager
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ProductPhotoDTO updatePhoto(@PathVariable Long restaurantId, @PathVariable Long productId, @Valid ProductPhotoInput productPhotoInput, @RequestPart(required = true) MultipartFile file) throws IOException {
 		Product product = productService.findById(restaurantId, productId);
@@ -104,7 +104,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
 	}
 	
 	@Override
-	@Security.Restaurants.AllowedEdit
+	@Security.Restaurants.AllowedUserManager
 	@DeleteMapping
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long restaurantId, @PathVariable Long productId) {

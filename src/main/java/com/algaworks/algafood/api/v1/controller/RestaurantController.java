@@ -137,7 +137,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 	}
 
 	@Override
-	@Security.Restaurants.AllowedEdit
+	@Security.Restaurants.AllowedUserManager
 	@PutMapping("/{restaurantId}/opening")
 	public ResponseEntity<Void> open(@PathVariable Long restaurantId) {
 		restaurantService.opening(restaurantId);
@@ -146,7 +146,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 	}
 
 	@Override
-	@Security.Restaurants.AllowedEdit
+	@Security.Restaurants.AllowedUserManager
 	@PutMapping("/{restaurantId}/closing")
 	public ResponseEntity<Void> close(@PathVariable Long restaurantId) {
 		restaurantService.closing(restaurantId);

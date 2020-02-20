@@ -72,7 +72,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
 	}
 
 	@Override
-	@Security.Restaurants.AllowedEdit
+	@Security.Restaurants.AllowedUserManager
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ProductDTO save(@PathVariable Long restaurantId, @RequestBody @Valid ProductInput productInput) {
@@ -85,7 +85,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
 	}
 
 	@Override
-	@Security.Restaurants.AllowedEdit
+	@Security.Restaurants.AllowedUserManager
 	@PutMapping("/{productId}")
 	public ProductDTO update(@PathVariable Long restaurantId, @PathVariable Long productId,	@RequestBody @Valid ProductInput productInput) {
 		Product productCurrent = productService.findById(restaurantId, productId);

@@ -15,14 +15,12 @@ public @interface Security {
 		@PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
 		@Retention(RUNTIME)
 		@Target(METHOD)
-		public @interface AllowedConsult {
-		}
+		public @interface AllowedConsult { }
 
 		@PreAuthorize("hasAuthority('EDITAR_COZINHAS') and hasAuthority('SCOPE_WRITE')")
 		@Retention(RUNTIME)
 		@Target(METHOD)
-		public @interface AllowedEdit {
-		}
+		public @interface AllowedEdit { }
 
 	}
 
@@ -31,14 +29,17 @@ public @interface Security {
 		@PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
 		@Retention(RUNTIME)
 		@Target(METHOD)
-		public @interface AllowedConsult {
-		}
+		public @interface AllowedConsult { }
 
 		@PreAuthorize("hasAuthority('EDITAR_RESTAURANTES') and hasAuthority('SCOPE_WRITE')")
 		@Retention(RUNTIME)
 		@Target(METHOD)
-		public @interface AllowedEdit {
-		}
+		public @interface AllowedEdit { }
+		
+		@PreAuthorize("(hasAuthority('EDITAR_RESTAURANTES') or @algaSecurity.isUserManager(#restaurantId)) and hasAuthority('SCOPE_WRITE')")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface AllowedUserManager { }
 
 	}
 

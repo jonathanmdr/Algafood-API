@@ -52,7 +52,7 @@ public class RestaurantPaymentFormController implements RestaurantPaymentFormCon
 	}
 
 	@Override
-	@Security.Restaurants.AllowedEdit
+	@Security.Restaurants.AllowedUserManager
 	@PutMapping("/{paymentFormId}")
 	public ResponseEntity<Void> associatePaymentForm(@PathVariable Long restaurantId, @PathVariable Long paymentFormId) {
 		restaurantService.associatePaymentForm(restaurantId, paymentFormId);
@@ -61,7 +61,7 @@ public class RestaurantPaymentFormController implements RestaurantPaymentFormCon
 	}
 
 	@Override
-	@Security.Restaurants.AllowedEdit
+	@Security.Restaurants.AllowedUserManager
 	@DeleteMapping("/{paymentFormId}")
 	public ResponseEntity<Void> disassociatePaymentForm(@PathVariable Long restaurantId, @PathVariable Long paymentFormId) {
 		restaurantService.disassociatePaymentForm(restaurantId, paymentFormId);
