@@ -29,6 +29,7 @@ import com.algaworks.algafood.api.v1.model.OrderSummaryDTO;
 import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.core.security.AlgaSecurity;
+import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.algafood.domain.filter.OrderFilter;
@@ -56,6 +57,7 @@ public class OrderController implements OrderControllerOpenApi {
 	private AlgaSecurity algaSecurity;
 
 	@Override
+	@Security.Orders.AllowedConsult
 	@GetMapping
 	public PagedModel<OrderSummaryDTO> findAll(OrderFilter orderFilter, @PageableDefault(size = 10) Pageable pageable) {
 		Pageable pageableTransalated = translatePageable(pageable);
@@ -67,6 +69,7 @@ public class OrderController implements OrderControllerOpenApi {
 	}
 
 	@Override
+	@Security.Orders.AllowedConsult
 	@GetMapping("/{code}")
 	public OrderDTO findById(@PathVariable String code) {
 		return orderMapper.toModel(orderService.findByCode(code));
