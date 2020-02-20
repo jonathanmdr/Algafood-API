@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.v1.controller.openapi.controller.RestaurantUse
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.mapper.UserMapper;
 import com.algaworks.algafood.api.v1.model.UserSummaryDTO;
+import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.service.RestaurantService;
 
@@ -32,6 +33,7 @@ public class RestaurantUserManagerController implements RestaurantUserManagerCon
 	private AlgaLinks algaLinks;
 
 	@Override
+	@Security.Restaurants.AllowedConsult
 	@GetMapping
 	public CollectionModel<UserSummaryDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
 		Restaurant restaurant = restaurantService.findById(restaurantId);
@@ -49,6 +51,7 @@ public class RestaurantUserManagerController implements RestaurantUserManagerCon
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@PutMapping("/{userId}")
 	public ResponseEntity<Void> associateUser(@PathVariable Long restaurantId, @PathVariable Long userId) {
 		restaurantService.associateUser(restaurantId, userId);
@@ -57,6 +60,7 @@ public class RestaurantUserManagerController implements RestaurantUserManagerCon
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<Void> disassociateUser(@PathVariable Long restaurantId, @PathVariable Long userId) {
 		restaurantService.disassociateUser(restaurantId, userId);

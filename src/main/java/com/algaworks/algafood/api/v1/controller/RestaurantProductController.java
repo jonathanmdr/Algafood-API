@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.controller.openapi.controller.RestaurantProductControllerOpenApi;
 import com.algaworks.algafood.api.v1.model.input.ProductInput;
+import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.mapper.ProductMapper;
 import com.algaworks.algafood.api.v1.model.ProductDTO;
@@ -45,6 +46,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
 	private AlgaLinks algaLinks;
 
 	@Override
+	@Security.Restaurants.AllowedConsult
 	@GetMapping
 	public CollectionModel<ProductDTO> findByRestaurant(@PathVariable Long restaurantId, @RequestParam(required = false, defaultValue = "false") Boolean includingInactives) {
 		Restaurant restaurant = restaurantService.findById(restaurantId);
@@ -63,12 +65,14 @@ public class RestaurantProductController implements RestaurantProductControllerO
 	}
 
 	@Override
+	@Security.Restaurants.AllowedConsult
 	@GetMapping("/{productId}")
 	public ProductDTO findById(@PathVariable Long restaurantId, @PathVariable Long productId) {
 		return productMapper.toModel(productService.findById(restaurantId, productId));
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ProductDTO save(@PathVariable Long restaurantId, @RequestBody @Valid ProductInput productInput) {
@@ -81,6 +85,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@PutMapping("/{productId}")
 	public ProductDTO update(@PathVariable Long restaurantId, @PathVariable Long productId,	@RequestBody @Valid ProductInput productInput) {
 		Product productCurrent = productService.findById(restaurantId, productId);

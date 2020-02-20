@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.v1.controller.openapi.controller.RestaurantPay
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.mapper.PaymentFormMapper;
 import com.algaworks.algafood.api.v1.model.PaymentFormDTO;
+import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.service.RestaurantService;
 
@@ -32,6 +33,7 @@ public class RestaurantPaymentFormController implements RestaurantPaymentFormCon
 	private AlgaLinks algaLinks;
 
 	@Override
+	@Security.Restaurants.AllowedConsult
 	@GetMapping
 	public CollectionModel<PaymentFormDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
 		Restaurant restaurant = restaurantService.findById(restaurantId);
@@ -50,6 +52,7 @@ public class RestaurantPaymentFormController implements RestaurantPaymentFormCon
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@PutMapping("/{paymentFormId}")
 	public ResponseEntity<Void> associatePaymentForm(@PathVariable Long restaurantId, @PathVariable Long paymentFormId) {
 		restaurantService.associatePaymentForm(restaurantId, paymentFormId);
@@ -58,6 +61,7 @@ public class RestaurantPaymentFormController implements RestaurantPaymentFormCon
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@DeleteMapping("/{paymentFormId}")
 	public ResponseEntity<Void> disassociatePaymentForm(@PathVariable Long restaurantId, @PathVariable Long paymentFormId) {
 		restaurantService.disassociatePaymentForm(restaurantId, paymentFormId);

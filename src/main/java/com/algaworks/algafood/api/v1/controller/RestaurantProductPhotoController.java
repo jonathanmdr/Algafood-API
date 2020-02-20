@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.algaworks.algafood.api.v1.controller.openapi.controller.RestaurantProductPhotoControllerOpenApi;
 import com.algaworks.algafood.api.v1.model.input.ProductPhotoInput;
+import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.api.v1.mapper.ProductPhotoMapper;
 import com.algaworks.algafood.api.v1.model.ProductPhotoDTO;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
@@ -52,6 +53,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
 	private ProductPhotoMapper productPhotoMapper;
 	
 	@Override
+	@Security.Restaurants.AllowedConsult
 	@GetMapping
 	public ProductPhotoDTO findById(@PathVariable Long restaurantId, @PathVariable Long productId) {
 		ProductPhoto productPhoto = catalogProductService.findById(restaurantId, productId);
@@ -59,6 +61,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
 	}
 	
 	@Override
+	@Security.Restaurants.AllowedConsult
 	@GetMapping(produces = MediaType.ALL_VALUE)
 	public ResponseEntity<?> servePhoto(@PathVariable Long restaurantId, @PathVariable Long productId, @RequestHeader(name = "accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
 		try {
@@ -85,6 +88,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ProductPhotoDTO updatePhoto(@PathVariable Long restaurantId, @PathVariable Long productId, @Valid ProductPhotoInput productPhotoInput, @RequestPart(required = true) MultipartFile file) throws IOException {
 		Product product = productService.findById(restaurantId, productId);
@@ -100,6 +104,7 @@ public class RestaurantProductPhotoController implements RestaurantProductPhotoC
 	}
 	
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@DeleteMapping
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long restaurantId, @PathVariable Long productId) {

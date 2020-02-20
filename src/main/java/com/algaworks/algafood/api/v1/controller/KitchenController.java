@@ -25,7 +25,7 @@ import com.algaworks.algafood.api.v1.mapper.KitchenMapper;
 import com.algaworks.algafood.api.v1.model.KitchenDTO;
 import com.algaworks.algafood.api.v1.model.input.KitchenInput;
 import com.algaworks.algafood.api.v1.representation.KitchensXmlWrapper;
-import com.algaworks.algafood.core.security.CheckSecurity;
+import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.domain.model.Kitchen;
 import com.algaworks.algafood.domain.service.KitchenService;
 
@@ -43,7 +43,7 @@ public class KitchenController implements KitchenControllerOpenApi {
 	private PagedResourcesAssembler<Kitchen> pagedResourceAssembler;
 
 	@Override
-	@CheckSecurity.Kitchens.AllowedConsult
+	@Security.Kitchens.AllowedConsult
 	@GetMapping
 	public PagedModel<KitchenDTO> findAll(@PageableDefault(size = 10) Pageable pageable) {
 		Page<Kitchen> kitchens = kitchenService.findAll(pageable);
@@ -54,21 +54,21 @@ public class KitchenController implements KitchenControllerOpenApi {
 	}
 	
 	@Override
-	@CheckSecurity.Kitchens.AllowedConsult
+	@Security.Kitchens.AllowedConsult
 	@GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
 	public KitchensXmlWrapper findAllInFormatXml(Pageable pageable) {
 		return new KitchensXmlWrapper(kitchenMapper.toCollectionModel(kitchenService.findAll(pageable).getContent()));
 	}
 
 	@Override
-	@CheckSecurity.Kitchens.AllowedConsult
+	@Security.Kitchens.AllowedConsult
 	@GetMapping("/{kitchenId}")
 	public KitchenDTO findById(@PathVariable Long kitchenId) {
 		return kitchenMapper.toModel(kitchenService.findById(kitchenId));
 	}
 
 	@Override
-	@CheckSecurity.Kitchens.AllowedEdit
+	@Security.Kitchens.AllowedEdit
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public KitchenDTO save(@RequestBody @Valid KitchenInput kitchenInput) {
@@ -77,7 +77,7 @@ public class KitchenController implements KitchenControllerOpenApi {
 	}
 
 	@Override
-	@CheckSecurity.Kitchens.AllowedEdit
+	@Security.Kitchens.AllowedEdit
 	@PutMapping("/{kitchenId}")
 	public KitchenDTO update(@PathVariable Long kitchenId, @RequestBody @Valid KitchenInput kitchenInput) {
 		Kitchen kitchenCurrent = kitchenService.findById(kitchenId);
@@ -88,7 +88,7 @@ public class KitchenController implements KitchenControllerOpenApi {
 	}
 
 	@Override
-	@CheckSecurity.Kitchens.AllowedEdit
+	@Security.Kitchens.AllowedEdit
 	@DeleteMapping("/{kitchenId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long kitchenId) {

@@ -37,6 +37,7 @@ import com.algaworks.algafood.api.v1.mapper.RestaurantSummaryMapper;
 import com.algaworks.algafood.api.v1.model.RestaurantDTO;
 import com.algaworks.algafood.api.v1.model.RestaurantJustNameDTO;
 import com.algaworks.algafood.api.v1.model.RestaurantSummaryDTO;
+import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.core.validation.ValidationException;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
@@ -66,24 +67,28 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 	private RestaurantJustNameMapper restaurantJustNameMapper;
 
 	@Override
+	@Security.Restaurants.AllowedConsult
 	@GetMapping
 	public CollectionModel<RestaurantSummaryDTO> findAllSummary() {
 		return restaurantSummaryMapper.toCollectionModel(restaurantService.findAll());
 	}
 
 	@Override
+	@Security.Restaurants.AllowedConsult
 	@GetMapping(params = "projection=just-name")
 	public CollectionModel<RestaurantJustNameDTO> findAllJustName() {
 		return restaurantJustNameMapper.toCollectionModel(restaurantService.findAll());
 	}
 
 	@Override
+	@Security.Restaurants.AllowedConsult
 	@GetMapping("/{restaurantId}")
 	public RestaurantDTO findById(@PathVariable Long restaurantId) {
 		return restaurantMapper.toModel(restaurantService.findById(restaurantId));
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public RestaurantDTO save(@RequestBody @Valid RestaurantInput restaurantInput) {
@@ -96,6 +101,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@PutMapping("/{restaurantId}")
 	public RestaurantDTO update(@PathVariable Long restaurantId, @RequestBody @Valid RestaurantInput restaurantInput) {
 		try {
@@ -110,6 +116,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@PutMapping("/{restaurantId}/activate")
 	public ResponseEntity<Void> activate(@PathVariable Long restaurantId) {
 		restaurantService.activate(restaurantId);
@@ -118,6 +125,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@PutMapping("/activations")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void activations(@RequestBody List<Long> restaurantIds) {
@@ -129,6 +137,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@PutMapping("/{restaurantId}/opening")
 	public ResponseEntity<Void> open(@PathVariable Long restaurantId) {
 		restaurantService.opening(restaurantId);
@@ -137,6 +146,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@PutMapping("/{restaurantId}/closing")
 	public ResponseEntity<Void> close(@PathVariable Long restaurantId) {
 		restaurantService.closing(restaurantId);
@@ -145,6 +155,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@DeleteMapping("/{restaurantId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long restaurantId) {
@@ -152,6 +163,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@DeleteMapping("/{restaurantId}/inactivate")
 	public ResponseEntity<Void> inactivate(@PathVariable Long restaurantId) {
 		restaurantService.inactivate(restaurantId);
@@ -160,6 +172,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@DeleteMapping("/inactivations")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void inactivations(@RequestBody List<Long> restaurantIds) {
@@ -171,6 +184,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
 	}
 
 	@Override
+	@Security.Restaurants.AllowedEdit
 	@PatchMapping("/{restaurantId}")
 	public RestaurantDTO updatePartial(@PathVariable Long restaurantId, @RequestBody Map<String, Object> values,
 			HttpServletRequest request) {
