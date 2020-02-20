@@ -28,6 +28,7 @@ import com.algaworks.algafood.api.v1.model.OrderDTO;
 import com.algaworks.algafood.api.v1.model.OrderSummaryDTO;
 import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.algafood.domain.filter.OrderFilter;
@@ -50,6 +51,9 @@ public class OrderController implements OrderControllerOpenApi {
 	
 	@Autowired
 	private PagedResourcesAssembler<Order> pagedResourceAssembler;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	@Override
 	@GetMapping
@@ -75,9 +79,8 @@ public class OrderController implements OrderControllerOpenApi {
 		try {
 			Order order = orderMapper.toDomainObject(orderInput);
 
-			// TODO: Alterar para pegar o usuário logado
 			order.setCustomer(new User());
-			order.getCustomer().setId(1L);
+			order.getCustomer().setId(algaSecurity.getUserId());
 
 			return orderMapper.toModel(orderService.save(order));
 		} catch (EntityNotFoundException ex) {
