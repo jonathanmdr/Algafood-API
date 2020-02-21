@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.controller.openapi.controller.StateControllerOpenApi;
 import com.algaworks.algafood.api.v1.model.input.StateInput;
+import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.api.v1.mapper.StateMapper;
 import com.algaworks.algafood.api.v1.model.StateDTO;
 import com.algaworks.algafood.domain.model.State;
@@ -34,18 +35,21 @@ public class StateController implements StateControllerOpenApi {
 	private StateMapper stateMapper;
 
 	@Override
+	@Security.States.AllowedConsult
 	@GetMapping
 	public CollectionModel<StateDTO> findAll() {
 		return stateMapper.toCollectionModel(stateService.findAll());
 	}
 
 	@Override
+	@Security.States.AllowedConsult
 	@GetMapping("/{stateId}")
 	public StateDTO findById(@PathVariable Long stateId) {
 		return stateMapper.toModel(stateService.findById(stateId));
 	}
 
 	@Override
+	@Security.States.AllowedEdit
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public StateDTO save(@RequestBody @Valid StateInput stateInput) {
@@ -54,6 +58,7 @@ public class StateController implements StateControllerOpenApi {
 	}
 
 	@Override
+	@Security.States.AllowedEdit
 	@PutMapping("/{stateId}")
 	public StateDTO update(@PathVariable Long stateId, @RequestBody @Valid StateInput stateInput) {
 		State stateCurrent = stateService.findById(stateId);
@@ -64,6 +69,7 @@ public class StateController implements StateControllerOpenApi {
 	}
 
 	@Override
+	@Security.States.AllowedEdit
 	@DeleteMapping("/{stateId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long stateId) {

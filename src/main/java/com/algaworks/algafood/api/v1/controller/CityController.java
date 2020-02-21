@@ -21,6 +21,7 @@ import com.algaworks.algafood.api.v1.controller.openapi.controller.CityControlle
 import com.algaworks.algafood.api.v1.mapper.CityMapper;
 import com.algaworks.algafood.api.v1.model.CityDTO;
 import com.algaworks.algafood.api.v1.model.input.CityInput;
+import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.domain.exception.BusinessException;
 import com.algaworks.algafood.domain.exception.StateNotFoundException;
 import com.algaworks.algafood.domain.model.City;
@@ -37,18 +38,21 @@ public class CityController implements CityControllerOpenApi {
 	private CityMapper cityMapper;
 
 	@Override
+	@Security.Cities.AllowedConsult
 	@GetMapping
 	public CollectionModel<CityDTO> findAll() {
 		return cityMapper.toCollectionModel(cityService.findAll());
 	}
 
 	@Override
+	@Security.Cities.AllowedConsult
 	@GetMapping("/{cityId}")
 	public CityDTO findById(@PathVariable Long cityId) {
 		return cityMapper.toModel(cityService.findById(cityId));
 	}
 
 	@Override
+	@Security.Cities.AllowedEdit
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public CityDTO save(@RequestBody @Valid CityInput cityInput) {
@@ -65,6 +69,7 @@ public class CityController implements CityControllerOpenApi {
 	}
 
 	@Override
+	@Security.Cities.AllowedEdit
 	@PutMapping("/{cityId}")
 	public CityDTO update(@PathVariable Long cityId, @RequestBody @Valid CityInput cityInput) {
 		try {
@@ -79,6 +84,7 @@ public class CityController implements CityControllerOpenApi {
 	}
 
 	@Override
+	@Security.Cities.AllowedEdit
 	@DeleteMapping("/{cityId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long cityId) {
