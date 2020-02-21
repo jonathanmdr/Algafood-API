@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.controller.openapi.controller.StatisticsControllerOpenApi;
+import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.domain.filter.DailySaleFilter;
 import com.algaworks.algafood.domain.model.dto.DailySale;
@@ -31,7 +32,8 @@ public class StatisticsController implements StatisticsControllerOpenApi {
 
 	@Autowired
 	private AlgaLinks algaLinks;
-
+	
+	@Security.Statistics.allowedGenerateReports
 	@GetMapping
 	public StatisticsDTO statistics() {
 		var statisticsDTO = new StatisticsDTO();
@@ -41,11 +43,15 @@ public class StatisticsController implements StatisticsControllerOpenApi {
 		return statisticsDTO;
 	}
 
+	@Override
+	@Security.Statistics.allowedGenerateReports
 	@GetMapping("/daily-sales")
 	public List<DailySale> findDailySales(DailySaleFilter filter, @RequestParam(required = false, defaultValue = "+00:00") String timeOffset) {
 		return saleQuerySevice.findDailySales(filter, timeOffset);
 	}
 
+	@Override
+	@Security.Statistics.allowedGenerateReports
 	@GetMapping(path = "/daily-sales", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<byte[]> findDailySalesPdf(DailySaleFilter filter,	@RequestParam(required = false, defaultValue = "+00:00") String timeOffset) {
 		byte[] bytesPdf = saleReportService.issueDailySales(filter, timeOffset);

@@ -166,5 +166,16 @@ public @interface Security {
         public @interface allowedUpdatePassword { }
         
     }
+    
+    public @interface Statistics {
+        
+        @PreAuthorize("isAuthenticated() "
+                + "and hasAuthority('GERAR_RELATORIOS') "
+                + "and hasAuthority('SCOPE_READ')")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface allowedGenerateReports { }
+        
+    }
 
 }
