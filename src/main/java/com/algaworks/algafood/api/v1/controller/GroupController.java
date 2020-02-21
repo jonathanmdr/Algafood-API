@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.controller.openapi.controller.GroupControllerOpenApi;
 import com.algaworks.algafood.api.v1.model.input.GroupInput;
+import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.api.v1.mapper.GroupMapper;
 import com.algaworks.algafood.api.v1.model.GroupDTO;
 import com.algaworks.algafood.domain.model.Group;
@@ -33,16 +34,22 @@ public class GroupController implements GroupControllerOpenApi {
 	@Autowired
 	private GroupMapper groupMapper;
 	
+	@Override
+	@Security.UsersGroupsPermissions.allowedConsult
 	@GetMapping
 	public CollectionModel<GroupDTO> findAll() {
 		return groupMapper.toCollectionModel(groupService.findAll());
 	}
 	
+	@Override
+	@Security.UsersGroupsPermissions.allowedConsult
 	@GetMapping("/{groupId}")
 	public GroupDTO findById(@PathVariable Long groupId) {
 		return groupMapper.toModel(groupService.findById(groupId));
 	}
 	
+	@Override
+	@Security.UsersGroupsPermissions.allowedEdit
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public GroupDTO save(@RequestBody @Valid GroupInput groupInput) {
@@ -50,6 +57,8 @@ public class GroupController implements GroupControllerOpenApi {
 		return groupMapper.toModel(groupService.save(group));
 	}
 	
+	@Override
+	@Security.UsersGroupsPermissions.allowedEdit
 	@PutMapping("/{groupId}")
 	public GroupDTO update(@PathVariable Long groupId, @RequestBody @Valid GroupInput groupInput) {
 		Group groupCurrent = groupService.findById(groupId);
@@ -59,6 +68,8 @@ public class GroupController implements GroupControllerOpenApi {
 		return groupMapper.toModel(groupService.save(groupCurrent));
 	}
 	
+	@Override
+	@Security.UsersGroupsPermissions.allowedEdit
 	@DeleteMapping("/{groupId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long groupId) {

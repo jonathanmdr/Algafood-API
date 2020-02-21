@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.v1.controller.openapi.controller.GroupPermissi
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.mapper.PermissionMapper;
 import com.algaworks.algafood.api.v1.model.PermissionDTO;
+import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.domain.model.Group;
 import com.algaworks.algafood.domain.service.GroupService;
 
@@ -32,6 +33,7 @@ public class GroupPermissionController implements GroupPermissionControllerOpenA
 	private AlgaLinks algaLinks;
 
 	@Override
+	@Security.UsersGroupsPermissions.allowedConsult
 	@GetMapping
 	public CollectionModel<PermissionDTO> findById(@PathVariable Long groupId) {
 		Group group = groupService.findById(groupId);
@@ -50,6 +52,7 @@ public class GroupPermissionController implements GroupPermissionControllerOpenA
 	}
 
 	@Override
+	@Security.UsersGroupsPermissions.allowedEdit
 	@PutMapping("/{permissionId}")
 	public ResponseEntity<Void> associatePermission(@PathVariable Long groupId, @PathVariable Long permissionId) {
 		groupService.associatePermission(groupId, permissionId);
@@ -58,6 +61,7 @@ public class GroupPermissionController implements GroupPermissionControllerOpenA
 	}
 
 	@Override
+	@Security.UsersGroupsPermissions.allowedEdit
 	@DeleteMapping("/{permissionId}")
 	public ResponseEntity<Void> disassociatePermission(@PathVariable Long groupId, @PathVariable Long permissionId) {
 		groupService.disassociatePermission(groupId, permissionId);

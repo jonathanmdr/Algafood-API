@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.v1.controller.openapi.controller.UserGroupCont
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.mapper.GroupMapper;
 import com.algaworks.algafood.api.v1.model.GroupDTO;
+import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.domain.model.User;
 import com.algaworks.algafood.domain.service.UserService;
 
@@ -32,6 +33,7 @@ public class UserGroupController implements UserGroupControllerOpenApi {
 	private AlgaLinks algaLinks;
 
 	@Override
+	@Security.UsersGroupsPermissions.allowedConsult
 	@GetMapping
 	public CollectionModel<GroupDTO> findAllByUserId(@PathVariable Long userId) {
 		User user = userService.findById(userId);
@@ -51,6 +53,7 @@ public class UserGroupController implements UserGroupControllerOpenApi {
 	}
 
 	@Override
+	@Security.UsersGroupsPermissions.allowedEdit
 	@PutMapping("/{groupId}")
 	public ResponseEntity<Void> associateGroup(@PathVariable Long userId, @PathVariable Long groupId) {
 		userService.associateGroup(userId, groupId);
@@ -59,6 +62,7 @@ public class UserGroupController implements UserGroupControllerOpenApi {
 	}
 
 	@Override
+	@Security.UsersGroupsPermissions.allowedEdit
 	@DeleteMapping("/{groupId}")
 	public ResponseEntity<Void> disassociateGroup(@PathVariable Long userId, @PathVariable Long groupId) {
 		userService.disassociateGroup(userId, groupId);

@@ -134,5 +134,37 @@ public @interface Security {
         public @interface AllowedEdit { }
 
     }
+    
+    public @interface UsersGroupsPermissions {
+        
+        @PreAuthorize("isAuthenticated() "
+                + "and hasAuthority('CONSULTAR_USUARIOS_GRUPOS_PERMISSOES') "
+                + "and hasAuthority('SCOPE_READ')")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface allowedConsult { }
+        
+        @PreAuthorize("isAuthenticated() "
+                + "and hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES') "
+                + "and hasAuthority('SCOPE_WRITE')")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface allowedEdit { }
+        
+        @PreAuthorize("isAuthenticated() "
+                + "and (hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES') or @algaSecurity.getUserId() == #userId) "
+                + "and hasAuthority('SCOPE_WRITE')")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface allowedUpdateUser { }
+        
+        @PreAuthorize("isAuthenticated() "
+                + "and @algaSecurity.getUserId() == #userId "
+                + "and hasAuthority('SCOPE_WRITE')")
+        @Retention(RUNTIME)
+        @Target(METHOD)
+        public @interface allowedUpdatePassword { }
+        
+    }
 
 }

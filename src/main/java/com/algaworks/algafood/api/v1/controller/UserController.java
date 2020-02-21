@@ -20,6 +20,7 @@ import com.algaworks.algafood.api.v1.controller.openapi.controller.UserControlle
 import com.algaworks.algafood.api.v1.model.input.UserInput;
 import com.algaworks.algafood.api.v1.model.input.UserPasswordInput;
 import com.algaworks.algafood.api.v1.model.input.UserSummaryInput;
+import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.api.v1.mapper.UserMapper;
 import com.algaworks.algafood.api.v1.model.UserSummaryDTO;
 import com.algaworks.algafood.domain.model.User;
@@ -36,18 +37,21 @@ public class UserController implements UserControllerOpenApi {
 	private UserMapper userMapper;
 
 	@Override
+	@Security.UsersGroupsPermissions.allowedConsult
 	@GetMapping
 	public CollectionModel<UserSummaryDTO> findAll() {
 		return userMapper.toCollectionModel(userService.findAll());
 	}
 
 	@Override
+	@Security.UsersGroupsPermissions.allowedConsult
 	@GetMapping("/{userId}")
 	public UserSummaryDTO findById(@PathVariable Long userId) {
 		return userMapper.toModel(userService.findById(userId));
 	}
 
 	@Override
+	@Security.UsersGroupsPermissions.allowedEdit
 	@PostMapping
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public UserSummaryDTO save(@RequestBody @Valid UserInput userInput) {
@@ -56,6 +60,7 @@ public class UserController implements UserControllerOpenApi {
 	}
 
 	@Override
+	@Security.UsersGroupsPermissions.allowedUpdateUser
 	@PutMapping("/{userId}")
 	public UserSummaryDTO update(@PathVariable Long userId, @RequestBody @Valid UserSummaryInput userSummaryInput) {
 		User userCurrent = userService.findById(userId);
@@ -66,6 +71,7 @@ public class UserController implements UserControllerOpenApi {
 	}
 
 	@Override
+	@Security.UsersGroupsPermissions.allowedUpdatePassword
 	@PutMapping("/{userId}/password")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void updatePassword(@PathVariable Long userId, @RequestBody @Valid UserPasswordInput userPasswordInput) {
@@ -73,6 +79,7 @@ public class UserController implements UserControllerOpenApi {
 	}
 
 	@Override
+	@Security.UsersGroupsPermissions.allowedEdit
 	@DeleteMapping("/{userId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long userId) {
