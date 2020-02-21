@@ -83,5 +83,22 @@ public @interface Security {
 		public @interface AllowedManageOrder { }
 
 	}
+	
+	public @interface PaymentForms {
+		
+		@PreAuthorize("isAuthenticated() "
+				+ "and hasAuthority('SCOPE_READ')")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface AllowedConsult { }
+
+		@PreAuthorize("isAuthenticated() "
+				+ "and hasAuthority('EDITAR_FORMAS_PAGAMENTO') "
+				+ "and hasAuthority('SCOPE_WRITE')")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface AllowedEdit { }
+		
+	}
 
 }
