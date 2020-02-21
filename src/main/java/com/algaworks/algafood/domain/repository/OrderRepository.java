@@ -16,5 +16,7 @@ public interface OrderRepository extends CustomJpaRepository<Order, Long>, JpaSp
 	List<Order> findAll();
 	
 	Optional<Order> findByCode(String code);
+	
+	boolean isOrderManagedBy(String code, Long userId);
 
 }

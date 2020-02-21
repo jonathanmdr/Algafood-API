@@ -13,12 +13,15 @@ public @interface Security {
 
 	public @interface Kitchens {
 
-		@PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
+		@PreAuthorize("isAuthenticated() "
+				+ "and hasAuthority('SCOPE_READ')")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		public @interface AllowedConsult { }
 
-		@PreAuthorize("hasAuthority('EDITAR_COZINHAS') and hasAuthority('SCOPE_WRITE')")
+		@PreAuthorize("isAuthenticated() "
+				+ "and hasAuthority('EDITAR_COZINHAS') "
+				+ "and hasAuthority('SCOPE_WRITE')")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		public @interface AllowedEdit { }
@@ -27,17 +30,22 @@ public @interface Security {
 
 	public @interface Restaurants {
 
-		@PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
+		@PreAuthorize("isAuthenticated() "
+				+ "and hasAuthority('SCOPE_READ')")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		public @interface AllowedConsult { }
 
-		@PreAuthorize("hasAuthority('EDITAR_RESTAURANTES') and hasAuthority('SCOPE_WRITE')")
+		@PreAuthorize("isAuthenticated() "
+				+ "and hasAuthority('EDITAR_RESTAURANTES') "
+				+ "and hasAuthority('SCOPE_WRITE')")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		public @interface AllowedEdit { }
 		
-		@PreAuthorize("(hasAuthority('EDITAR_RESTAURANTES') or @algaSecurity.isUserManager(#restaurantId)) and hasAuthority('SCOPE_WRITE')")
+		@PreAuthorize("isAuthenticated() "
+				+ "and (hasAuthority('EDITAR_RESTAURANTES') or @algaSecurity.isUserManager(#restaurantId)) "
+				+ "and hasAuthority('SCOPE_WRITE')")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		public @interface AllowedUserManager { }
@@ -45,12 +53,34 @@ public @interface Security {
 	}
 	
 	public @interface Orders {
-
-		@PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_READ')")
-		@PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or @algaSecurity.getUserId() == returnObject.customer.id or @algaSecurity.isUserManager(returnObject.restaurant.id)")
+		
+		@PreAuthorize("isAuthenticated() "
+				+ "and (hasAuthority('CONSULTAR_PEDIDOS') or @algaSecurity.getUserId() == #orderFilter.customerId or @algaSecurity.isUserManager(#orderFilter.restaurantId)) "
+				+ "and hasAuthority('SCOPE_READ')")		
 		@Retention(RUNTIME)
 		@Target(METHOD)
-		public @interface AllowedConsult { }
+		public @interface AllowedConsultAll { }
+
+		@PreAuthorize("isAuthenticated() "
+				+ "and hasAuthority('SCOPE_READ')")
+		@PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') "
+				+ "or @algaSecurity.getUserId() == returnObject.customer.id "
+				+ "or @algaSecurity.isUserManager(returnObject.restaurant.id)")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface AllowedConsultUnique { }
+		
+		@PreAuthorize("isAuthenticated() "
+				+ "and hasAuthority('SCOPE_WRITE')")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface AllowedEdit { }
+		
+		@PreAuthorize("isAuthenticated() "
+				+ "and (hasAuthority('GERENCIAR_PEDIDOS') or @algaSecurity.managedRestaurantOfOrder(#code))")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface AllowedManageOrder { }
 
 	}
 

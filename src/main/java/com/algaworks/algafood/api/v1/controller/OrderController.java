@@ -57,7 +57,7 @@ public class OrderController implements OrderControllerOpenApi {
 	private AlgaSecurity algaSecurity;
 
 	@Override
-	@Security.Orders.AllowedConsult
+	@Security.Orders.AllowedConsultAll
 	@GetMapping
 	public PagedModel<OrderSummaryDTO> findAll(OrderFilter orderFilter, @PageableDefault(size = 10) Pageable pageable) {
 		Pageable pageableTransalated = translatePageable(pageable);
@@ -69,13 +69,14 @@ public class OrderController implements OrderControllerOpenApi {
 	}
 
 	@Override
-	@Security.Orders.AllowedConsult
+	@Security.Orders.AllowedConsultUnique
 	@GetMapping("/{code}")
 	public OrderDTO findById(@PathVariable String code) {
 		return orderMapper.toModel(orderService.findByCode(code));
 	}
 
 	@Override
+	@Security.Orders.AllowedEdit
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public OrderDTO save(@RequestBody @Valid OrderInput orderInput) {
