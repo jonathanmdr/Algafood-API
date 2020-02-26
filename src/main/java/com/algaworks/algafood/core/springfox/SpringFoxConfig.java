@@ -54,16 +54,23 @@ import com.fasterxml.classmate.TypeResolver;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.GrantType;
+import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
 import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -103,6 +110,8 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, RestaurantSummaryDTO.class), RestaurantsSummaryModelOpenApi.class))
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, UserSummaryDTO.class), UsersSummaryModelOpenApi.class))
 				.apiInfo(apiInfoV1())
+				.securitySchemes(Arrays.asList(securityScheme()))
+				.securityContexts(Arrays.asList(securityContext()))
 				.tags(new Tag("Cidades", "Realiza o gerencimanento de cidades"), 
 					  new Tag("Grupos", "Realiza o gerenciamento de grupos de usuário"),
 					  new Tag("Cozinhas", "Realiza o gerencimento de cozinhas"),
@@ -139,9 +148,40 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(CollectionModel.class, CityDTOV2.class), CitiesModelOpenApiV2.class))
 				.alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(PagedModel.class, KitchenDTOV2.class), KitchensModelOpenApiV2.class))
 				.apiInfo(apiInfoV2())
+				.securitySchemes(Arrays.asList(securityScheme()))
+				.securityContexts(Arrays.asList(securityContext()))
 				.tags(new Tag("Cidades", "Realiza o gerencimanento de cidades"),
 					  new Tag("Cozinhas", "Realiza o gerencimento de cozinhas"),
 					  new Tag("Root", "Realiza o gerenciamento das URL's disponíveis na API"));
+	}
+	
+	private SecurityScheme securityScheme() {
+	    return new OAuthBuilder()
+	            .name("Algafood")
+	            .grantTypes(grantTypes())
+	            .scopes(authorizationScopes())
+	            .build();
+	}
+	
+	private List<GrantType> grantTypes() {
+	    return Arrays.asList(new ResourceOwnerPasswordCredentialsGrant("/oauth/token"));
+	}
+	
+	private SecurityContext securityContext() {
+	    var securityReference = SecurityReference.builder()
+	            .reference(securityScheme().getName())
+	            .scopes(authorizationScopes().toArray(new AuthorizationScope[0]))
+	            .build();
+	    
+	    return SecurityContext.builder()
+	            .securityReferences(Arrays.asList(securityReference))
+	            .forPaths(PathSelectors.any())
+	            .build();
+	}
+	
+	private List<AuthorizationScope> authorizationScopes() {
+	    return Arrays.asList(new AuthorizationScope("READ", "Acesso de leitura"),
+	            new AuthorizationScope("WRITE", "Acesso de escrita"));
 	}
 	
 	private List<ResponseMessage> globalGetResponseMessage() {
