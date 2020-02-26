@@ -55,7 +55,7 @@ public @interface Security {
     public @interface Orders {
 
         @PreAuthorize("isAuthenticated() "
-                + "and (hasAuthority('CONSULTAR_PEDIDOS') or @algaSecurity.getUserId() == #orderFilter.customerId or @algaSecurity.isUserManager(#orderFilter.restaurantId)) "
+                + "and (hasAuthority('CONSULTAR_PEDIDOS') or @algaSecurity.athenticatedUserIsEquals(#orderFilter.customerId) or @algaSecurity.isUserManager(#orderFilter.restaurantId)) "
                 + "and hasAuthority('SCOPE_READ')")     
         @Retention(RUNTIME)
         @Target(METHOD)
@@ -64,7 +64,7 @@ public @interface Security {
         @PreAuthorize("isAuthenticated() "
                 + "and hasAuthority('SCOPE_READ')")
         @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') "
-                + "or @algaSecurity.getUserId() == returnObject.customer.id "
+                + "or @algaSecurity.athenticatedUserIsEquals(returnObject.customer.id) "
                 + "or @algaSecurity.isUserManager(returnObject.restaurant.id)")
         @Retention(RUNTIME)
         @Target(METHOD)
@@ -152,14 +152,14 @@ public @interface Security {
         public @interface allowedEdit { }
         
         @PreAuthorize("isAuthenticated() "
-                + "and (hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES') or @algaSecurity.getUserId() == #userId) "
+                + "and (hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES') or @algaSecurity.athenticatedUserIsEquals(#userId)) "
                 + "and hasAuthority('SCOPE_WRITE')")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface allowedUpdateUser { }
         
         @PreAuthorize("isAuthenticated() "
-                + "and @algaSecurity.getUserId() == #userId "
+                + "and @algaSecurity.athenticatedUserIsEquals(#userId) "
                 + "and hasAuthority('SCOPE_WRITE')")
         @Retention(RUNTIME)
         @Target(METHOD)
