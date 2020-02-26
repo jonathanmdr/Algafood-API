@@ -74,12 +74,40 @@ public class AlgaSecurity {
      * 
      * @param userId ID do usuário que se deseja verificar a igualdade com o usuário
      *               do contexto.
-     * @return true caso o usuário recebido por parâmetro seja o mesmo usuário do
-     *         contexto, e false caso o usuário recebido por parâmetro não seja
-     *         igual ao usuário do contexto.
+     * @return Retorna true caso o usuário recebido por parâmetro seja o mesmo
+     *         usuário do contexto, e false caso o usuário recebido por parâmetro
+     *         não seja igual ao usuário do contexto.
      */
     public boolean athenticatedUserIsEquals(Long userId) {
         return getUserId() != null && userId != null && getUserId().equals(userId);
+    }
+
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para validação personalizada de regras de
+     * negócio. Valida se o usuário do contexto tem a permissão SCOPE_WRITE e também
+     * se o mesmo possui a permissão GERENCIAR_PEDIDOS ou se é um usuário
+     * responsável pelo restaurante do pedido. ou se
+     * 
+     * @param code Código do pedido.
+     * @return Retorna true caso atenda as condições listadas acima e false caso não
+     *         atenda.
+     */
+    public boolean canManageOrders(String code) {
+        return hasAuthority("SCOPE_WRITE") && (hasAuthority("GERENCIAR_PEDIDOS") || managedRestaurantOfOrder(code));
+    }
+
+    /**
+     * Verifica se usuário autenticado no contexto tem a permissão informada por
+     * parâmetro.
+     * 
+     * @param authorityName Nome da authority que se deseja verificar se o usuário
+     *                      do contexto à possui.
+     * @return Retorna true caso o usuário tenha a permissão e false caso não tenha.
+     */
+    private boolean hasAuthority(String authorityName) {
+        return getAuthentication().getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals(authorityName));
     }
 
 }

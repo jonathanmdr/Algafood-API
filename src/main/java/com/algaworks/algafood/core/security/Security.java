@@ -77,7 +77,7 @@ public @interface Security {
         public @interface AllowedEdit { }
 
         @PreAuthorize("isAuthenticated() "
-                + "and (hasAuthority('GERENCIAR_PEDIDOS') or @algaSecurity.managedRestaurantOfOrder(#code))")
+                + "and @algaSecurity.canManageOrders(#code)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowedManageOrder { }

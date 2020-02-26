@@ -6,6 +6,7 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.v1.model.input.OrderInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.controller.OrderController;
 import com.algaworks.algafood.api.v1.model.OrderDTO;
@@ -19,6 +20,9 @@ public class OrderMapper extends RepresentationModelAssemblerSupport<Order, Orde
 	
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	public OrderMapper() {
 		super(OrderController.class, OrderDTO.class);
@@ -31,16 +35,18 @@ public class OrderMapper extends RepresentationModelAssemblerSupport<Order, Orde
 		
 		orderDto.add(algaLinks.linkToOrders("orders"));
 		
-		if (order.canBeConfirmed()) {
-            orderDto.add(algaLinks.linkToConfirmOrder(orderDto.getCode(), "confirm"));
-		}
+		if (algaSecurity.canManageOrders(order.getCode())) {
+		    if (order.canBeConfirmed()) {
+                orderDto.add(algaLinks.linkToConfirmOrder(orderDto.getCode(), "confirm"));
+		    }
 		
-		if (order.canBeCanceled()) {
-            orderDto.add(algaLinks.linkToCancelOrder(orderDto.getCode(), "cancel"));
-		}
+		    if (order.canBeCanceled()) {
+                orderDto.add(algaLinks.linkToCancelOrder(orderDto.getCode(), "cancel"));
+		    }
 		
-		if (order.canBeDelivered()) {
-            orderDto.add(algaLinks.linkToDeliverOrder(orderDto.getCode(), "deliver"));
+		    if (order.canBeDelivered()) {
+                orderDto.add(algaLinks.linkToDeliverOrder(orderDto.getCode(), "deliver"));
+		    }
 		}
 		
 		orderDto.getRestaurant()
