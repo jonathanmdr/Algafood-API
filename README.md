@@ -1,5 +1,5 @@
 # Algafood-API
-API RESTful com Spring de um delivery food.
+API RESTful para um food delivery aplicando HATEOAS, a API foi desenvolvida utilizando o ecossistema Spring.
 
 ## Travis CI
 
