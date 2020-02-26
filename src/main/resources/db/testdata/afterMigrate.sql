@@ -16,6 +16,7 @@ TRUNCATE TABLE restaurante_usuario_responsavel;
 TRUNCATE TABLE pedido;
 TRUNCATE TABLE item_pedido;
 TRUNCATE TABLE foto_produto;
+TRUNCATE TABLE oauth_client_details;
 
 SET foreign_key_checks = 1;
 
@@ -156,6 +157,16 @@ INSERT INTO pedido(id, codigo, restaurante_id, usuario_cliente_id, forma_pagamen
 VALUES(5, '8d774bcf-b238-42f3-aef1-5fb388754d63', 1, 3, 2, 1, '38400-200', 'Rua 10', '930', 'Casa 20', 'Martins', 'DELIVERED', '2019-11-02 21:00:30', '2019-11-02 21:01:21', '2019-11-02 21:20:10', 87.2, 10, 97.2);
 
 INSERT INTO item_pedido(id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao) VALUES(6, 5, 3, 1, 87.2, 87.2, null);
+
+-- Clients Oauth
+INSERT INTO oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, autoapprove)
+VALUES('algafood-web', null, '$2y$12$NGeHELVosZT9oIDSkA/M8OH6ZjjVjTpXcv/IaKYUsVYwo.6wuvrfe', 'READ,WRITE', 'password', null, null, 60 * 60 * 6, 60 * 24 * 60 * 60, null);
+
+INSERT INTO oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, autoapprove)
+VALUES('food-analytics', null, '$2y$12$NGeHELVosZT9oIDSkA/M8OH6ZjjVjTpXcv/IaKYUsVYwo.6wuvrfe', 'READ,WRITE', 'authorization_code', 'http://localhost:8082', null, null, null, null);
+
+INSERT INTO oauth_client_details(client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, autoapprove)
+VALUES('faturamento', null, '$2y$12$NGeHELVosZT9oIDSkA/M8OH6ZjjVjTpXcv/IaKYUsVYwo.6wuvrfe', 'READ,WRITE', 'client_credentials', null, 'CONSULTAR_PEDIDOS,GERAR_RELATORIOS', null, null, null);
 
 
 
