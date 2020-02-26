@@ -21,7 +21,7 @@ public class NotificationCustomerOrderCanceledListener {
 		
 		var message = Message.builder()
 				.subject(order.getRestaurant().getName() + " - Pedido cancelado")
-				.body("pedido-cancelado.html")
+				.body("emails/pedido-cancelado.html")
 				.variable("order", order)
 				.recipient(order.getCustomer().getEmail())
 				.build();

@@ -21,7 +21,7 @@ public class NotificationCustomerOrderConfirmedListener {
 		
 		var message = Message.builder()
 				.subject(order.getRestaurant().getName() + " - Pedido confirmado")
-				.body("pedido-confirmado.html")
+				.body("emails/pedido-confirmado.html")
 				.variable("order", order)
 				.recipient(order.getCustomer().getEmail())
 				.build();
