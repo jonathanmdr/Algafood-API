@@ -49,21 +49,34 @@ public class OrderMapper extends RepresentationModelAssemblerSupport<Order, Orde
 		    }
 		}
 		
-		orderDto.getRestaurant()
-		    .add(algaLinks.linkToRestaurant(orderDto.getRestaurant().getId()));
+		if (algaSecurity.canConsultingRestaurants()) {
+		    orderDto.getRestaurant()
+		        .add(algaLinks.linkToRestaurant(orderDto.getRestaurant().getId()));
+		}
 		
-		orderDto.getCustomer()
-		    .add(algaLinks.linkToUser(orderDto.getCustomer().getId()));
+		if (algaSecurity.canConsultingUsersGroupsPermissions()) {
+		    orderDto.getCustomer()
+		        .add(algaLinks.linkToUser(orderDto.getCustomer().getId()));
+		}
 		
-		orderDto.getPaymentForm()
-		    .add(algaLinks.linkToPaymentForm(orderDto.getPaymentForm().getId()));
+		if (algaSecurity.canConsultingPaymentForms()) {
+		    orderDto.getPaymentForm()
+		        .add(algaLinks.linkToPaymentForm(orderDto.getPaymentForm().getId()));
+		}
 		
-		orderDto.getAddress().getCity()
-		    .add(algaLinks.linkToCity(orderDto.getAddress().getCity().getId()));
+		if (algaSecurity.canConsultingCities()) {
+		    orderDto.getAddress().getCity()
+		        .add(algaLinks.linkToCity(orderDto.getAddress().getCity().getId()));
+		}
 		
-		orderDto.getItems().forEach(item -> {
-			item.add(algaLinks.linkToProduct(orderDto.getRestaurant().getId(), item.getProductId(), "product"));
-		});
+		/**
+		 * Usuário com permissão de consultar restaurantes também pode consultar os produtos do mesmo.
+		 */
+		if (algaSecurity.canConsultingRestaurants()) {
+		    orderDto.getItems().forEach(item -> {
+			    item.add(algaLinks.linkToProduct(orderDto.getRestaurant().getId(), item.getProductId(), "product"));
+		    });
+		}
 		
 		return orderDto;
 	}

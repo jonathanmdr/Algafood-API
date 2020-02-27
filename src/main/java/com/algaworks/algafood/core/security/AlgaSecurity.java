@@ -26,6 +26,10 @@ public class AlgaSecurity {
     public Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
     }
+    
+    public boolean isAuthenticated() {
+        return getAuthentication().isAuthenticated();
+    }
 
     /**
      * Como estamos usando JWT na aplicação o getPrincipal() retorna uma instância
@@ -36,8 +40,21 @@ public class AlgaSecurity {
     public Long getUserId() {
         Jwt jwt = (Jwt) getAuthentication().getPrincipal();
         return jwt.getClaim("user_id");
-    }
+    }    
 
+    /**
+     * Verifica se usuário autenticado no contexto tem a permissão informada por
+     * parâmetro.
+     * 
+     * @param authorityName Nome da authority que se deseja verificar se o usuário
+     *                      do contexto à possui.
+     * @return Retorna true caso o usuário tenha a permissão e false caso não tenha.
+     */
+    private boolean hasAuthority(String authorityName) {
+        return getAuthentication().getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals(authorityName));
+    }
+    
     /**
      * Usado nas anotações @Security para validação personalizada para regras de
      * negócio. Verifica se o usuário em questão é um responsável pelo restaurante.
@@ -46,7 +63,7 @@ public class AlgaSecurity {
      * @return retorna true caso o usuário do contexto atual seja um responsável
      *         pelo restaurante e retorna falso caso o mesmo não seja.
      */
-    public boolean isUserManager(Long restaurantId) {
+    public boolean isUserManagerOfRestaurants(Long restaurantId) {
         if (restaurantId == null) {
             return false;
         }
@@ -81,6 +98,14 @@ public class AlgaSecurity {
     public boolean athenticatedUserIsEquals(Long userId) {
         return getUserId() != null && userId != null && getUserId().equals(userId);
     }
+    
+    public boolean hasScopeWrite() {
+        return hasAuthority("SCOPE_WRITE");
+    }
+    
+    public boolean hasScopeRead() {
+        return hasAuthority("SCOPE_READ");
+    }
 
     /**
      * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
@@ -94,20 +119,55 @@ public class AlgaSecurity {
      *         atenda.
      */
     public boolean canManageOrders(String code) {
-        return hasAuthority("SCOPE_WRITE") && (hasAuthority("GERENCIAR_PEDIDOS") || managedRestaurantOfOrder(code));
+        return isAuthenticated() && hasScopeWrite() && (hasAuthority("GERENCIAR_PEDIDOS") || managedRestaurantOfOrder(code));
     }
-
-    /**
-     * Verifica se usuário autenticado no contexto tem a permissão informada por
-     * parâmetro.
-     * 
-     * @param authorityName Nome da authority que se deseja verificar se o usuário
-     *                      do contexto à possui.
-     * @return Retorna true caso o usuário tenha a permissão e false caso não tenha.
-     */
-    private boolean hasAuthority(String authorityName) {
-        return getAuthentication().getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals(authorityName));
+    
+    public boolean canConsultingRestaurants() {
+        return isAuthenticated() && hasScopeRead();
+    }
+    
+    public boolean canEditingRestaurants() {
+        return isAuthenticated() && hasScopeWrite() && hasAuthority("EDITAR_RESTAURANTES");
+    }
+    
+    public boolean canManageRestaurants(Long restaurantId) {
+        return isAuthenticated() && hasScopeWrite() && (hasAuthority("EDITAR_RESTAURANTES") || isUserManagerOfRestaurants(restaurantId));
+    }
+    
+    public boolean canConsultingUsersGroupsPermissions() {
+        return isAuthenticated() && hasScopeRead() && hasAuthority("CONSULTAR_USUARIOS_GRUPOS_PERMISSOES");
+    }
+    
+    public boolean canEditingUsersGroupsPermissions() {
+        return isAuthenticated() && hasScopeWrite() && hasAuthority("EDITAR_USUARIOS_GRUPOS_PERMISSOES");
+    }
+    
+    public boolean canConsultingAllOrders(Long userId, Long restaurantId) {
+        return canConsultingOrders() && (hasAuthority("CONSULTAR_PEDIDOS") || athenticatedUserIsEquals(userId) || isUserManagerOfRestaurants(restaurantId));
+    }
+    
+    public boolean canConsultingOrders() {
+        return isAuthenticated() && hasScopeRead();
+    }
+    
+    public boolean canConsultingPaymentForms() {
+        return isAuthenticated() && hasScopeRead();
+    }
+    
+    public boolean canConsultingCities() {
+        return isAuthenticated() && hasScopeRead();
+    }
+    
+    public boolean canConsultingStates() {
+        return isAuthenticated() && hasScopeRead();
+    }
+    
+    public boolean canConsultingKitchens() {
+        return isAuthenticated() && hasScopeRead();
+    }
+    
+    public boolean canConsultingStatistics() {
+        return isAuthenticated() && hasScopeRead() && hasAuthority("GERAR_RELATORIOS");
     }
 
 }

@@ -13,169 +13,179 @@ public @interface Security {
 
     public @interface Kitchens {
 
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('SCOPE_READ')")
+        @PreAuthorize("@algaSecurity.canConsultingKicthens()")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedConsult { }
+        public @interface AllowedConsult {
+            
+        }
 
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('EDITAR_COZINHAS') "
-                + "and hasAuthority('SCOPE_WRITE')")
+        @PreAuthorize("isAuthenticated() and hasAuthority('EDITAR_COZINHAS') and hasAuthority('SCOPE_WRITE')")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedEdit { }
+        public @interface AllowedEdit {
+            
+        }
 
     }
 
     public @interface Restaurants {
 
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('SCOPE_READ')")
+        @PreAuthorize("@algaSecurity.canConsultingRestaurants()")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedConsult { }
+        public @interface AllowedConsult {
+            
+        }
 
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('EDITAR_RESTAURANTES') "
-                + "and hasAuthority('SCOPE_WRITE')")
+        @PreAuthorize("@algaSecurity.canEditingRestaurants()")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedEdit { }
+        public @interface AllowedEdit {
+            
+        }
 
-        @PreAuthorize("isAuthenticated() "
-                + "and (hasAuthority('EDITAR_RESTAURANTES') or @algaSecurity.isUserManager(#restaurantId)) "
-                + "and hasAuthority('SCOPE_WRITE')")
+        @PreAuthorize("@algaSecurity.canManageRestaurants(#restaurantId)")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedUserManager { }
+        public @interface AllowedUserManager {
+            
+        }
 
     }
 
     public @interface Orders {
 
-        @PreAuthorize("isAuthenticated() "
-                + "and (hasAuthority('CONSULTAR_PEDIDOS') or @algaSecurity.athenticatedUserIsEquals(#orderFilter.customerId) or @algaSecurity.isUserManager(#orderFilter.restaurantId)) "
-                + "and hasAuthority('SCOPE_READ')")     
+        @PreAuthorize("@algaSecurity.canConsultingAllOrders(#orderFilter.customerId, #orderFilter.restaurantId)")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedConsultAll { }
+        public @interface AllowedConsultAll {
+            
+        }
 
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('SCOPE_READ')")
-        @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') "
-                + "or @algaSecurity.athenticatedUserIsEquals(returnObject.customer.id) "
-                + "or @algaSecurity.isUserManager(returnObject.restaurant.id)")
+        @PreAuthorize("@algaSecurity.canConsultingOrders()")
+        @PostAuthorize("@algaSecurity.canConsultingAllOrders(returnObject.customer.id, returnObject.restaurant.id)")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedConsultUnique { }
+        public @interface AllowedConsultUnique {
+            
+        }
 
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('SCOPE_WRITE')")
+        @PreAuthorize("isAuthenticated() and hasAuthority('SCOPE_WRITE')")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedEdit { }
+        public @interface AllowedEdit {
+            
+        }
 
-        @PreAuthorize("isAuthenticated() "
-                + "and @algaSecurity.canManageOrders(#code)")
+        @PreAuthorize("@algaSecurity.canManageOrders(#code)")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedManageOrder { }
+        public @interface AllowedManageOrder {
+            
+        }
 
     }
 
     public @interface PaymentForms {
 
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('SCOPE_READ')")
+        @PreAuthorize("@algaSecurity.canConsultingPaymentForms()")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedConsult { }
+        public @interface AllowedConsult {
+            
+        }
 
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('EDITAR_FORMAS_PAGAMENTO') "
-                + "and hasAuthority('SCOPE_WRITE')")
+        @PreAuthorize("isAuthenticated() and hasAuthority('EDITAR_FORMAS_PAGAMENTO') and hasAuthority('SCOPE_WRITE')")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedEdit { }
+        public @interface AllowedEdit {
+            
+        }
 
     }
 
     public @interface Cities {
 
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('SCOPE_READ')")
+        @PreAuthorize("@algaSecurity.canConsultingCities()")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedConsult { }
+        public @interface AllowedConsult {
+            
+        }
 
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('EDITAR_CIDADES') "
-                + "and hasAuthority('SCOPE_WRITE')")
+        @PreAuthorize("isAuthenticated() and hasAuthority('EDITAR_CIDADES') and hasAuthority('SCOPE_WRITE')")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedEdit { }
+        public @interface AllowedEdit {
+            
+        }
 
     }
 
     public @interface States {
 
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('SCOPE_READ')")
+        @PreAuthorize("@algaSecurity.canConsultingStates()")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedConsult { }
+        public @interface AllowedConsult {
+            
+        }
 
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('EDITAR_ESTADOS') "
-                + "and hasAuthority('SCOPE_WRITE')")
+        @PreAuthorize("isAuthenticated() and hasAuthority('EDITAR_ESTADOS') and hasAuthority('SCOPE_WRITE')")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface AllowedEdit { }
+        public @interface AllowedEdit {
+            
+        }
 
     }
-    
+
     public @interface UsersGroupsPermissions {
-        
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('CONSULTAR_USUARIOS_GRUPOS_PERMISSOES') "
-                + "and hasAuthority('SCOPE_READ')")
+
+        @PreAuthorize("@algaSecurity.canConsultingUsersGroupsPermissions()")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface allowedConsult { }
-        
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES') "
-                + "and hasAuthority('SCOPE_WRITE')")
+        public @interface allowedConsult {
+            
+        }
+
+        @PreAuthorize("@algaSecurity.canEditingUsersGroupsPermissions()")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface allowedEdit { }
-        
+        public @interface allowedEdit {
+            
+        }
+
         @PreAuthorize("isAuthenticated() "
                 + "and (hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES') or @algaSecurity.athenticatedUserIsEquals(#userId)) "
                 + "and hasAuthority('SCOPE_WRITE')")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface allowedUpdateUser { }
-        
-        @PreAuthorize("isAuthenticated() "
+        public @interface allowedUpdateUser {
+            
+        }
+
+        @PreAuthorize("isAuthenticated() " 
                 + "and @algaSecurity.athenticatedUserIsEquals(#userId) "
                 + "and hasAuthority('SCOPE_WRITE')")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface allowedUpdatePassword { }
-        
+        public @interface allowedUpdatePassword {
+            
+        }
+
     }
-    
+
     public @interface Statistics {
-        
-        @PreAuthorize("isAuthenticated() "
-                + "and hasAuthority('GERAR_RELATORIOS') "
-                + "and hasAuthority('SCOPE_READ')")
+
+        @PreAuthorize("@algaSecurity.canConsultingStatistics()")
         @Retention(RUNTIME)
         @Target(METHOD)
-        public @interface allowedGenerateReports { }
-        
+        public @interface allowedGenerateReports {
+            
+        }
+
     }
 
 }
