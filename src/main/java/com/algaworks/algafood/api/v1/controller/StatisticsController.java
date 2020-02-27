@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.controller.openapi.controller.StatisticsControllerOpenApi;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.domain.filter.DailySaleFilter;
@@ -33,12 +34,17 @@ public class StatisticsController implements StatisticsControllerOpenApi {
 	@Autowired
 	private AlgaLinks algaLinks;
 	
+	@Autowired
+	private AlgaSecurity algaSecurity;
+	
 	@Security.Statistics.allowedGenerateReports
 	@GetMapping
 	public StatisticsDTO statistics() {
 		var statisticsDTO = new StatisticsDTO();
 
-		statisticsDTO.add(algaLinks.linkToStatisticsDailySale("daily-sales"));
+		if (algaSecurity.canConsultingStatistics()) {
+		    statisticsDTO.add(algaLinks.linkToStatisticsDailySale("daily-sales"));
+		}
 
 		return statisticsDTO;
 	}

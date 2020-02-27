@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.v1.model.input.UserInput;
 import com.algaworks.algafood.api.v1.model.input.UserSummaryInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.controller.UserController;
 import com.algaworks.algafood.api.v1.model.UserSummaryDTO;
@@ -21,6 +22,9 @@ public class UserMapper extends RepresentationModelAssemblerSupport<User, UserSu
 	
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	public UserMapper() {
 		super(UserController.class, UserSummaryDTO.class);
@@ -31,15 +35,23 @@ public class UserMapper extends RepresentationModelAssemblerSupport<User, UserSu
 		UserSummaryDTO userSummaryDto = createModelWithId(user.getId(), user);
 		modelMapper.map(user, userSummaryDto);
 
-		userSummaryDto.add(algaLinks.linkToUsers("users"));
-		userSummaryDto.add(algaLinks.linkToUserGroup(userSummaryDto.getId(), "user-groups"));
+		if (algaSecurity.canConsultingUsersGroupsPermissions()) {
+		    userSummaryDto.add(algaLinks.linkToUsers("users"));
+		    userSummaryDto.add(algaLinks.linkToUserGroup(userSummaryDto.getId(), "user-groups"));
+		}
 
 		return userSummaryDto;
 	}
 
 	@Override
 	public CollectionModel<UserSummaryDTO> toCollectionModel(Iterable<? extends User> entities) {
-		return super.toCollectionModel(entities).add(algaLinks.linkToUsers());
+	    CollectionModel<UserSummaryDTO> usersModel = super.toCollectionModel(entities);
+	    
+	    if (algaSecurity.canConsultingUsersGroupsPermissions()) {
+	        usersModel.add(algaLinks.linkToUsers());
+	    }
+	    
+	    return usersModel;
 	}
 
 	public User toDomainObject(UserInput userInput) {

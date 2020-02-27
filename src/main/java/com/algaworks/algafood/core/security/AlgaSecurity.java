@@ -27,6 +27,12 @@ public class AlgaSecurity {
         return SecurityContextHolder.getContext().getAuthentication();
     }
     
+    /**Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário do contexto está autenticado.
+     * 
+     * @return Retorna true caso esteja autenticado e false caso contrário.
+     */
     public boolean isAuthenticated() {
         return getAuthentication().isAuthenticated();
     }
@@ -56,7 +62,7 @@ public class AlgaSecurity {
     }
     
     /**
-     * Usado nas anotações @Security para validação personalizada para regras de
+     * Usado nas anotações @Security para Validação personalizada para regras de
      * negócio. Verifica se o usuário em questão é um responsável pelo restaurante.
      * 
      * @param restaurantId ID do restaurante atual indicado no path da requisição.
@@ -72,7 +78,7 @@ public class AlgaSecurity {
     }
 
     /**
-     * Usado nas anotações @Security para validação personalizada para regras de
+     * Usado nas anotações @Security para Validação personalizada para regras de
      * negócio. Verifica se o usuário em questão está autorizado a movimentar os
      * status de um pedido.
      * 
@@ -85,7 +91,7 @@ public class AlgaSecurity {
     }
 
     /**
-     * Usado nas anotações @Security para validação personalizada para regras de
+     * Usado nas anotações @Security para Validação personalizada para regras de
      * negócio. Verifica se o usuário autenticado no contexto é o mesmo usuário
      * utilizado como filtro de pesquisa nas requisições.
      * 
@@ -99,17 +105,31 @@ public class AlgaSecurity {
         return getUserId() != null && userId != null && getUserId().equals(userId);
     }
     
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário tem a permissão de escrita.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
     public boolean hasScopeWrite() {
         return hasAuthority("SCOPE_WRITE");
     }
     
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário tem a permissão de leitura.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
     public boolean hasScopeRead() {
         return hasAuthority("SCOPE_READ");
     }
 
     /**
      * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
-     * tambem nas anotações @Security para validação personalizada de regras de
+     * tambem nas anotações @Security para Validação personalizada de regras de
      * negócio. Valida se o usuário do contexto tem a permissão SCOPE_WRITE e também
      * se o mesmo possui a permissão GERENCIAR_PEDIDOS ou se é um usuário
      * responsável pelo restaurante do pedido. ou se
@@ -122,50 +142,148 @@ public class AlgaSecurity {
         return isAuthenticated() && hasScopeWrite() && (hasAuthority("GERENCIAR_PEDIDOS") || managedRestaurantOfOrder(code));
     }
     
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário possuí permissão para consultar restaurantes.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
     public boolean canConsultingRestaurants() {
         return isAuthenticated() && hasScopeRead();
     }
     
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário possuí permissão para editar restaurantes.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
     public boolean canEditingRestaurants() {
         return isAuthenticated() && hasScopeWrite() && hasAuthority("EDITAR_RESTAURANTES");
     }
     
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário possuí permissão para gerenciar restaurantes.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
     public boolean canManageRestaurants(Long restaurantId) {
         return isAuthenticated() && hasScopeWrite() && (hasAuthority("EDITAR_RESTAURANTES") || isUserManagerOfRestaurants(restaurantId));
     }
     
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário possuí permissão para consultar usuários, grupos e
+     * permissões.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
     public boolean canConsultingUsersGroupsPermissions() {
         return isAuthenticated() && hasScopeRead() && hasAuthority("CONSULTAR_USUARIOS_GRUPOS_PERMISSOES");
     }
     
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário possuí permissão para editar usuários, grupos e
+     * permissões.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
     public boolean canEditingUsersGroupsPermissions() {
         return isAuthenticated() && hasScopeWrite() && hasAuthority("EDITAR_USUARIOS_GRUPOS_PERMISSOES");
     }
     
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário possuí permissão para editar formas de pagamento.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
+    public boolean canEditingPaymentForms() {
+        return isAuthenticated() && hasScopeWrite() && hasAuthority("EDITAR_FORMAS_PAGAMENTO");
+    }
+    
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário possuí permissão para consultar todos os pedidos
+     * de um determinado restaurante.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
     public boolean canConsultingAllOrders(Long userId, Long restaurantId) {
         return canConsultingOrders() && (hasAuthority("CONSULTAR_PEDIDOS") || athenticatedUserIsEquals(userId) || isUserManagerOfRestaurants(restaurantId));
     }
     
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário possuí permissão para consultar pedidos.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
     public boolean canConsultingOrders() {
         return isAuthenticated() && hasScopeRead();
     }
     
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário possuí permissão para consultar formas de pagamento.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
     public boolean canConsultingPaymentForms() {
         return isAuthenticated() && hasScopeRead();
     }
     
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário possuí permissão para consultar cidades.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
     public boolean canConsultingCities() {
         return isAuthenticated() && hasScopeRead();
     }
     
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário possuí permissão para consultar estados.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
     public boolean canConsultingStates() {
         return isAuthenticated() && hasScopeRead();
     }
     
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário possuí permissão para consultar cozinhas.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
     public boolean canConsultingKitchens() {
         return isAuthenticated() && hasScopeRead();
     }
     
+    /**
+     * Utilizado para geração dos links de hypermidea no padrão HAL dinâmicamente e
+     * tambem nas anotações @Security para Validação personalizada de regras de
+     * negócio. Valida se o usuário possuí permissão para gerar relatórios.
+     * 
+     * @return Retorna true caso possua e false caso contrário.
+     */
     public boolean canConsultingStatistics() {
         return isAuthenticated() && hasScopeRead() && hasAuthority("GERAR_RELATORIOS");
     }

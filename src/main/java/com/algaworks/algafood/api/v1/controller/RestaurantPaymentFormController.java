@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.v1.controller.openapi.controller.RestaurantPay
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.mapper.PaymentFormMapper;
 import com.algaworks.algafood.api.v1.model.PaymentFormDTO;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.service.RestaurantService;
@@ -31,6 +32,9 @@ public class RestaurantPaymentFormController implements RestaurantPaymentFormCon
 
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	@Override
 	@Security.Restaurants.AllowedConsult
@@ -38,15 +42,17 @@ public class RestaurantPaymentFormController implements RestaurantPaymentFormCon
 	public CollectionModel<PaymentFormDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
 		Restaurant restaurant = restaurantService.findById(restaurantId);
 
-		CollectionModel<PaymentFormDTO> paymentFormsDto = paymentFormMapper
-				.toCollectionModel(restaurant.getPaymentForms())
-				.removeLinks()
-				.add(algaLinks.linkToRestaurantPaymentForms(restaurantId))
+		CollectionModel<PaymentFormDTO> paymentFormsDto = paymentFormMapper.toCollectionModel(restaurant.getPaymentForms())
+				.removeLinks();
+		
+		if (algaSecurity.canEditingPaymentForms()) {
+		    paymentFormsDto.add(algaLinks.linkToRestaurantPaymentForms(restaurantId))
 				.add(algaLinks.linkToRestaurantPaymentFormsAssociate(restaurantId, "associate"));
 
-		paymentFormsDto.getContent().forEach(paymentForm -> {
-			paymentForm.add(algaLinks.linkToRestaurantPaymentFormsDisassociate(restaurantId, paymentForm.getId(), "disassociate"));
-		});
+		    paymentFormsDto.getContent().forEach(paymentForm -> {
+			    paymentForm.add(algaLinks.linkToRestaurantPaymentFormsDisassociate(restaurantId, paymentForm.getId(), "disassociate"));
+		    });
+		}
 
 		return paymentFormsDto;
 	}

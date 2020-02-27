@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.v1.controller.openapi.controller.GroupPermissi
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.mapper.PermissionMapper;
 import com.algaworks.algafood.api.v1.model.PermissionDTO;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.domain.model.Group;
 import com.algaworks.algafood.domain.service.GroupService;
@@ -31,6 +32,9 @@ public class GroupPermissionController implements GroupPermissionControllerOpenA
 
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	@Override
 	@Security.UsersGroupsPermissions.allowedConsult
@@ -38,15 +42,17 @@ public class GroupPermissionController implements GroupPermissionControllerOpenA
 	public CollectionModel<PermissionDTO> findById(@PathVariable Long groupId) {
 		Group group = groupService.findById(groupId);
 
-		CollectionModel<PermissionDTO> permissionsDto = permissionMapper
-				.toCollectionModel(group.getPermissions())
-				.removeLinks()
-				.add(algaLinks.linkToGroupPermissions(groupId))
+		CollectionModel<PermissionDTO> permissionsDto = permissionMapper.toCollectionModel(group.getPermissions())
+				.removeLinks();
+		
+		if (algaSecurity.canEditingUsersGroupsPermissions()) {
+		    permissionsDto.add(algaLinks.linkToGroupPermissions(groupId))
 				.add(algaLinks.linkToGroupPermissionAssociate(groupId, null, "associate"));
 
-		permissionsDto.forEach(permission -> {
-			permission.add(algaLinks.linkToGroupPermissionDisassociate(groupId, permission.getId(), "disassociate"));
-		});
+		    permissionsDto.forEach(permission -> {
+			    permission.add(algaLinks.linkToGroupPermissionDisassociate(groupId, permission.getId(), "disassociate"));
+		    });
+		}
 
 		return permissionsDto;
 	}

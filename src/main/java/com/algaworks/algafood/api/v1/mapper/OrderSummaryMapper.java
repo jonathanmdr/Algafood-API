@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.controller.OrderController;
 import com.algaworks.algafood.api.v1.model.OrderSummaryDTO;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.model.Order;
 
 @Component
@@ -18,6 +19,9 @@ public class OrderSummaryMapper extends RepresentationModelAssemblerSupport<Orde
 	
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	public OrderSummaryMapper() {
 		super(OrderController.class, OrderSummaryDTO.class);
@@ -28,9 +32,17 @@ public class OrderSummaryMapper extends RepresentationModelAssemblerSupport<Orde
 		OrderSummaryDTO orderSummaryDto = createModelWithId(order.getCode(), order);
 		modelMapper.map(order, orderSummaryDto);
 
-		orderSummaryDto.add(algaLinks.linkToOrders("orders"));
-		orderSummaryDto.getRestaurant().add(algaLinks.linkToRestaurant(orderSummaryDto.getRestaurant().getId()));
-		orderSummaryDto.getCustomer().add(algaLinks.linkToUser(orderSummaryDto.getCustomer().getId()));
+		if (algaSecurity.canConsultingOrders()) {
+		    orderSummaryDto.add(algaLinks.linkToOrders("orders"));
+		}
+		
+		if (algaSecurity.canConsultingRestaurants()) {
+		    orderSummaryDto.getRestaurant().add(algaLinks.linkToRestaurant(orderSummaryDto.getRestaurant().getId()));
+		}
+		
+		if (algaSecurity.canConsultingUsersGroupsPermissions()) {
+		    orderSummaryDto.getCustomer().add(algaLinks.linkToUser(orderSummaryDto.getCustomer().getId()));
+		}
 
 		return orderSummaryDto;
 	}

@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.v1.controller.openapi.controller.RestaurantUse
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.mapper.UserMapper;
 import com.algaworks.algafood.api.v1.model.UserSummaryDTO;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.domain.model.Restaurant;
 import com.algaworks.algafood.domain.service.RestaurantService;
@@ -31,6 +32,9 @@ public class RestaurantUserManagerController implements RestaurantUserManagerCon
 
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	@Override
 	@Security.Restaurants.AllowedConsult
@@ -39,13 +43,16 @@ public class RestaurantUserManagerController implements RestaurantUserManagerCon
 		Restaurant restaurant = restaurantService.findById(restaurantId);
 
 		CollectionModel<UserSummaryDTO> userSummaryDto = userMapper.toCollectionModel(restaurant.getUsers())
-				.removeLinks()
-				.add(algaLinks.linkToRestaurantUserManager(restaurant.getId()))
+				.removeLinks();
+		
+		if (algaSecurity.canEditingUsersGroupsPermissions()) {
+		    userSummaryDto.add(algaLinks.linkToRestaurantUserManager(restaurant.getId()))
 				.add(algaLinks.linkToRestaurantUserManagerAssociate(restaurantId, "associate"));
 
-		userSummaryDto.getContent().forEach(user -> {
-			user.add(algaLinks.linkToRestaurantUserManagerDisassociate(restaurantId, user.getId(), "disassociate"));
-		});
+		    userSummaryDto.getContent().forEach(user -> {
+			    user.add(algaLinks.linkToRestaurantUserManagerDisassociate(restaurantId, user.getId(), "disassociate"));
+		    });
+		}
 
 		return userSummaryDto;
 	}

@@ -6,6 +6,7 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.v1.model.input.KitchenInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.controller.KitchenController;
 import com.algaworks.algafood.api.v1.model.KitchenDTO;
@@ -19,6 +20,9 @@ public class KitchenMapper extends RepresentationModelAssemblerSupport<Kitchen, 
 	
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	public KitchenMapper() {
 		super(KitchenController.class, KitchenDTO.class);
@@ -29,7 +33,9 @@ public class KitchenMapper extends RepresentationModelAssemblerSupport<Kitchen, 
 		KitchenDTO kitchenDto = createModelWithId(kitchen.getId(), kitchen);
 		modelMapper.map(kitchen, kitchenDto);
 
-		kitchenDto.add(algaLinks.linkToKitchens("kitchens"));
+		if (algaSecurity.canConsultingKitchens()) {
+		    kitchenDto.add(algaLinks.linkToKitchens("kitchens"));
+		}
 
 		return kitchenDto;
 	}

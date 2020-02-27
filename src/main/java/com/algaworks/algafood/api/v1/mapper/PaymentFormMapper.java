@@ -7,6 +7,7 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.v1.model.input.PaymentFormInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.controller.PaymentFormController;
 import com.algaworks.algafood.api.v1.model.PaymentFormDTO;
@@ -20,6 +21,9 @@ public class PaymentFormMapper extends RepresentationModelAssemblerSupport<Payme
 
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	public PaymentFormMapper() {
 		super(PaymentFormController.class, PaymentFormDTO.class);
@@ -30,14 +34,22 @@ public class PaymentFormMapper extends RepresentationModelAssemblerSupport<Payme
 		PaymentFormDTO paymentFormDto = createModelWithId(paymentForm.getId(), paymentForm);
 		modelMapper.map(paymentForm, paymentFormDto);
 
-		paymentFormDto.add(algaLinks.linkToPaymentForms("paymentForms"));
+		if (algaSecurity.canConsultingPaymentForms()) {
+		    paymentFormDto.add(algaLinks.linkToPaymentForms("paymentForms"));
+		}
 
 		return paymentFormDto;
 	}
 
 	@Override
 	public CollectionModel<PaymentFormDTO> toCollectionModel(Iterable<? extends PaymentForm> entities) {
-		return super.toCollectionModel(entities).add(algaLinks.linkToPaymentForms());
+	    CollectionModel<PaymentFormDTO> paymentFormsModel = super.toCollectionModel(entities);
+	    
+	    if (algaSecurity.canConsultingPaymentForms()) {
+	        paymentFormsModel.add(algaLinks.linkToPaymentForms());
+	    }
+	    
+	    return paymentFormsModel;
 	}
 
 	public PaymentForm toDomainObject(PaymentFormInput paymentFormInput) {

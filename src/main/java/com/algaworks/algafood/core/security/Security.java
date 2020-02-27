@@ -13,7 +13,7 @@ public @interface Security {
 
     public @interface Kitchens {
 
-        @PreAuthorize("@algaSecurity.canConsultingKicthens()")
+        @PreAuthorize("@algaSecurity.canConsultingKitchens()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowedConsult {
@@ -96,7 +96,7 @@ public @interface Security {
             
         }
 
-        @PreAuthorize("isAuthenticated() and hasAuthority('EDITAR_FORMAS_PAGAMENTO') and hasAuthority('SCOPE_WRITE')")
+        @PreAuthorize("@algaSecurity.canEditingPaymentForms()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface AllowedEdit {

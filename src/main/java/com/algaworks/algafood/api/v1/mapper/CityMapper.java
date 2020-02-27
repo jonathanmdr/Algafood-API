@@ -7,6 +7,7 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.v1.model.input.CityInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.controller.CityController;
 import com.algaworks.algafood.api.v1.model.CityDTO;
@@ -21,6 +22,9 @@ public class CityMapper extends RepresentationModelAssemblerSupport<City, CityDT
 
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	public CityMapper() {
 		super(CityController.class, CityDTO.class);
@@ -31,15 +35,26 @@ public class CityMapper extends RepresentationModelAssemblerSupport<City, CityDT
 		CityDTO cityDto = createModelWithId(city.getId(), city);
 		modelMapper.map(city, cityDto);
 
-		cityDto.add(algaLinks.linkToCities("cities"));
-		cityDto.getState().add(algaLinks.linkToState(cityDto.getState().getId()));
+		if (algaSecurity.canConsultingCities()) {
+		    cityDto.add(algaLinks.linkToCities("cities"));
+		}
+		
+		if (algaSecurity.canConsultingStates()) {
+		    cityDto.getState().add(algaLinks.linkToState(cityDto.getState().getId()));
+		}
 
 		return cityDto;
 	}
 
 	@Override
 	public CollectionModel<CityDTO> toCollectionModel(Iterable<? extends City> entities) {
-		return super.toCollectionModel(entities).add(algaLinks.linkToCities());
+	    CollectionModel<CityDTO> citiesModel = super.toCollectionModel(entities);
+	    
+	    if (algaSecurity.canConsultingCities()) {
+	        citiesModel.add(algaLinks.linkToCities());
+	    }
+	    
+	    return citiesModel;
 	}
 
 	public City toDomainObject(CityInput cityInput) {

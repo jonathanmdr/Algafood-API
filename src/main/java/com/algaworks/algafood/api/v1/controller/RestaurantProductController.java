@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.v1.controller.openapi.controller.RestaurantProductControllerOpenApi;
 import com.algaworks.algafood.api.v1.model.input.ProductInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.mapper.ProductMapper;
@@ -44,6 +45,9 @@ public class RestaurantProductController implements RestaurantProductControllerO
 
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	@Override
 	@Security.Restaurants.AllowedConsult
@@ -59,9 +63,16 @@ public class RestaurantProductController implements RestaurantProductControllerO
 			productsDto = productService.findActiveByRestaurant(restaurant);
 		}
 
-		return productMapper.toCollectionModel(productsDto)
-				.removeLinks()
-				.add(algaLinks.linkToProdutcs(restaurantId));
+		CollectionModel<ProductDTO> productsModel = productMapper.toCollectionModel(productsDto)
+				.removeLinks();
+		/**
+		 * Usuário com permissão de consultar restaurantes também pode consultar os produtos do mesmo.
+		 */
+		if (algaSecurity.canConsultingRestaurants()) {
+		    productsModel.add(algaLinks.linkToProdutcs(restaurantId));
+		}
+		
+		return productsModel;
 	}
 
 	@Override

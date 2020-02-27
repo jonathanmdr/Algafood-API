@@ -15,6 +15,7 @@ import com.algaworks.algafood.api.v1.controller.openapi.controller.UserGroupCont
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.mapper.GroupMapper;
 import com.algaworks.algafood.api.v1.model.GroupDTO;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.core.security.Security;
 import com.algaworks.algafood.domain.model.User;
 import com.algaworks.algafood.domain.service.UserService;
@@ -31,6 +32,9 @@ public class UserGroupController implements UserGroupControllerOpenApi {
 	
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	@Override
 	@Security.UsersGroupsPermissions.allowedConsult
@@ -38,16 +42,17 @@ public class UserGroupController implements UserGroupControllerOpenApi {
 	public CollectionModel<GroupDTO> findAllByUserId(@PathVariable Long userId) {
 		User user = userService.findById(userId);
 
-		CollectionModel<GroupDTO> groupDto = groupMapper
-		        .toCollectionModel(user.getGroups())
-		        .removeLinks()
-		        .add(algaLinks.linkToUserGroup(userId))
-		        .add(algaLinks.linkToUserGroupAssociate(userId, null, "associate"));
-		        
+		CollectionModel<GroupDTO> groupDto = groupMapper.toCollectionModel(user.getGroups())		        
+		        .removeLinks();
+		
+		if (algaSecurity.canEditingUsersGroupsPermissions()) {
+		    groupDto.add(algaLinks.linkToUserGroup(userId))
+		            .add(algaLinks.linkToUserGroupAssociate(userId, null, "associate"));				        
 
-		groupDto.forEach(group -> {
-			group.add(algaLinks.linkToUserGroupDisassociate(userId, group.getId(), "disassociate"));
-		});
+		    groupDto.forEach(group -> {
+			    group.add(algaLinks.linkToUserGroupDisassociate(userId, group.getId(), "disassociate"));
+		    });
+		}
 
 		return groupDto;
 	}

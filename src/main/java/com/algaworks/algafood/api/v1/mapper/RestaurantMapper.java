@@ -6,6 +6,7 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.v1.model.input.RestaurantInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.controller.RestaurantController;
 import com.algaworks.algafood.api.v1.model.RestaurantDTO;
@@ -21,6 +22,9 @@ public class RestaurantMapper extends RepresentationModelAssemblerSupport<Restau
 
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	public RestaurantMapper() {
 		super(RestaurantController.class, RestaurantDTO.class);
@@ -31,35 +35,54 @@ public class RestaurantMapper extends RepresentationModelAssemblerSupport<Restau
 		RestaurantDTO restaurantDto = createModelWithId(restaurant.getId(), restaurant);
 		modelMapper.map(restaurant, restaurantDto);
 
-		if (restaurant.allowedActivate()) {
-			restaurantDto.add(algaLinks.linkToRestaurantActivation(restaurantDto.getId(), "activate"));
+		if (algaSecurity.canEditingRestaurants()) {
+    		if (restaurant.allowedActivate()) {
+    			restaurantDto.add(algaLinks.linkToRestaurantActivation(restaurantDto.getId(), "activate"));
+    		}
+    
+    		if (restaurant.allowedInactivate()) {
+    			restaurantDto.add(algaLinks.linkToRestaurantInactivation(restaurantDto.getId(), "inactivate"));
+    		}
 		}
 
-		if (restaurant.allowedInactivate()) {
-			restaurantDto.add(algaLinks.linkToRestaurantInactivation(restaurantDto.getId(), "inactivate"));
+		if (algaSecurity.canManageRestaurants(restaurant.getId())) {
+    		if (restaurant.allowedOpening()) {
+    			restaurantDto.add(algaLinks.linkToRestaurantOpening(restaurantDto.getId(), "opening"));
+    		}
+    
+    		if (restaurant.allowedClosing()) {
+    			restaurantDto.add(algaLinks.linkToRestaurantClosing(restaurantDto.getId(), "closing"));
+    		}
+	    }
+
+		if (algaSecurity.canConsultingRestaurants()) {
+		    restaurantDto.add(algaLinks.linkToRestaurants("restaurants"));
 		}
 
-		if (restaurant.allowedOpening()) {
-			restaurantDto.add(algaLinks.linkToRestaurantOpening(restaurantDto.getId(), "opening"));
+		if (algaSecurity.canConsultingKitchens()) {
+		    restaurantDto.getKitchen().add(algaLinks.linkToKitchen(restaurantDto.getKitchen().getId()));
 		}
 
-		if (restaurant.allowedClosing()) {
-			restaurantDto.add(algaLinks.linkToRestaurantClosing(restaurantDto.getId(), "closing"));
-		}
-
-		restaurantDto.add(algaLinks.linkToRestaurants("restaurants"));
-
-		restaurantDto.getKitchen().add(algaLinks.linkToKitchen(restaurantDto.getKitchen().getId()));
-
-		if (restaurantDto.getAddress() != null && restaurantDto.getAddress().getCity() != null) {
-		    restaurantDto.getAddress().getCity().add(algaLinks.linkToCity(restaurantDto.getAddress().getCity().getId()));
+		if (algaSecurity.canConsultingCities()) {
+		    if (restaurantDto.getAddress() != null && restaurantDto.getAddress().getCity() != null) {
+		        restaurantDto.getAddress().getCity().add(algaLinks.linkToCity(restaurantDto.getAddress().getCity().getId()));
+		    }
 		}
 		
-		restaurantDto.add(algaLinks.linkToProdutcs(restaurantDto.getId(), "products"));
+		/**
+		 * Usuário com permissão de consultar restaurantes também pode consultar os produtos do mesmo.
+		 */
+		if (algaSecurity.canConsultingRestaurants()) {
+		    restaurantDto.add(algaLinks.linkToProdutcs(restaurantDto.getId(), "products"));
+		}
 
-		restaurantDto.add(algaLinks.linkToRestaurantPaymentForms(restaurantDto.getId(), "paymentForms"));
+		if (algaSecurity.canConsultingPaymentForms()) {
+		    restaurantDto.add(algaLinks.linkToRestaurantPaymentForms(restaurantDto.getId(), "paymentForms"));
+		}
 
-		restaurantDto.add(algaLinks.linkToRestaurantUserManager(restaurantDto.getId(), "responsible-users"));
+		if (algaSecurity.canEditingRestaurants()) {
+		    restaurantDto.add(algaLinks.linkToRestaurantUserManager(restaurantDto.getId(), "responsible-users"));
+		}
 
 		return restaurantDto;
 	}

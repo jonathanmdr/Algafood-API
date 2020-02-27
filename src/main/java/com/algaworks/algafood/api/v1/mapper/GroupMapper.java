@@ -7,6 +7,7 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.v1.model.input.GroupInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.controller.GroupController;
 import com.algaworks.algafood.api.v1.model.GroupDTO;
@@ -20,6 +21,9 @@ public class GroupMapper extends RepresentationModelAssemblerSupport<Group, Grou
 
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	public GroupMapper() {
 		super(GroupController.class, GroupDTO.class);
@@ -30,15 +34,23 @@ public class GroupMapper extends RepresentationModelAssemblerSupport<Group, Grou
 		GroupDTO groupDto = createModelWithId(group.getId(), group);
 		modelMapper.map(group, groupDto);
 
-		groupDto.add(algaLinks.linkToGroups("groups"));
-		groupDto.add(algaLinks.linkToGroupPermissions(group.getId(), "permissions"));
+		if (algaSecurity.canConsultingUsersGroupsPermissions()) {
+		    groupDto.add(algaLinks.linkToGroups("groups"));
+		    groupDto.add(algaLinks.linkToGroupPermissions(group.getId(), "permissions"));
+		}
 
 		return groupDto;
 	}
 
 	@Override
 	public CollectionModel<GroupDTO> toCollectionModel(Iterable<? extends Group> entities) {
-		return super.toCollectionModel(entities).add(algaLinks.linkToGroups());
+	    CollectionModel<GroupDTO> groupsModel = super.toCollectionModel(entities);
+	    
+	    if (algaSecurity.canConsultingUsersGroupsPermissions()) {
+	        groupsModel.add(algaLinks.linkToGroups());
+	    }
+	    
+	    return groupsModel;
 	}
 
 	public Group toDomainObject(GroupInput groupInput) {

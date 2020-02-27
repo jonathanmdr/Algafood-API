@@ -6,6 +6,7 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.v1.model.input.ProductInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.controller.RestaurantProductController;
 import com.algaworks.algafood.api.v1.model.ProductDTO;
@@ -19,6 +20,9 @@ public class ProductMapper extends RepresentationModelAssemblerSupport<Product, 
 
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	public ProductMapper() {
 		super(RestaurantProductController.class, ProductDTO.class);
@@ -29,8 +33,13 @@ public class ProductMapper extends RepresentationModelAssemblerSupport<Product, 
 		ProductDTO productDto = createModelWithId(product.getId(), product, product.getRestaurant().getId());
 		modelMapper.map(product, productDto);
 
-		productDto.add(algaLinks.linkToProdutcs(product.getRestaurant().getId(), "products"));
-		productDto.add(algaLinks.linkToProductPhoto(product.getRestaurant().getId(), product.getId(), "photo"));
+		/**
+		 * Usuário com permissão de consultar restaurantes também pode consultar os produtos do mesmo.
+		 */
+		if (algaSecurity.canConsultingRestaurants()) {
+		    productDto.add(algaLinks.linkToProdutcs(product.getRestaurant().getId(), "products"));
+		    productDto.add(algaLinks.linkToProductPhoto(product.getRestaurant().getId(), product.getId(), "photo"));
+		}
 
 		return productDto;
 	}

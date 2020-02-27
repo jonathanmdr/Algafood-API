@@ -7,6 +7,7 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.stereotype.Component;
 
 import com.algaworks.algafood.api.v1.model.input.StateInput;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.api.v1.AlgaLinks;
 import com.algaworks.algafood.api.v1.controller.StateController;
 import com.algaworks.algafood.api.v1.model.StateDTO;
@@ -20,6 +21,9 @@ public class StateMapper extends RepresentationModelAssemblerSupport<State, Stat
 
 	@Autowired
 	private AlgaLinks algaLinks;
+	
+	@Autowired
+	private AlgaSecurity algaSecurity;
 
 	public StateMapper() {
 		super(StateController.class, StateDTO.class);
@@ -30,14 +34,22 @@ public class StateMapper extends RepresentationModelAssemblerSupport<State, Stat
 		StateDTO stateDto = createModelWithId(state.getId(), state);
 		modelMapper.map(state, stateDto);
 
-		stateDto.add(algaLinks.linkToStates("states"));
+		if (algaSecurity.canConsultingStates()) {
+		    stateDto.add(algaLinks.linkToStates("states"));
+		}
 
 		return stateDto;
 	}
 
 	@Override
 	public CollectionModel<StateDTO> toCollectionModel(Iterable<? extends State> entities) {
-		return super.toCollectionModel(entities).add(algaLinks.linkToStates());
+	    CollectionModel<StateDTO> statesModel = super.toCollectionModel(entities);
+	    
+	    if (algaSecurity.canConsultingStates()) {
+	        statesModel.add(algaLinks.linkToStates());
+	    }
+	    
+	    return statesModel;
 	}
 
 	public State toDomainObject(StateInput stateInput) {
