@@ -31,6 +31,7 @@
 		<oauth2-oidc-sdk.version>6.21.2</oauth2-oidc-sdk.version>
 		<spring-security-oauth2.version>2.3.7.RELEASE</spring-security-oauth2.version>
 		<spring-security-jwt.version>1.0.11.RELEASE</spring-security-jwt.version>
+		<flyway.version>5.2.4</flyway.version>
 	</properties>
 
 	<dependencies>
@@ -122,6 +123,7 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
+			<version>${flyway.version}</version>
 		</dependency>
 
 		<!-- Utility classes -->
