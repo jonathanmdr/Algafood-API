@@ -6,6 +6,9 @@ import java.nio.charset.Charset;
 
 import org.springframework.util.StreamUtils;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class ResourceUtils {
 
 	public static String getContentFromResource(String resourceName) {
