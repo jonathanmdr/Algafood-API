@@ -29,7 +29,7 @@
 			from Order ord
 			join ord.restaurant rest
 			join rest.users managers
-			where rest.id = :restaurantId
+			where ord.code = :code
 			and managers.id = :userId
 		</query>
 	</named-query>
